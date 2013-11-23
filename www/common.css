@@ -1,0 +1,30 @@
+input {
+	font-family:宋体;
+	font-size:18px;
+	text-align:center;
+	line-height:15px;
+	border-top-width: 0px;
+	border-right-width: 0px;
+	border-bottom-width: 0px;
+	border-left-width: 0px;
+}
+
+#filling_info input {
+	border-top-style:none;
+	border-right-style:none;
+	border-bottom-style:dotted;
+	border-left-style:none;
+	border-bottom-color:#000000;
+	border-bottom-width:1px;
+}
+
+table {
+	border-collapse:collapse;
+	border:1px solid;
+}
+
+th, td {
+	border:1px solid;
+	padding:2px;
+	font-weight: normal;
+}

@@ -5,8 +5,8 @@
 			if ($one === '') {
 				return FALSE;
 			}
-			return TRUE;
 		}
+		return TRUE;
 	}
 	
 	function hex16to64($m, $len = 0) {

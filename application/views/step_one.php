@@ -28,6 +28,7 @@
 		<div id="filling_info">
 			<form id="basic_form" method="POST" action="update_basic_info">
 				<input type="hidden" name="unipue_uuid" value="<?php echo $uuid;?>"/>
+				<input type="hidden" name="userid" value="4338"/>
 				<p>1、Full name 姓名:
 				(English英文)<input type="text" name="name_en" value="<?php echo $name_en;?>"/>
 				(Chinese中文)<input type="text" name="name_cn" value="<?php echo $name_cn;?>"/></p>
@@ -62,6 +63,7 @@
 				<input type="text" name="home_addr" value="<?php echo $home_info['home_addr'];?>"/><br>
 				&nbsp;&nbsp;&nbsp;Tel No.电话:
 				<input type="text" name="home_tel" value="<?php echo $home_info['home_tel'];?>"/></p>
+				<button type="submit">保存并下一步</button>
 			</form>
 		</div>
 	</body>

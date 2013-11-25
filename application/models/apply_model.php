@@ -12,7 +12,7 @@
 			$this->apply_db->select($attributes);
 			$this->apply_db->where('userid', $userid);
 			$this->apply_db->where('status', 0);
-			$this->apply_db->order_by('apply_time', 'desc');
+			$this->apply_db->order_by('modify_time', 'desc');
 			$this->apply_db->limit(1);
 			$query = $this->apply_db->get('visa_applying');
 			
@@ -20,7 +20,7 @@
 		}
 		
 		public function update_basic_info($data) {
-			$sql = 	'INSERT INTO visa_applying (uuid, name_en, name_cn, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, apply_time) '.
+			$sql = 	'INSERT INTO visa_applying (uuid, name_en, name_cn, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, modify_time) '.
 					'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE '.
 					'name_en = VALUES(name_en), '.
 					'name_cn = VALUES(name_cn), '.
@@ -33,7 +33,7 @@
 					'birth_place = VALUES(birth_place), '.
 					'occupation_info = VALUES(occupation_info), '.
 					'home_info = VALUES(home_info), '.
-					'apply_time = VALUES(apply_time)';
+					'modify_time = VALUES(modify_time)';
 			$args = array(
 						'uuid' => $data['uuid'],
 						'name_en' => $data['name_en'],
@@ -55,7 +55,7 @@
 							'home_addr' => $data['home_addr'],
 							'home_tel' => $data['home_tel'],
 							)),
-						'apply_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
+						'modify_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
 					);
 			
 			$this->apply_db->query($sql, $args);
@@ -64,10 +64,10 @@
 		}
 		
 		public function update_passport_info($data) {
-			$sql = 	'INSERT INTO visa_applying (uuid, passport_info, apply_time) '.
+			$sql = 	'INSERT INTO visa_applying (uuid, passport_info, modify_time) '.
 					'VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE '.
 					'passport_info = VALUES(passport_info), '.
-					'apply_time = VALUES(apply_time)';
+					'modify_time = VALUES(modify_time)';
 			$args = array(
 						'uuid' => $data['uuid'],
 						'passport_info' => json_encode(array(
@@ -76,7 +76,7 @@
 							'passport_date' => $data['passport_date'],
 							'passport_expiry' => $data['passport_expiry'],
 							)),
-						'apply_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
+						'modify_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
 					);
 			
 			$this->apply_db->query($sql, $args);
@@ -85,13 +85,13 @@
 		}
 		
 		public function update_travel_info($data) {
-			$sql = 	'INSERT INTO visa_applying (uuid, purpose, destination, relative_info, detail_info, apply_time) '.
+			$sql = 	'INSERT INTO visa_applying (uuid, purpose, destination, relative_info, detail_info, modify_time) '.
 					'VALUES (?, ?, ?, ?, ? ,?) ON DUPLICATE KEY UPDATE '.
 					'purpose = VALUES(purpose), '.
 					'destination = VALUES(destination), '.
 					'relative_info = VALUES(relative_info), '.
 					'detail_info = VALUES(detail_info), '.
-					'apply_time = VALUES(apply_time)';
+					'modify_time = VALUES(modify_time)';
 			$args = array(
 						'uuid' => $data['uuid'],
 						'purpose' => $data['purpose'],
@@ -108,7 +108,7 @@
 							'duration' => $data['duration'],
 							'financial_source' => $data['financial_source'],
 							)),
-						'apply_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
+						'modify_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
 					);
 			
 			$this->apply_db->query($sql, $args);
@@ -129,25 +129,26 @@
 			}
 			
 			$behaviour_info = array();
-			$behaviour['criminal'] = $data['criminal'];
-			$behaviour['crime_country'] = $data['crime_country'];
-			$behaviour['deported'] = $data['deported'];
-			$behaviour['deport_country'] = $data['deport_country'];
-			$behaviour['visited'] = $data['visited'];
-			$behaviour['applied'] = $data['applied'];
-			$behaviour['apply_date'] = $data['apply_date'];
-			$behaviour['refused'] = $data['refused'];
-			$behaviour['refuse_date'] = $data['refuse_date'];
+			$behaviour_info['criminal'] = $data['criminal'];
+			$behaviour_info['crime_country'] = $data['crime_country'];
+			$behaviour_info['deported'] = $data['deported'];
+			$behaviour_info['deport_country'] = $data['deport_country'];
+			$behaviour_info['visited'] = $data['visited'];
+			$behaviour_info['applied'] = $data['applied'];
+			$behaviour_info['apply_date'] = $data['apply_date'];
+			$behaviour_info['refused'] = $data['refused'];
+			$behaviour_info['refuse_date'] = $data['refuse_date'];
 			
-			$sql = 	'INSERT INTO visa_applying (uuid, children_info, behaviour_info, apply_time) '.
+			$sql = 	'INSERT INTO visa_applying (uuid, children_info, behaviour_info, modify_time) '.
 					'VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE '.
 					'children_info = VALUES(children_info), '.
-					'behaviour_info = VALUES(behaviour_info)';
+					'behaviour_info = VALUES(behaviour_info), '.
+					'modify_time = VALUES(modify_time)';
 			$args = array(
 						'uuid' => $data['uuid'],
 						'children_info' => json_encode($children_info),
 						'behaviour_info' => json_encode($behaviour_info),
-						'apply_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
+						'modify_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
 					);
 			
 			$this->apply_db->query($sql, $args);

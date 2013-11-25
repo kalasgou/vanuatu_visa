@@ -3,10 +3,15 @@
 class Apply extends CI_Controller {
 
 	public function agencies() {
+		$data = array(
+						'selected' => '1',
+						'' => array(),
+					);
 		//$userid = $this->userid;
 		$userid = trim($this->input->get('userid', TRUE));
+		$attributes = 'uuid, province_id';
 		$this->load->model('apply_model', 'alm');
-		$agencies = $this->alm->get_all_agencies();
+		$info = $this->alm->retrieve_some_info($userid, $attributes);
 		
 		$this->load->view('agency_selection', $agencies);
 	}
@@ -224,9 +229,9 @@ class Apply extends CI_Controller {
 						'deport_country' => 'China',
 						'visited' => 'no',
 						'applied' => 'no',
-						'apply_time' => '',
+						'apply_date' => '',
 						'refused' => 'no',
-						'refuse_time' => '',
+						'refuse_date' => '',
 						),
 				);
 		//$userid = $this->userid;

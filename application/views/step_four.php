@@ -67,10 +67,10 @@
 				Yes是<input type="radio" name="deported"/>Where哪一国家<input type="text" name="deport_country" value="<?php echo $behaviour_info['deport_country'];?>"/>No否<input type="radio" name="deported"/></p>
 				<p>20、Details of previous visits? 您曾经到过瓦努阿图吗？Yes有<input type="radio" name="visited"/> No没有<input type="radio" name="visited"/></p>
 				<p>21、Have you ever applied for a work, residence or student permit before in Vanuatu? <br>您是否曾经在瓦努阿图申请过工作、居留或学生签证？
-				Yes是<input type="radio" name="applied"/> When何时<input type="text" name="apply_time" value="<?php echo $behaviour_info['apply_time'];?>"/>No否<input type="radio" name="applied"/></p>
+				Yes是<input type="radio" name="applied"/> When何时<input type="text" name="apply_date" value="<?php echo $behaviour_info['apply_date'];?>"/>No否<input type="radio" name="applied"/></p>
 				<p>22、Have you ever been refused entry to Vanuatu?<br>
 				您曾经被瓦努阿图拒签过吗？
-				Yes是<input type="radio" name="refused"/>When何时<input type="text" name="refuse_time" value="<?php echo $behaviour_info['refuse_time'];?>"/>No否<input type="radio" name="refused"/></p>
+				Yes是<input type="radio" name="refused"/>When何时<input type="text" name="refuse_date" value="<?php echo $behaviour_info['refuse_date'];?>"/>No否<input type="radio" name="refused"/></p>
 				<!--<p>23、I declare that the information given in this application is true and correct to the best of my knowledge and belief.<br>
 				我声明，本人在本申请表中所做之回答就本人所知均属实无误。<br>
 				Signature 签字<input type="text" name="purpose"/>Date 日期<input type="text" name="purpose"/>.<br>

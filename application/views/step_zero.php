@@ -26,14 +26,16 @@
 		</div>
 		<p></p>
 		<div id="filling_info">
-			<form id="passport_form" method="POST" action="update_passport_info">
+			<form id="passport_form" method="POST" action="select_agency">
 				<input type="hidden" name="unipue_uuid" value="<?php echo $uuid;?>"/>
 				<input type="hidden" name="userid" value="4338"/>
-				<p>10、Passport 护照:<br>
-				(a) Number 护照号<input type="text" name="passport_number" value="<?php echo $passport_number;?>"/>
-				(b) Place of Issue 发照地<input type="text" name="passport_place" value="<?php echo $passport_place;?>"/><br>
-				(c) Date of Issue发照日期<input type="text" name="passport_date" value="<?php echo $passport_date;?>"/>
-				(d) Expiry Date 有效日期至<input type="text" name="passport_expiry" value="<?php echo $passport_expiry;?>"/></P>
+				<p>请选择办事处:<br>
+				<select name="province_id" onchange="">
+					<?php foreach ($agencies as $one) { ?>
+					<option value="<?php echo $one['id'];?>"><?php echo $one['province_cn'].'--'.$one['location_cn']?></option>
+					<?php } ?>
+				</select>
+				</P>
 				<button type="submit">保存并下一步</button>
 			</form>
 		</div>

@@ -54,7 +54,20 @@
 				<p>17、Source of financial support in Vanuatu 在瓦费用来源:
 				<input type="text" name="financial_source" value="<?php echo $detail_info['financial_source']?>"/></p>
 				<button type="submit">保存并下一步</button>
+				<p style="border-bottom:1px dashed #000; width=200px;">测试一下啦啦啦啦啦了乐乐乐乐斯蒂芬速度嘎我</p>
 			</form>
 		</div>
 	</body>
 </html>
+<?php
+	/*$HTMLoutput = ob_get_contents();
+	ob_end_clean();
+	
+	//Convert HTML 2 PDF by using MPDF PHP library
+	require '../application/third_party/mPDF/mpdf.php';
+	$mpdf = new mPDF('utf-8'); 
+	$mpdf->useAdobeCJK = TRUE; 
+	$mpdf->SetAutoFont(AUTOFONT_ALL);
+	$mpdf->WriteHTML($HTMLoutput);
+	$mpdf->Output('application_form.pdf', 'D');*/
+?>

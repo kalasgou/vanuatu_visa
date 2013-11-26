@@ -19,6 +19,22 @@
 			return $query->row_array();
 		}
 		
+		public function select_agency($data) {
+			$sql = 	'INSERT INTO visa_applying (uuid, province_id, modify_time) '.
+					'VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE '.
+					'province_id = VALUES(province_id), '.
+					'modify_time = VALUES(modify_time)';
+			$args = array(
+						'uuid' => $data['uuid'],
+						'province_id' => $data['province_id'],
+						'modify_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
+					);
+					
+			$this->apply_db->query($sql, $args);
+			
+			return $this->apply_db->affected_rows();
+		}
+		
 		public function update_basic_info($data) {
 			$sql = 	'INSERT INTO visa_applying (uuid, name_en, name_cn, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, modify_time) '.
 					'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE '.
@@ -64,18 +80,19 @@
 		}
 		
 		public function update_passport_info($data) {
-			$sql = 	'INSERT INTO visa_applying (uuid, passport_info, modify_time) '.
-					'VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE '.
-					'passport_info = VALUES(passport_info), '.
+			$sql = 	'INSERT INTO visa_applying (uuid, passport_number, passport_place, passport_date, passport_expiry, modify_time) '.
+					'VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE '.
+					'passport_number = VALUES(passport_number), '.
+					'passport_place = VALUES(passport_place), '.
+					'passport_date = VALUES(passport_date), '.
+					'passport_expiry = VALUES(passport_expiry), '.
 					'modify_time = VALUES(modify_time)';
 			$args = array(
 						'uuid' => $data['uuid'],
-						'passport_info' => json_encode(array(
-							'passport_number' => $data['passport_number'],
-							'passport_place' => $data['passport_place'],
-							'passport_date' => $data['passport_date'],
-							'passport_expiry' => $data['passport_expiry'],
-							)),
+						'passport_number' => $data['passport_number'],
+						'passport_place' => $data['passport_place'],
+						'passport_date' => $data['passport_date'],
+						'passport_expiry' => $data['passport_expiry'],
 						'modify_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
 					);
 			

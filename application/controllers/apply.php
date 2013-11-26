@@ -4,16 +4,59 @@ class Apply extends CI_Controller {
 
 	public function agencies() {
 		$data = array(
-						'selected' => '1',
-						'' => array(),
-					);
+					'uuid' => '',
+					'province_id' => '1',
+					'agencies' => array(
+						array(
+							'id' => '1',
+							'province_cn' => '北京办事处',
+							'location_cn' => '北京XXXXXXXXXX',
+							),
+						array(
+							'id' => '2',
+							'province_cn' => '上海办事处',
+							'location_cn' => '上海XXXXXXXXXX',
+							),
+						array(
+							'id' => '3',
+							'province_cn' => '广州办事处',
+							'location_cn' => '广州XXXXXXXXXX',
+							),
+						),
+				);
 		//$userid = $this->userid;
 		$userid = trim($this->input->get('userid', TRUE));
 		$attributes = 'uuid, province_id';
+		
 		$this->load->model('apply_model', 'alm');
 		$info = $this->alm->retrieve_some_info($userid, $attributes);
 		
-		$this->load->view('agency_selection', $agencies);
+		$this->load->view('step_zero', $data);
+	}
+	
+	public function select_agency() {
+		$data['userid'] = trim($this->input->post('userid', TRUE));
+		$data['uuid'] = trim($this->input->post('uuid', TRUE));
+		$data['province_id'] = trim($this->input->post('province_id', TRUE));
+		
+		$this->load->helper('util');
+		
+		if ($data['uuid'] === '') {
+			$data['uuid'] = hex16to64(uuid(), 0);
+		}
+		
+		if (!check_parameters($data)) {
+			$this->load->view('parameters_error');
+			die();
+		}
+		
+		$this->load->model('apply_model', 'alm');
+		
+		if ($this->alm->select_agency($data) > 0) {
+			echo 'success';
+		} else {
+			echo 'fail';
+		}
 	}
 	
 	public function basic_info() {
@@ -92,19 +135,17 @@ class Apply extends CI_Controller {
 	public function passport_info() {
 		$data = array(
 					'uuid' => '',
-					'passport_info' => array(
-						'passport_number' => '软件工程师',
-						'passport_place' => '广州苹果树',
-						'passport_date' => '020-13450229947',
-						'passport_expiry' => '东风路',
-						),
+					'passport_number' => '软件工程师',
+					'passport_place' => '广州苹果树',
+					'passport_date' => '450229947',
+					'passport_expiry' => '1450229947',
 				);
 		//$userid = $this->userid;
 		$userid = trim($this->input->get('userid', TRUE));
-		$attributes = 'uuid, passport_info';
+		$attributes = 'uuid, passport_number, passport_place, passport_date, passport_expiry';
 		
 		$this->load->model('apply_model', 'alm');
-		$info = $this->alm->retrieve_some_info($userid);
+		$info = $this->alm->retrieve_some_info($userid, $attributes);
 	
 		$this->load->view('step_two', $data);
 	}

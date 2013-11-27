@@ -2,6 +2,10 @@
 
 class Apply extends CI_Controller {
 
+	public function test_html_to_pdf() {
+		$this->load->view('step_five');
+	}
+
 	public function agencies() {
 		$data = array(
 					'uuid' => '',

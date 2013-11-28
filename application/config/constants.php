@@ -36,6 +36,10 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
+define('HASH_COST_LOG2', 	8);
+define('HASH_PORTABLE', 	FALSE);
+
+define('REDIS_DEFAULT', 	'/tmp/redis_6379.sock');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

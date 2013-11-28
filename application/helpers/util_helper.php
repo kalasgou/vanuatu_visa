@@ -85,4 +85,43 @@
 		
 		return $sent;
 	}
+	
+	function create_password($pw_length) {
+		$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+		$password = '';
+		for ($i = 0; $i < $pw_length; $i++) {
+			$password .= $chars[mt_rand(0, strlen($chars) - 1)];
+		}
+		return $password;
+	}
+	
+	function gen_access_token($userid, $redis) {
+		$token_timeout = 172800;
+		$access_token = create_password(16);
+		$key = $userid.'_'.$_SERVER['REQUEST_TIME'];
+		$redis->setex($key, $token_timeout, $access_token);
+		$redis->lPush($userid.'_token', $key);
+		$redis->lTrim($userid.'_token', 0, 9);
+		return $access_token;
+	}
+	
+	function access_token_verify($redis, $userid, $token) {
+		$token_keys = $redis->lRange($userid.'_token', 0, -1);
+		if (count($token_keys)) {
+			foreach ($token_keys as $key_index => $key) {
+				if ($redis->get($key) === $token) {
+					return TRUE;
+				}
+			}
+		}
+		return FALSE;
+	}
+	
+	function email_verify($email){
+		if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
 ?>

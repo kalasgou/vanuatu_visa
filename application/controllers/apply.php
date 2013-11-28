@@ -50,7 +50,8 @@ class Apply extends CI_Controller {
 		}
 		
 		if (!check_parameters($data)) {
-			$this->load->view('parameters_error');
+			$error['msg'] = 'email incorrect';
+			$this->load->view('error_page', $error);
 			die();
 		}
 		

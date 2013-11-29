@@ -39,7 +39,10 @@
 */
 
 $route['default_controller'] = 'welcome';
-$route['login'] = 'user/login';
+$route['login'] = 'welcome/login';
+$route['register'] = 'welcome/register';
+$route['admin_login'] = 'welcome/admin_login';
+$route['admin_register'] = 'welcome/admin_register';
 $route['space/(:num)/(:any)'] = 'space/$2/$1';
 $route['404_override'] = '';
 

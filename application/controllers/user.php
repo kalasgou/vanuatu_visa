@@ -16,25 +16,24 @@ class User extends CI_Controller {
 				$data['phone'] = trim($this->input->post('phone', TRUE));
 				break;
 			case 'administrator':
-				$data['name'] = trim($this->input->post('name', TRUE));
+				$data['realname'] = trim($this->input->post('realname', TRUE));
 				$data['permission'] = trim($this->input->post('permission', TRUE));
 				$data['province_id'] = trim($this->input->post('province_id', TRUE));
 				break;
 			default :
-				echo 'error'; die();
+				$msg['tips'] = 'forbidden';
+				header('simple_msg_page');
 		}
 		
 		$this->load->helper('util');
 		if (!check_parameters($data)) {
 			$msg['tips'] = 'parameters not enough';
 			$this->load->view('simple_msg_page', $msg);
-			die();
 		}
 		
 		if (!email_verify($data['email'])) {
 			$msg['tips'] = 'email incorrect';
 			$this->load->view('simple_msg_page', $msg);
-			die();
 		}
 		
 		require '../application/third_party/pass/PasswordHash.php';
@@ -49,9 +48,11 @@ class User extends CI_Controller {
 		$func_name = $user_type.'_register';
 		
 		if ($this->user->$func_name($data) > 0) {
-			$this->load->view('');
+			$msg['tips'] = 'register success';
+			$this->load->view('simple_msg_page', $msg);
 		} else {
-			$this->load->view('');
+			$msg['tips'] = 'register fail';
+			$this->load->view('simple_msg_page', $msg);
 		}
 		
 		exit(0);
@@ -102,6 +103,7 @@ class User extends CI_Controller {
 		
 		exit(0);
 	}
+	
 }
 
 /* End of file */

@@ -19,16 +19,17 @@
 	</head>
 	<body>
 		<div id="step_menu" style="display:inline;">
-			<a href="">basic info</a>
-			<a href="">passport info</a>
-			<a href="">travel info</a>
-			<a href="">other info</a>
+			<a href="/apply/agencies/<?php echo $uuid;?>">选择办事处</a>
+			<a href="/apply/basic_info/<?php echo $uuid;?>">基本个人信息</a>
+			<a href="/apply/passport_info/<?php echo $uuid;?>">护照信息</a>
+			<a href="/apply/travel_info/<?php echo $uuid;?>">行程信息</a>
+			<a href="/apply/complement_info/<?php echo $uuid;?>">其他补充信息</a>
+			<a href="/apply/confirm_info/<?php echo $uuid;?>">所填信息确认</a>
 		</div>
 		<p></p>
 		<div id="filling_info">
-			<form id="travel_form" method="POST" action="update_travel_info">
-				<input type="hidden" name="unipue_uuid" value="<?php echo $uuid;?>"/>
-				<input type="hidden" name="userid" value="4338"/>
+			<form id="travel_form" method="POST" action="/apply/update_travel_info">
+				<input type="hidden" name="uuid" value="<?php echo $uuid;?>"/>
 				<p>11、Purpose of Visit 访瓦目的:<br>
 				Tourism 旅游<input type="radio" name="purpose" value="8"/>
 				Visiting Relative 探亲<input type="radio" name="purpose" value="9"/>
@@ -54,7 +55,6 @@
 				<p>17、Source of financial support in Vanuatu 在瓦费用来源:
 				<input type="text" name="financial_source" value="<?php echo $detail_info['financial_source']?>"/></p>
 				<button type="submit">保存并下一步</button>
-				<p style="border-bottom:1px dashed #000; width=200px;">测试一下啦啦啦啦啦了乐乐乐乐斯蒂芬速度嘎我</p>
 			</form>
 		</div>
 	</body>

@@ -9,16 +9,25 @@
 		<link rel="shortcut icon" href=""/>
 		<link rel="stylesheet" type="text/css" href=''>
 		<script type="text/javascript" src=""/>
+		<script type="text/javascript" src=""/>
+		<script type="text/javascript" src=""/>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
 			});
 		</script>
+		<style type="text/css">
+		</style>
 	</head>
 	<body>
 		<div>
-			<p><?php echo $tips;?></p>
-			<p><a href="<?php echo $link;?>">go to page <?php echo $location;?></a></p>
+			<h4>Hello, <?php echo $nickname;?>!</h4>
+		</div>
+		<div id="step_menu" style="display:inline;">
+			<a href="/apply/agencies">签证申请</a>
+			<a href="/apply/records">申请记录</a>
+			<a href="/apply/account">帐户信息</a>
+			<a href="/apply/password">密码修改</a>
 		</div>
 	</body>
 </html>

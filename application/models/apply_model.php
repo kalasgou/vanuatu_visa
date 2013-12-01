@@ -8,11 +8,10 @@
 			$this->apply_db = $this->load->database('default', TRUE);
 		}
 		
-		public function retrieve_some_info($userid, $attributes) {
+		public function retrieve_some_info($userid, $uuid, $attributes) {
 			$this->apply_db->select($attributes);
 			$this->apply_db->where('userid', $userid);
-			$this->apply_db->where('status', 0);
-			$this->apply_db->order_by('modify_time', 'desc');
+			$this->apply_db->where('uuid', $uuid);
 			$this->apply_db->limit(1);
 			$query = $this->apply_db->get('visa_applying');
 			
@@ -20,11 +19,12 @@
 		}
 		
 		public function select_agency($data) {
-			$sql = 	'INSERT INTO visa_applying (uuid, province_id, modify_time) '.
-					'VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE '.
+			$sql = 	'INSERT INTO visa_applying (userid, uuid, province_id, modify_time) '.
+					'VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE '.
 					'province_id = VALUES(province_id), '.
 					'modify_time = VALUES(modify_time)';
 			$args = array(
+						'userid' => $data['userid'],
 						'uuid' => $data['uuid'],
 						'province_id' => $data['province_id'],
 						'modify_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
@@ -137,7 +137,7 @@
 			$children_info = array();
 			$length = count($data['child_name']);
 			for ($i = 0; $i < $length; $i ++) {
-				$tmp['chlid_name'] = $data['child_name'][$i];
+				$tmp['child_name'] = $data['child_name'][$i];
 				$tmp['child_sex'] = $data['child_sex'][$i];
 				$tmp['child_date'] = $data['child_date'][$i];
 				$tmp['child_place'] = $data['child_place'][$i];
@@ -171,6 +171,26 @@
 			$this->apply_db->query($sql, $args);
 			
 			return $this->apply_db->affected_rows();
+		}
+		
+		public function submit_all_info($userid, $uuid, $status) {
+			$this->apply_db->set('status', $status);
+			$this->apply_db->set('submit_time', date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']));
+			$this->apply_db->where('userid', $userid);
+			$this->apply_db->where('uuid', $uuid);
+			$this->apply_db->update('visa_applying');
+			
+			return $this->apply_db->affected_rows();
+		}
+		
+		public function get_records($userid) {
+			$this->apply_db->select('uuid, name_en, name_cn, status, passport_number, submit_time');
+			$this->apply_db->where('userid', $userid);
+			$this->apply_db->where('status > ', 0);
+			$this->apply_db->order_by('submit_time', 'desc');
+			$query = $this->apply_db->get('visa_applying');
+			
+			return $query->result_array();
 		}
 	}
 ?>

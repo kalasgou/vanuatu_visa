@@ -124,4 +124,16 @@
 			return FALSE;
 		}
 	}
+	
+	function gen_visa_number($id) {
+		$range = '+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$number = '0000CH13';
+		for ($i = 3; $i >= 0; $i --) {
+			$left = $id % 36;
+			$number[$i] = strval($range[$left]);
+			$id = intval($id / 36);
+			if ($id === 0) break;
+		}
+		return $number;
+	}
 ?>

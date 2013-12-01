@@ -26,15 +26,6 @@
 		</style>
 	</head>
 	<body>
-		<div id="step_menu" style="display:inline;">
-			<a href="/apply/agencies/<?php echo $uuid;?>">选择办事处</a>
-			<a href="/apply/basic_info/<?php echo $uuid;?>">基本个人信息</a>
-			<a href="/apply/passport_info/<?php echo $uuid;?>">护照信息</a>
-			<a href="/apply/travel_info/<?php echo $uuid;?>">行程信息</a>
-			<a href="/apply/complement_info/<?php echo $uuid;?>">其他补充信息</a>
-			<a href="/apply/confirm_info/<?php echo $uuid;?>">所填信息确认</a>
-		</div>
-		<p></p>
 		<div id="application_form">
 			<div>
 				1、Full name 姓名:
@@ -181,23 +172,19 @@
 				您曾经被瓦努阿图拒签过吗？ Yes 是 <span id="option"><input type="checkbox"/></span>When 何时 <span id="answer" style="width:200px;"><?php echo $behaviour_info['refuse_date'];?></span>No 否 <span id="option"><input type="checkbox"/></span><br>
 			</div>
 		</div>
-		<div>
-			<a href="/apply/submit_all_info/<?php echo $uuid;?>/submit">确认</a>
-			<a href="/apply/submit_all_info/<?php echo $uuid;?>/cancel">取消</a>
-		</div>
 	</body>
 </html>
 <?php
-	/*$HTMLoutput = ob_get_contents();
-	ob_end_clean();*/
+	$HTMLoutput = ob_get_contents();
+	ob_end_clean();
 	
 	//Convert HTML 2 PDF by using MPDF PHP library
-	/*require '../application/third_party/mPDF/mpdf.php';
+	require '../application/third_party/mPDF/mpdf.php';
 	$mpdf = new mPDF('utf-8'); 
 	$mpdf->useAdobeCJK = TRUE; 
 	$mpdf->SetAutoFont(AUTOFONT_ALL);
 	$mpdf->WriteHTML($HTMLoutput);
-	$mpdf->Output('application_form.pdf', 'D');*/
+	$mpdf->Output('application_form.pdf', 'D');
 	/*require '../application/third_party/dompdf/dompdf_config.inc.php';
 	$dompdf = new DOMPDF();
 	$dompdf->load_html($HTMLoutput);

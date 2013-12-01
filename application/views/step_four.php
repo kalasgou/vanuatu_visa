@@ -32,17 +32,18 @@
 	</head>
 	<body>
 		<div id="step_menu" style="display:inline;">
-			<a href="">basic info</a>
-			<a href="">passport info</a>
-			<a href="">travel info</a>
-			<a href="">other info</a>
+			<a href="/apply/agencies/<?php echo $uuid;?>">选择办事处</a>
+			<a href="/apply/basic_info/<?php echo $uuid;?>">基本个人信息</a>
+			<a href="/apply/passport_info/<?php echo $uuid;?>">护照信息</a>
+			<a href="/apply/travel_info/<?php echo $uuid;?>">行程信息</a>
+			<a href="/apply/complement_info/<?php echo $uuid;?>">其他补充信息</a>
+			<a href="/apply/confirm_info/<?php echo $uuid;?>">所填信息确认</a>
 		</div>
 		<p></p>
 		<div id="filling_info">
-			<form id="passport_form" method="POST" action="update_complement_info">
-				<input type="hidden" name="unipue_uuid" value="<?php echo $uuid;?>"/>
-				<input type="hidden" name="userid" value="4338"/>
-				<p>18 Details of family included in passport 护照内偕行儿童详细信息:<br>
+			<form id="passport_form" method="POST" action="/apply/update_complement_info">
+				<input type="hidden" name="uuid" value="<?php echo $uuid;?>"/>
+				<p>18、Details of family included in passport 护照内偕行儿童详细信息:<br>
 				<table id="children_info">
 					<tr>
 						<th>Name 姓名</th>

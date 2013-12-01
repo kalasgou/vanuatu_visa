@@ -1,12 +1,28 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Apply extends CI_Controller {
+require APPPATH .'core/ApplyLoginController.php';
 
-	public function test_html_to_pdf() {
-		$this->load->view('step_five');
+class Apply extends ApplyLoginController {
+	
+	/*function test_captcha() {
+		$this->load->helper('captcha');
+		$val = array(
+				'img_path' => './captcha/',
+				'img_url' => '/captcha/',
+				);
+		$cap = create_captcha($val);
+		var_dump($cap);
+	}*/
+	
+	public function index() {
+		$this->load->view('apply_index', $this->user_info);
 	}
 
-	public function agencies() {
+	public function download_pdf($uuid = '') {
+		$this->load->view('application_form');
+	}
+
+	public function agencies($uuid = '') {
 		$data = array(
 					'uuid' => '',
 					'province_id' => '1',
@@ -28,18 +44,22 @@ class Apply extends CI_Controller {
 							),
 						),
 				);
-		//$userid = $this->userid;
-		$userid = trim($this->input->get('userid', TRUE));
+		$userid = $this->userid;
 		$attributes = 'uuid, province_id';
 		
 		$this->load->model('apply_model', 'alm');
-		$info = $this->alm->retrieve_some_info($userid, $attributes);
+		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		
+		if ($info) {
+			$data['uuid'] = $info['uuid'];
+			$data['province_id'] = $info['province_id'];
+		}
 		
 		$this->load->view('step_zero', $data);
 	}
 	
 	public function select_agency() {
-		$data['userid'] = trim($this->input->post('userid', TRUE));
+		$data['userid'] = $this->userid;
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
 		$data['province_id'] = trim($this->input->post('province_id', TRUE));
 		
@@ -50,56 +70,76 @@ class Apply extends CI_Controller {
 		}
 		
 		if (!check_parameters($data)) {
-			$error['msg'] = 'email incorrect';
-			$this->load->view('error_page', $error);
+			show_error('parameters not enough', 500);
 			die();
 		}
 		
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->select_agency($data) > 0) {
-			echo 'success';
+			header('Location: '.base_url('/apply/basic_info/'.$data['uuid']));
 		} else {
 			echo 'fail';
 		}
 	}
 	
-	public function basic_info() {
+	public function basic_info($uuid = '') {
 		$data = array(
 					'uuid' => '',
-					'name_en' => 'kalasou',
-					'name_cn' => '杜宇翔',
+					'name_en' => '',
+					'name_cn' => '',
 					'gender' => '',
 					'family' => '',
-					'nationality' => '中国',
-					'birth_day' => '17',
-					'birth_month' => '3',
-					'birth_year' => '1988',
-					'birth_place' => '广东省湛江市',
+					'nationality' => '',
+					'birth_day' => '',
+					'birth_month' => '',
+					'birth_year' => '',
+					'birth_place' => '',
 					'occupation_info' => array(
-						'occupation' => '软件工程师',
-						'employer' => '广州苹果树',
-						'employer_tel' => '020-13450229947',
-						'employer_addr' => '东风路',
+						'occupation' => '',
+						'employer' => '',
+						'employer_tel' => '',
+						'employer_addr' => '',
 						),
 					'home_info' => array(
-						'home_addr' => '农讲所德政中路',
-						'home_tel' => '13450229947',
+						'home_addr' => '',
+						'home_tel' => '',
 						),
 				);
-		//$userid = $this->userid;
-		$userid = trim($this->input->get('userid', TRUE));
+		$userid = $this->userid;
 		$attributes = 'uuid, name_en, name_cn, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info';
 		
 		$this->load->model('apply_model', 'alm');
-		$info = $this->alm->retrieve_some_info($userid, $attributes);
-	
+		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		
+		if ($info) {
+			$data['uuid'] = $info['uuid'];
+			$data['name_en'] = $info['name_en'];
+			$data['name_cn'] = $info['name_cn'];
+			$data['gender'] = $info['gender'];
+			$data['family'] = $info['family'];
+			$data['nationality'] = $info['nationality'];
+			$data['birth_day'] = $info['birth_day'];
+			$data['birth_month'] = $info['birth_month'];
+			$data['birth_year'] = $info['birth_year'];
+			$data['birth_place'] = $info['birth_place'];
+			
+			$occupation_info = json_decode($info['occupation_info'], TRUE);
+			$data['occupation_info']['occupation'] = $occupation_info['occupation'];
+			$data['occupation_info']['employer'] = $occupation_info['employer'];
+			$data['occupation_info']['employer_tel'] = $occupation_info['employer_tel'];
+			$data['occupation_info']['employer_addr'] = $occupation_info['employer_addr'];
+			
+			$home_info = json_decode($info['home_info'], TRUE);
+			$data['home_info']['home_addr'] = $home_info['home_addr'];
+			$data['home_info']['home_tel'] = $home_info['home_tel'];
+		}
+		
 		$this->load->view('step_one', $data);
 	}
 	
 	public function update_basic_info() {
-		//$userid = $this->userid;
-		$data['userid'] = trim($this->input->post('userid', TRUE));
+		$data['userid'] = $this->userid;
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
 		$data['name_en'] = trim($this->input->post('name_en', TRUE));
 		$data['name_cn'] = trim($this->input->post('name_cn', TRUE));
@@ -120,43 +160,51 @@ class Apply extends CI_Controller {
 		$this->load->helper('util');
 		
 		if ($data['uuid'] === '') {
-			$data['uuid'] = hex16to64(uuid(), 0);
+			show_error('uuid empty error', 500);
+			die();
 		}
 		
 		if (!check_parameters($data)) {
-			$this->load->view('parameters_error');
+			show_error('parameters not enough', 500);
 			die();
 		}
 		
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->update_basic_info($data) > 0) {
-			echo 'success';
+			header('Location: '.base_url('/apply/passport_info/'.$data['uuid']));
 		} else {
 			echo 'fail';
 		}
 	}
 	
-	public function passport_info() {
+	public function passport_info($uuid = '') {
 		$data = array(
 					'uuid' => '',
-					'passport_number' => '软件工程师',
-					'passport_place' => '广州苹果树',
-					'passport_date' => '450229947',
-					'passport_expiry' => '1450229947',
+					'passport_number' => '',
+					'passport_place' => '',
+					'passport_date' => '',
+					'passport_expiry' => '',
 				);
-		//$userid = $this->userid;
-		$userid = trim($this->input->get('userid', TRUE));
+		$userid = $this->userid;
 		$attributes = 'uuid, passport_number, passport_place, passport_date, passport_expiry';
 		
 		$this->load->model('apply_model', 'alm');
-		$info = $this->alm->retrieve_some_info($userid, $attributes);
-	
+		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		
+		if ($info) {
+			$data['uuid'] = $info['uuid'];
+			$data['passport_number'] = $info['passport_number'];
+			$data['passport_place'] = $info['passport_place'];
+			$data['passport_date'] = $info['passport_date'];
+			$data['passport_expiry'] = $info['passport_expiry'];
+		}
+		
 		$this->load->view('step_two', $data);
 	}
 	
 	public function update_passport_info() {
-		$data['userid'] = trim($this->input->post('userid', TRUE));
+		$data['userid'] = $this->userid;
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
 		$data['passport_number'] = trim($this->input->post('passport_number', TRUE));
 		$data['passport_place'] = trim($this->input->post('passport_place', TRUE));
@@ -166,48 +214,66 @@ class Apply extends CI_Controller {
 		$this->load->helper('util');
 		
 		if ($data['uuid'] === '') {
-			$data['uuid'] = hex16to64(uuid(), 0);
+			show_error('uuid empty error', 500);
+			die();
 		}
 		
 		if (!check_parameters($data)) {
-			$this->load->view('parameters_error');
+			show_error('parameters not enough', 500);
 			die();
 		}
 		
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->update_passport_info($data) > 0) {
-			echo 'success';
+			header('Location: '.base_url('/apply/travel_info/'.$data['uuid']));
 		} else {
 			echo 'fail';
 		}
 	}
 	
-	public function travel_info() {
+	public function travel_info($uuid = '') {
 		$data = array(
 					'uuid' => '',
 					'purpose' => '',
-					'destination' => '海边123',
+					'destination' => '',
 					'relative_info' => array(
-						'relative_name' => '软件工程师',
-						'relative_addr' => '广州苹果树',
+						'relative_name' => '',
+						'relative_addr' => '',
 						),
 					'detail_info' => array(
-						'arrival_number' => 'CHNA123123123',
-						'arrival_date' => '2013-12-01',
-						'return_number' => 'NACH123123123',
-						'return_date' => '2013-12-31',
-						'duration' => '10天',
-						'financial_source' => 'Daily Paid',
+						'arrival_number' => '',
+						'arrival_date' => '',
+						'return_number' => '',
+						'return_date' => '',
+						'duration' => '',
+						'financial_source' => '',
 						),
 				);
-		//$userid = $this->userid;
-		$userid = trim($this->input->get('userid', TRUE));
+		$userid = $this->userid;
 		$attributes = 'uuid, purpose, destination, relative_info, detail_info';
 		
 		$this->load->model('apply_model', 'alm');
-		$info = $this->alm->retrieve_some_info($userid, $attributes);
-	
+		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		
+		if ($info) {
+			$data['uuid'] = $info['uuid'];
+			$data['purpose'] = $info['purpose'];
+			$data['destination'] = $info['destination'];
+			
+			$relative_info = json_decode($info['relative_info'], TRUE);
+			$data['relative_info']['relative_name'] = $relative_info['relative_name'];
+			$data['relative_info']['relative_addr'] = $relative_info['relative_addr'];
+			
+			$detail_info = json_decode($info['detail_info'], TRUE);
+			$data['detail_info']['arrival_number'] = $detail_info['arrival_number'];
+			$data['detail_info']['arrival_date'] = $detail_info['arrival_date'];
+			$data['detail_info']['return_number'] = $detail_info['return_number'];
+			$data['detail_info']['return_date'] = $detail_info['return_date'];
+			$data['detail_info']['duration'] = $detail_info['duration'];
+			$data['detail_info']['financial_source'] = $detail_info['financial_source'];
+		}
+		
 		$this->load->view('step_three', $data);
 	}
 	
@@ -228,65 +294,75 @@ class Apply extends CI_Controller {
 		$this->load->helper('util');
 		
 		if ($data['uuid'] === '') {
-			$data['uuid'] = hex16to64(uuid(), 0);
-		}
-		
-		if (!check_parameters($data)) {
-			$this->load->view('parameters_error');
+			show_error('uuid empty error', 500);
 			die();
 		}
 		
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->update_travel_info($data) > 0) {
-			echo 'success';
+			header('Location: '.base_url('/apply/complement_info/'.$data['uuid']));
 		} else {
 			echo 'fail';
 		}
 	}
 	
-	public function complement_info() {
+	public function complement_info($uuid = '') {
 		$data = array(
 					'uuid' => '',
 					'children_info' => array(
 						array (
-							'child_name' => '软件工程师12',
-							'child_sex' => '广州苹果树',
-							'child_date' => '广州苹果树21',
-							'child_place' => '广州苹果树22',
+							'child_name' => '',
+							'child_sex' => '',
+							'child_date' => '',
+							'child_place' => '',
 							),
 						array (
-							'child_name' => '软件工程师22',
-							'child_sex' => '广州苹果树',
-							'child_date' => '广州苹果树31',
-							'child_place' => '广州苹果树42',
+							'child_name' => '',
+							'child_sex' => '',
+							'child_date' => '',
+							'child_place' => '',
 							),
 						array (
-							'child_name' => '软件工程师11',
-							'child_sex' => '广州苹果树',
-							'child_date' => '广州苹果树51',
-							'child_place' => '广州苹果树62',
+							'child_name' => '',
+							'child_sex' => '',
+							'child_date' => '',
+							'child_place' => '',
 							),
 						),
 					'behaviour_info' => array(
-						'criminal' => 'yes',
-						'crime_country' => 'America',
-						'deported' => 'yes',
-						'deport_country' => 'China',
-						'visited' => 'no',
-						'applied' => 'no',
+						'criminal' => '',
+						'crime_country' => '',
+						'deported' => '',
+						'deport_country' => '',
+						'visited' => '',
+						'applied' => '',
 						'apply_date' => '',
-						'refused' => 'no',
+						'refused' => '',
 						'refuse_date' => '',
 						),
 				);
-		//$userid = $this->userid;
-		$userid = trim($this->input->get('userid', TRUE));
+		$userid = $this->userid;
 		$attributes = 'uuid, children_info, behaviour_info';
 		
 		$this->load->model('apply_model', 'alm');
-		$info = $this->alm->retrieve_some_info($userid, $attributes);
-	
+		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		
+		if ($info) {
+			$data['uuid'] = $info['uuid'];
+			
+			$children_info = json_decode($info['children_info'], TRUE);
+			if ($children_info) {
+				$i = 0;
+				foreach ($children_info as $one) {
+					$data['children_info'][$i] = $one;
+					$i++;
+				}
+			}
+			$behaviour_info = json_decode($info['behaviour_info'], TRUE);
+			$data['behaviour_info'] = $behaviour_info;
+		}
+		
 		$this->load->view('step_four', $data);
 	}
 	
@@ -310,15 +386,107 @@ class Apply extends CI_Controller {
 		$this->load->helper('util');
 		
 		if ($data['uuid'] === '') {
-			$data['uuid'] = hex16to64(uuid(), 0);
+			show_error('uuid empty error', 500);
+			die();
 		}
 		
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->update_complement_info($data) > 0) {
-			echo 'success';
+			header('Location: '.base_url('/apply/confirm_info/'.$data['uuid']));
 		} else {
 			echo 'fail';
+		}
+	}
+	
+	public function confirm_info($uuid = '') {
+		if ($uuid === '') {
+			show_error('uuid empty error', 500);
+			die();
+		}
+		
+		$userid = $this->userid;
+		$attributes = '*';
+		
+		$this->load->model('apply_model', 'alm');
+		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		
+		if ($info) {
+			$this->load->view('step_five', $info);
+		} else {
+			show_error('no application available', 500);
+		}
+	}
+	
+	public function submit_all_info($uuid = '', $opt = '') {
+		$userid = $this->userid;
+		$status = 0;
+		switch ($opt) {
+			case 'submit': $status = 1; break;
+			case 'cancel': $status = -1; break;
+		}
+		
+		if ($uuid === '') {
+			show_error('uuid empty error', 500);
+			die();
+		}
+		
+		$this->load->model('apply_model', 'alm');
+		
+		if ($this->alm->submit_all_info($userid, $uuid, $status) > 0) {
+			header('Location: '.base_url('/apply/records'));
+		} else {
+			$msg['tips'] = 'do not repeat it';
+			$msg['link'] = '/apply/records';
+			$msg['location'] = 'index page';
+			$this->load->view('simple_msg_page', $msg);
+		}
+	}
+	
+	public function view($uuid = '') {
+		if ($uuid === '') {
+			show_error('uuid empty error', 500);
+			die();
+		}
+		
+		$userid = $this->userid;
+		$attributes = '*';
+		
+		$this->load->model('apply_model', 'alm');
+		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		
+		if ($info) {
+			$this->load->view('apply_view', $info);
+		} else {
+			show_error('no application available', 500);
+		}
+	}
+	
+	public function records() {
+		$userid = $this->userid;
+		
+		$this->load->model('apply_model', 'alm');
+		$data['records'] = $this->alm->get_records($userid);
+		
+		$this->load->view('apply_records', $data);
+	}
+	
+	public function download_form($uuid = '') {
+		if ($uuid === '') {
+			show_error('uuid empty error', 500);
+			die();
+		}
+		
+		$userid = $this->userid;
+		$attributes = '*';
+		
+		$this->load->model('apply_model', 'alm');
+		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		
+		if ($info) {
+			$this->load->view('form_for_download', $info);
+		} else {
+			show_error('no application available', 500);
 		}
 	}
 }

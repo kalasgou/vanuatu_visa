@@ -29,11 +29,11 @@
 				</div>
 				<div>
 					设定登录密码(长度至少六位):<br>
-					<input type="password" name="pswd_1" name="password" placeholder="密码"/>
+					<input type="password" id="pswd_1" name="password" placeholder="密码"/>
 				</div>
 				<div>
 					确认登录密码:<br>
-					<input type="password" name="pswd_2" placeholder="确认密码"/>
+					<input type="password" id="pswd_2" placeholder="确认密码"/>
 				</div>
 				<div>
 					真实姓名:<br>

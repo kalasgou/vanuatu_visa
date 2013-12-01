@@ -19,16 +19,17 @@
 	</head>
 	<body>
 		<div id="step_menu" style="display:inline;">
-			<a>basic info</a>
-			<a href="passport_info">passport info</a>
-			<a href="travel_info">travel info</a>
-			<a href="other_info">other info</a>
+			<a href="/apply/agencies/<?php echo $uuid;?>">选择办事处</a>
+			<a href="/apply/basic_info/<?php echo $uuid;?>">基本个人信息</a>
+			<a href="/apply/passport_info/<?php echo $uuid;?>">护照信息</a>
+			<a href="/apply/travel_info/<?php echo $uuid;?>">行程信息</a>
+			<a href="/apply/complement_info/<?php echo $uuid;?>">其他补充信息</a>
+			<a href="/apply/confirm_info/<?php echo $uuid;?>">所填信息确认</a>
 		</div>
 		<p></p>
 		<div id="filling_info">
-			<form id="basic_form" method="POST" action="update_basic_info">
-				<input type="hidden" name="unipue_uuid" value="<?php echo $uuid;?>"/>
-				<input type="hidden" name="userid" value="4338"/>
+			<form id="basic_form" method="POST" action="/apply/update_basic_info">
+				<input type="hidden" name="uuid" value="<?php echo $uuid;?>"/>
 				<p>1、Full name 姓名:
 				(English英文)<input type="text" name="name_en" value="<?php echo $name_en;?>"/>
 				(Chinese中文)<input type="text" name="name_cn" value="<?php echo $name_cn;?>"/></p>

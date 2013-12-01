@@ -23,13 +23,13 @@
 		}
 		
 		public function push_cookie($user) {
-			$local_key = hash('SHA1', $user['userid'].$user['email'].$_SERVER['REQUEST_TIME']);
+			$local_key = hash('SHA1', $user['userid'].$user['permission'].$user['email'].$_SERVER['REQUEST_TIME']);
 			
 			if (setcookie('local_key', $local_key, 0, '/', $_SERVER['HTTP_HOST'], FALSE, TRUE)) {
 				$json_info = json_encode($user);
 				$this->load->library('RedisDB');
 				$redis = $this->redisdb->instance(REDIS_DEFAULT);
-				$redis->setex($local_key, 86400, $json_info);
+				$redis->setex($local_key, 3600, $json_info);
 				
 				return TRUE;
 			} else {
@@ -46,16 +46,12 @@
 		}
 		
 		public function applicant_register($data) {
-			$data['reg_time'] = date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);
-			$data['status'] = 0;
 			$this->user_db->insert('applicant', $data);
 			
 			return $this->user_db->affected_rows();
 		}
 		
 		public function administrator_register($data) {
-			$data['reg_time'] = date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);
-			$data['status'] = 0;
 			$this->user_db->insert('administrator', $data);
 			
 			return $this->user_db->affected_rows();

@@ -18,7 +18,7 @@ class Admin extends AdminLoginController {
 		}
 	}
 	
-	public function audit_list($opt = 'wait') {
+	public function audit($opt = 'wait') {
 		$user = $this->user_info;
 		
 		$this->load->helper('util');
@@ -59,8 +59,6 @@ class Admin extends AdminLoginController {
 	public function approving($uuid = '') {
 		$userid = $this->userid;
 		$data['uuid'] = $uuid;
-		$data['passed'] = trim($this->input->post('passed', TRUE));
-		$data['reason'] = trim($this->input->post('reason', TRUE));
 		$data['start_time'] = strtotime('today');
 		$data['end_time'] = $data['start_time'] + 86400 * 60;
 		
@@ -99,6 +97,14 @@ class Admin extends AdminLoginController {
 			}
 
 			$document->save($path.$visa_no.'.docx');
+			
+			header('Content-Description: File Transfer');
+			header('Content-Type: application/force-download');
+			header('Content-Disposition: attachment; filename='.basename($path.$visa_no.'.docx'));
+			header('Content-Transfer-Encoding: binary');
+			header('Content-Length: '.filesize($path.$visa_no.'.docx'));
+			readfile($path.$visa_no.'.docx');
+			unlink($path.$visa_no.'.docx');
 		}
 	}
 }

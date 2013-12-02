@@ -7,10 +7,8 @@
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
 		<link rel="shortcut icon" href=""/>
-		<link rel="stylesheet" type="text/css" href=''>
-		<script type="text/javascript" src=""/>
-		<script type="text/javascript" src=""/>
-		<script type="text/javascript" src=""/>
+		<link rel="stylesheet" type="text/css" href=''/>
+		<script type="text/javascript" src=""/></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
@@ -24,10 +22,11 @@
 			<h4>Hello, <?php echo $realname;?>!</h4>
 		</div>
 		<div id="step_menu" style="display:inline;">
-			<a href="/admin/audit">审核申请</a>
-			<a href="/admin/records">审核记录</a>
+			<a href="/admin/audit">审批签证</a>
+			<a href="/admin/records">审批记录</a>
 			<a href="/admin/account">帐户信息</a>
 			<a href="/admin/password">密码修改</a>
+			<a href="/logout">退出登录</a>
 		</div>
 	</body>
 </html>

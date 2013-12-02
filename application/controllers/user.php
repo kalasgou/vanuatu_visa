@@ -67,9 +67,9 @@ class User extends CI_Controller {
 	}
 	
 	public function login() {
-		$user_type = trim($this->input->get('user_type', TRUE));
-		$data['email'] = trim($this->input->get('email', TRUE));
-		$data['password'] = trim($this->input->get('password', TRUE));
+		$user_type = trim($this->input->post('user_type', TRUE));
+		$data['email'] = trim($this->input->post('email', TRUE));
+		$data['password'] = trim($this->input->post('password', TRUE));
 		
 		$this->load->helper('util');
 		if (!check_parameters($data)) {

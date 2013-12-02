@@ -39,6 +39,9 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('HASH_COST_LOG2', 	8);
 define('HASH_PORTABLE', 	FALSE);
 
+define('VISA_PATH',			'/var/visa_file/');
+define('APPLICATION_PATH',	'/var/application_file/');
+
 define('REDIS_DEFAULT', 	'/tmp/redis_6379.sock');
 
 /* End of file constants.php */

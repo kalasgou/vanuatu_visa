@@ -7,10 +7,8 @@
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
 		<link rel="shortcut icon" href=""/>
-		<link rel="stylesheet" type="text/css" href=''>
-		<script type="text/javascript" src=""/>
-		<script type="text/javascript" src=""/>
-		<script type="text/javascript" src=""/>
+		<link rel="stylesheet" type="text/css" href=''/>
+		<script type="text/javascript" src=""/></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
@@ -19,7 +17,10 @@
 	</head>
 	<body>
 		<div>
-			<form id="" method="get" action="/user/login">
+			<form id="" method="post" action="/user/login">
+				<div>
+					<h3>普通帐户登录</h3>
+				</div>
 				<div>
 					<input type="hidden" name="user_type" value="applicant"/>
 				</div>
@@ -38,6 +39,9 @@
 					</tr>
 				</table>
 			</form>
+			<div>
+				<a class="register" href="/register">点此注册新用户</a>
+			</div>
 		</div>
 	</body>
 </html>

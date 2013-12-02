@@ -5,18 +5,58 @@ require APPPATH .'core/AdminLoginController.php';
 class Admin extends AdminLoginController {
 
 	public function index() {
-		$this->load->view('admin_index', $this->user_info);
+		switch (intval($this->permission)) {
+			case 3: $this->load->view('agency_admin_index', $this->user_info); break;
+			case 2: $this->load->view('embassy_admin_index', $this->user_info); break;
+			case 1: $this->load->view('system_admin_index', $this->user_info); break;
+			default : 
+				$msg['tips'] = 'account forbidden';
+				$link = '/admin_login';
+				$location = 'index page';
+				$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+				show_error($msg);
+		}
 	}
 	
-	public function audit() {
+	public function audit_list($opt = 'wait') {
 		$user = $this->user_info;
+		
+		$this->load->helper('util');
+		$status = text2status($opt);
+		
 		$this->load->model('admin_model', 'adm');
-		$data['records'] = $this->adm->get_applications($user['province_id']);
+		$data['records'] = $this->adm->get_applications($user['province_id'], $status);
 		
 		$this->load->view('admin_audit', $data);
 	}
 	
-	public function auditing($uuid) {
+	public function audit_preview($uuid = '') {
+		$user = $this->user_info;
+	}
+	
+	public function auditing($uuid = '', $opt = '') {
+		$data['userid'] = $this->userid;
+		$data['uuid'] = $uuid;
+		$data['message'] = trim($this->input->post('message', TRUE));
+		
+		$this->load->helper('util');
+		$data['status'] = text2status($opt);
+		
+		if ($data['uuid'] === '') {
+			show_error('uuid empty error', 500);
+		}
+		
+		$this->load->model('admin_model', 'adm');
+		if ($this->adm->auditing_application($data)) {
+			$ret['msg'] = 'success';
+		} else {
+			$ret['msg'] = 'fail';
+		}
+		
+		echo json_encode($ret);
+	}
+	
+	public function approving($uuid = '') {
 		$userid = $this->userid;
 		$data['uuid'] = $uuid;
 		$data['passed'] = trim($this->input->post('passed', TRUE));
@@ -37,7 +77,7 @@ class Admin extends AdminLoginController {
 			require '../application/third_party/PHPWord/PHPWord.php';
 			$PHPWord = new PHPWord();
 
-			$document = $PHPWord->loadTemplate('../www/visa_file/form.docx');
+			$document = $PHPWord->loadTemplate('/var/visa_file/visa_template.docx');
 
 			$document->setValue('name', $info['name_en'].'/'.$info['name_cn']);
 			$document->setValue('visa_no', $visa_no);
@@ -52,13 +92,14 @@ class Admin extends AdminLoginController {
 			$document->setValue('date_of_issue_p', date('j M, Y', $info['passport_date']));
 			$document->setValue('date_of_expiry_p', date('j M, Y', $info['passport_expiry']));
 			$document->setValue('visa_fee', 'RMB180');
+			
+			$path = VISA_PATH .$uuid.'/';
+			if (file_exists($path) === FALSE) {
+				mkdir($path, 0777);
+			}
 
-			$document->save($visa_no.'.docx');
+			$document->save($path.$visa_no.'.docx');
 		}
-	}
-	
-	public function approving() {
-		$data['uuid'] = $this->input->post('uuid', TRUE);
 	}
 }
 

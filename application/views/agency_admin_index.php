@@ -14,34 +14,19 @@
 				
 			});
 		</script>
+		<style type="text/css">
+		</style>
 	</head>
 	<body>
 		<div>
-			<form id="" method="post" action="/user/login">
-				<div>
-					<h3>管理员登录</h3>
-				</div>
-				<div>
-					<input type="hidden" name="user_type" value="administrator"/>
-				</div>
-				<table>
-					<tr>
-						<td>邮箱：</td>
-						<td><input type="text" name="email" placeholder="注册邮箱"/></td>
-					</tr>
-					<tr>
-						<td>密码：</td>
-						<td><input type="password" name="password" placeholder="密码"/></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td><input type="submit" value="登录"/></td>
-					</tr>
-				</table>
-			</form>
-			<div>
-				<a class="register" href="/admin_register">点此注册新用户</a>
-			</div>
+			<h4>Hello, <?php echo $realname;?>!</h4>
+		</div>
+		<div id="step_menu" style="display:inline;">
+			<a href="/admin/audit">审核申请</a>
+			<a href="/admin/records">审核记录</a>
+			<a href="/admin/account">帐户信息</a>
+			<a href="/admin/password">密码修改</a>
+			<a href="/logout">退出登录</a>
 		</div>
 	</body>
 </html>

@@ -184,8 +184,23 @@ class CI_Exceptions {
 		ob_end_clean();
 		echo $buffer;
 	}
-
-
+	
+	/*
+	 * Customed Simple Error Output Page
+	 */
+	function show_simple_error($header, $message, $template = 'simple_msg_page', $status_code = 500)
+	{
+		if (ob_get_level() > $this->ob_level + 1)
+		{
+			ob_end_flush();
+		}
+		var_dump($message);
+		/*ob_start();
+		include(APPPATH.'errors/'.$template.'.php');
+		$buffer = ob_get_contents();
+		ob_end_clean();
+		return $buffer;*/
+	}
 }
 // END Exceptions Class
 

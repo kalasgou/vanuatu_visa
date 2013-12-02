@@ -7,10 +7,8 @@
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
 		<link rel="shortcut icon" href=""/>
-		<link rel="stylesheet" type="text/css" href=''>
-		<script type="text/javascript" src=""/>
-		<script type="text/javascript" src=""/>
-		<script type="text/javascript" src=""/>
+		<link rel="stylesheet" type="text/css" href=''/>
+		<script type="text/javascript" src=""/></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
@@ -28,6 +26,7 @@
 			<a href="/apply/records">申请记录</a>
 			<a href="/apply/account">帐户信息</a>
 			<a href="/apply/password">密码修改</a>
+			<a href="/logout">退出登录</a>
 		</div>
 	</body>
 </html>

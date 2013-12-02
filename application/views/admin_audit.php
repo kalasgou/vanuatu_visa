@@ -7,14 +7,29 @@
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
 		<link rel="shortcut icon" href=""/>
-		<link rel="stylesheet" type="text/css" href=''>
-		<script type="text/javascript" src=""/>
-		<script type="text/javascript" src=""/>
-		<script type="text/javascript" src=""/>
+		<link rel="stylesheet" type="text/css" href=''/>
+		<script type="text/javascript" src="/jquery-1.9.1.min.js"/></script>
 		<script type="text/javascript">
-			$(document).ready(function(){
-				
-			});
+			function pay_for_visa(uuid) {
+				var fee = parseInt(prompt('请输入签证费用，单位：人名币'));
+				if (isNaN(fee)) {
+					alert('请输入数字！');
+					return;
+				}
+				var message = '签证申请流水号 ' + uuid + ' 已缴款RMB ' + fee + '，请等待签证通过！';
+				$.ajax({
+					url: '/admin/auditing/' + uuid + '/paid',
+					data: {message: message},
+					type: 'POST',
+					dataType: 'json',
+					success: function(json) {
+						alert(json);
+					},
+					error: function() {
+						alert('Network Error');
+					}
+				});
+			}
 		</script>
 	</head>
 	<body>
@@ -38,8 +53,8 @@
 					<td><?php echo $one['submit_time'];?></td>
 					<td><?php echo $one['status'];?></td>
 					<td>
-						<a href="/admin/auditing/<?php echo $one['uuid'];?>">通过</a>
-						<a href="/admin/agencies/<?php echo $one['uuid'];?>">不通过</a>
+						<a href="/admin/audit_preview/<?php echo $one['uuid'];?>">查看详细</a> / 
+						<a href="javascript:pay_for_visa('<?php echo $one['uuid'];?>');">缴费</a> 
 					</td>
 				</tr>
 				<?php

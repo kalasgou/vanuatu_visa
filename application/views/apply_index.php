@@ -26,7 +26,7 @@
 			<a href="/apply/records">申请记录</a>
 			<a href="/apply/account">帐户信息</a>
 			<a href="/apply/password">密码修改</a>
-			<a href="/logout">退出登录</a>
+			<a href="/user/logout">退出登录</a>
 		</div>
 	</body>
 </html>

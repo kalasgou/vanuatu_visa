@@ -6,6 +6,7 @@ input {
 	border-right-width: 0px;
 	border-bottom-width: 0px;
 	border-left-width: 0px;
+	background: #FFFFF0;
 }
 
 #filling_info input {
@@ -26,4 +27,17 @@ th, td {
 	border:1px solid;
 	padding:2px;
 	font-weight: normal;
+}
+
+#filling_info {
+	border: 1px dotted #000;
+	width: 800px;
+	height: 100%;
+	background: #FFFFF0;
+	margin: auto;
+}
+
+#next_step {
+	position: relative;
+	float: right;
 }

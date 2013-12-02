@@ -15,6 +15,9 @@
 				
 			});
 		</script>
+		<style type="text/css">
+			
+		</style>
 	</head>
 	<body>
 		<div id="step_menu" style="display:inline;">
@@ -41,9 +44,9 @@
 				<p>3、Nationality 国籍:
 				<input type="text" name="nationality" value="<?php echo $nationality;?>"/></p>
 				<p>4、Date of Birth 出生日期:
-				Day 日<input type="text" name="birth_day" value="<?php echo $birth_day;?>"/>/
-				Month 月<input type="text" name="birth_month" value="<?php echo $birth_month;?>"/>/
-				Year 年<input type="text" name="birth_year" value="<?php echo $birth_year;?>"/></p>
+				Day 日<input type="text" name="birth_day" style="width:100px;" value="<?php echo $birth_day;?>"/>/
+				Month 月<input type="text" name="birth_month" style="width:100px;" value="<?php echo $birth_month;?>"/>/
+				Year 年<input type="text" name="birth_year" style="width:100px;" value="<?php echo $birth_year;?>"/></p>
 				<p>5、Place of birth 出生地点:
 				<input type="text" name="birth_place" value="<?php echo $birth_place;?>"/></p>
 				<p>6、Family Situation 婚姻状况:
@@ -54,16 +57,16 @@
 				<p>7、Occupation 职业:
 				<input type="text" name="occupation" value="<?php echo $occupation_info['occupation'];?>"/></p>
 				<p>8、(a) Employer 就业单位:
-				<input type="text" name="employer" value="<?php echo $occupation_info['employer'];?>"/>
+				<input type="text" name="employer" style="width:300px;" value="<?php echo $occupation_info['employer'];?>"/>
 				Tel No.电话:
-				<input type="text" name="employer_tel" value="<?php echo $occupation_info['employer_tel'];?>"/><br>
+				<input type="text" name="employer_tel" style="width:150px;" value="<?php echo $occupation_info['employer_tel'];?>"/><br>
 				&nbsp;&nbsp;&nbsp;(b) Address 单位地址:
-				<input type="text" name="employer_addr" value="<?php echo $occupation_info['employer_addr'];?>"/></p>
+				<input type="text" name="employer_addr" style="width:400px;" value="<?php echo $occupation_info['employer_addr'];?>"/></p>
 				<p>9、Home Address 家庭住址:
-				<input type="text" name="home_addr" value="<?php echo $home_info['home_addr'];?>"/><br>
+				<input type="text" name="home_addr" style="width:400px;" value="<?php echo $home_info['home_addr'];?>"/><br>
 				&nbsp;&nbsp;&nbsp;Tel No.电话:
-				<input type="text" name="home_tel" value="<?php echo $home_info['home_tel'];?>"/></p>
-				<button type="submit">保存并下一步</button>
+				<input type="text" name="home_tel" style="width:150px;" value="<?php echo $home_info['home_tel'];?>"/></p>
+				<button id="next_step" type="submit">下一步</button>
 			</form>
 		</div>
 	</body>

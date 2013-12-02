@@ -7,13 +7,15 @@
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
 		<link rel="shortcut icon" href=""/>
-		<link rel="stylesheet" type="text/css" href=''/>
+		<link rel="stylesheet" type="text/css" href='/common.css'/>
 		<script type="text/javascript" src=""/></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
 			});
 		</script>
+		<style type="text/css">
+		</style>
 	</head>
 	<body>
 		<div id="step_menu" style="display:inline;">
@@ -35,7 +37,7 @@
 					<?php } ?>
 				</select>
 				</P>
-				<button type="submit">保存并下一步</button>
+				<button id="next_step" type="submit">下一步</button>
 			</form>
 		</div>
 	</body>

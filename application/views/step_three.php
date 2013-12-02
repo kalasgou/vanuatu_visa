@@ -36,25 +36,25 @@
 				Business 商务<input type="radio" name="purpose" value="10"/>
 				Other 其他<input type="radio" name="purpose" value="11"/></p>
 				<p>12、Address in Vanuatu 在瓦地址:
-				<input type="text" name="destination" value="<?php echo $destination;?>"/></p>
+				<input type="text" name="destination" style="width:300px" value="<?php echo $destination;?>"/></p>
 				<p>13、Details of Family in Vanuatu if visiting relative 如属探亲在瓦亲属概况:<br>
 				Name 姓名:
-				<input type="text" name="relative_name" value="<?php echo $relative_info['relative_name'];?>"/>
+				<input type="text" name="relative_name" style="width:150px" value="<?php echo $relative_info['relative_name'];?>"/>
 				Add. 地址:
-				<input type="text" name="relative_addr" value="<?php echo $relative_info['relative_addr'];?>"/></p>
-				<p>14、Details of arrival in Vanuatu抵瓦航班号:
-				<input type="text" name="arrival_number" value="<?php echo $detail_info['arrival_number']?>"/>
+				<input type="text" name="relative_addr" style="width:300px" value="<?php echo $relative_info['relative_addr'];?>"/></p>
+				<p>14、Details of arrival in Vanuatu 抵瓦航班号:
+				<input type="text" name="arrival_number" style="width:150px" value="<?php echo $detail_info['arrival_number']?>"/>
 				日期:
-				<input type="text" name="arrival_date" value="<?php echo $detail_info['arrival_date']?>"/></p>
+				<input type="text" name="arrival_date" style="width:150px" value="<?php echo $detail_info['arrival_date']?>"/></p>
 				<p>15、Details of return ticket 回程航班号:
-				<input type="text" name="return_number" value="<?php echo $detail_info['return_number']?>"/>
+				<input type="text" name="return_number" style="width:150px" value="<?php echo $detail_info['return_number']?>"/>
 				日期:
-				<input type="text" name="return_date" value="<?php echo $detail_info['return_date']?>"/></p>
+				<input type="text" name="return_date" style="width:150px" value="<?php echo $detail_info['return_date']?>"/></p>
 				<p>16、Proposed duration of stay 拟在瓦逗留时间:
 				<input type="text" name="duration" value="<?php echo $detail_info['duration']?>"/></p>
 				<p>17、Source of financial support in Vanuatu 在瓦费用来源:
 				<input type="text" name="financial_source" value="<?php echo $detail_info['financial_source']?>"/></p>
-				<button type="submit">保存并下一步</button>
+				<button id="next_step" type="submit">下一步</button>
 			</form>
 		</div>
 	</body>

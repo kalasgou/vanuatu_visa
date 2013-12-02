@@ -32,9 +32,9 @@
 				<p>10、Passport 护照:<br>
 				(a) Number 护照号<input type="text" name="passport_number" value="<?php echo $passport_number;?>"/>
 				(b) Place of Issue 发照地<input type="text" name="passport_place" value="<?php echo $passport_place;?>"/><br>
-				(c) Date of Issue发照日期<input type="text" name="passport_date" value="<?php echo $passport_date;?>"/>
-				(d) Expiry Date 有效日期至<input type="text" name="passport_expiry" value="<?php echo $passport_expiry;?>"/></P>
-				<button type="submit">保存并下一步</button>
+				(c) Date of Issue发照日期<input type="text" name="passport_date" style="width:150px" value="<?php echo $passport_date;?>"/>
+				(d) Expiry Date 有效日期至<input type="text" name="passport_expiry" style="width:150px" value="<?php echo $passport_expiry;?>"/></P>
+				<button id="next_step" type="submit">下一步</button>
 			</form>
 		</div>
 	</body>

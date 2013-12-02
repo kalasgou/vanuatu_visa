@@ -21,6 +21,8 @@
 			#option {display:inline-block;}
 			table {border-collapse:collapse; border:1px solid; text-align:center;}
 			th, td {border:1px solid; padding:8px; font-weight: normal;}
+			#application_form {border:1px dotted #000; width:800px; height:100%; background:#FFFFF0; margin:auto;}
+			#form_button {width:800px; height:100%; margin:auto; text-align:center;}
 		</style>
 	</head>
 	<body>
@@ -36,8 +38,8 @@
 		<div id="application_form">
 			<div>
 				1、Full name 姓名:
-				(English英文) <span id="answer" style="width:200px;"><?php echo $name_en;?></span>
-				(Chinese中文) <span id="answer" style="width:200px;"><?php echo $name_cn;?></span>
+				(English英文) <span id="answer" style="width:150px;"><?php echo $name_en;?></span>
+				(Chinese中文) <span id="answer" style="width:150px;"><?php echo $name_cn;?></span>
 			</div>
 			<div>
 				2、Mr.先生
@@ -46,20 +48,20 @@
 				Miss小姐 <span id="option"><input type="checkbox"/></span>
 			</div>
 			<div>3、Nationality 国籍:
-				<span id="answer" style="width:200px;"><?php echo $nationality;?></span>
+				<span id="answer" style="width:150px;"><?php echo $nationality;?></span>
 			</div>
 			<div>
 				4、Date of Birth 出生日期:
-				Day 日 <span id="answer" style="width:200px;"><?php echo $birth_day;?></span>
-				Month 月 <span id="answer" style="width:200px;"><?php echo $birth_month;?></span>
-				Year 年 <span id="answer" style="width:200px;"><?php echo $birth_year;?></span>
+				Day 日 <span id="answer" style="width:60px;"><?php echo $birth_day;?></span>
+				Month 月 <span id="answer" style="width:60px;"><?php echo $birth_month;?></span>
+				Year 年 <span id="answer" style="width:60px;"><?php echo $birth_year;?></span>
 			</div>
 			<div>
 				5、Place of birth 出生地点:
 				<span id="answer" style="width:200px;"><?php echo $birth_place;?></span>
 			</div>
 			<div>
-				6、Family Situation 婚姻状况:
+				6、Family Situation 婚姻状况:<br>&nbsp;&nbsp;
 				Married 已婚 <span id="option"><input type="checkbox"/></span>
 				Single 单身 <span id="option"><input type="checkbox" checked="checked"/></span>
 				Widowed 丧偶 <span id="option"><input type="checkbox"/></span>
@@ -75,7 +77,7 @@
 			<div>
 				8、(a) Employer 就业单位:
 				<span id="answer" style="width:200px;"><?php echo $occupation_info['employer'];?></span>
-				Tel No.电话: <span id="answer" style="width:200px;"><?php echo $occupation_info['employer_tel'];?></span><br>
+				Tel No.电话: <span id="answer" style="width:200px;"><?php echo $occupation_info['employer_tel'];?></span><br>&nbsp;&nbsp;
 				(b) Address 单位地址: <span id="answer" style="width:200px;"><?php echo $occupation_info['employer_addr'];?></span>
 			</div>
 			<?php
@@ -94,7 +96,7 @@
 				(d) Expiry Date 有效日期至 <span id="answer" style="width:200px;"><?php echo $passport_expiry;?></span>
 			</div>
 			<div>
-				11、Purpose of Visit 访瓦目的:<br>
+				11、Purpose of Visit 访瓦目的:<br>&nbsp;&nbsp;
 				Tourism 旅游 <span id="option"><input type="checkbox" checked="checked"/></span>
 				Visiting Relative 探亲 <span id="option"><input type="checkbox"/></span>
 				Business 商务 <span id="option"><input type="checkbox"/></span>
@@ -108,7 +110,7 @@
 				$relative_info = json_decode($relative_info, TRUE);
 			?>
 			<div>
-				13、Details of Family in Vanuatu if visiting relative 如属探亲在瓦亲属概况:<br>
+				13、Details of Family in Vanuatu if visiting relative 如属探亲在瓦亲属概况:<br>&nbsp;&nbsp;
 				Name 姓名: <span id="answer" style="width:100px;"><?php echo $relative_info['relative_name'];?></span>
 				Add. 地址: <span id="answer" style="width:300px;"><?php echo $relative_info['relative_addr'];?></span>
 			</div>
@@ -134,7 +136,7 @@
 				<span id="answer" style="width:200px;"><?php echo $detail_info['financial_source'];?></span>
 			</div>
 			<div>
-				18、Details of family included in passport<br>
+				18、Details of family included in passport<br>&nbsp;&nbsp;
 				护照内偕行儿童详细信息:<br>
 				<table id="children_info">
 					<tr>
@@ -179,26 +181,10 @@
 				您曾经被瓦努阿图拒签过吗？ Yes 是 <span id="option"><input type="checkbox"/></span>When 何时 <span id="answer" style="width:200px;"><?php echo $behaviour_info['refuse_date'];?></span>No 否 <span id="option"><input type="checkbox"/></span><br>
 			</div>
 		</div>
-		<div>
+		<br>
+		<div id="form_button">
 			<a href="/apply/submit_all_info/<?php echo $uuid;?>/submit">确认</a>
 			<a href="/apply/submit_all_info/<?php echo $uuid;?>/cancel">取消</a>
 		</div>
 	</body>
 </html>
-<?php
-	/*$HTMLoutput = ob_get_contents();
-	ob_end_clean();*/
-	
-	//Convert HTML 2 PDF by using MPDF PHP library
-	/*require '../application/third_party/mPDF/mpdf.php';
-	$mpdf = new mPDF('utf-8'); 
-	$mpdf->useAdobeCJK = TRUE; 
-	$mpdf->SetAutoFont(AUTOFONT_ALL);
-	$mpdf->WriteHTML($HTMLoutput);
-	$mpdf->Output('application_form.pdf', 'D');*/
-	/*require '../application/third_party/dompdf/dompdf_config.inc.php';
-	$dompdf = new DOMPDF();
-	$dompdf->load_html($HTMLoutput);
-	$dompdf->render();
-	$dompdf->stream('sample.pdf');*/
-?>

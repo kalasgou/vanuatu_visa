@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://www.visa_vanuatu.cn/';
+$config['base_url']	= 'http://www.visa2vanuatu.cn/';
 
 /*
 |--------------------------------------------------------------------------

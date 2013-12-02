@@ -16,5 +16,9 @@
 		</script>
 	</head>
 	<body>
-	
+	<noscript>
+		<div class="noScriptOrCookie-tip">
+			<div class="tip-text">该网站依赖于 JavaScript，请您在浏览器中开启 JavaScript。</div>
+		</div>;
+	</noscript>
 	

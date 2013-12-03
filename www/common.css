@@ -38,6 +38,7 @@ th, td {
 	margin: auto;
 	position: relative;
 	top: 36px;
+	padding: 16px;
 }
 
 #next_step {

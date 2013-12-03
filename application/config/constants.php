@@ -40,7 +40,8 @@ define('HASH_COST_LOG2', 	8);
 define('HASH_PORTABLE', 	FALSE);
 
 define('VISA_PATH',			'/var/visa_file/');
-define('APPLICATION_PATH',	'/var/application_file/');
+define('SCAN_PATH',			'/var/scan_file/');
+define('CAPTCHA_PATH',		'/var/captcha_pic/');
 
 define('REDIS_DEFAULT', 	'/tmp/redis_6379.sock');
 

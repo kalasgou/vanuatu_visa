@@ -11,12 +11,12 @@
 		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript">
 			function pay_for_visa(uuid) {
-				var fee = parseInt(prompt('è¯·è¾“å…¥ç­¾è¯è´¹ç”¨ï¼Œå•ä½ï¼šäººåå¸'));
+				var fee = parseInt(prompt('ÇëÊäÈëÇ©Ö¤·ÑÓÃ£¬µ¥Î»£ºÈËÃû±Ò'));
 				if (isNaN(fee)) {
-					alert('è¯·è¾“å…¥æ•°å­—ï¼');
+					alert('ÇëÊäÈëÊı×Ö£¡');
 					return;
 				}
-				var message = 'ç­¾è¯ç”³è¯·æµæ°´å· ' + uuid + ' å·²ç¼´æ¬¾RMB ' + fee + 'ï¼Œè¯·ç­‰å¾…ç­¾è¯é€šè¿‡ï¼';
+				var message = 'Ç©Ö¤ÉêÇëÁ÷Ë®ºÅ ' + uuid + ' ÒÑ½É¿îRMB ' + fee + '£¬ÇëµÈ´ıÇ©Ö¤Í¨¹ı£¡';
 				$.ajax({
 					url: '/admin/auditing/' + uuid + '/paid',
 					data: {message: message},
@@ -40,21 +40,21 @@
 		<div>
 			<div>
 				<select id="cur_status">
-					<option value="wait">å¾…å®¡æ ¸</option>
-					<option value="pass">å·²é€šè¿‡</option>
-					<option value="fail">æœªé€šè¿‡</option>
-					<option value="paid">å·²ç¼´è´¹</option>
+					<option value="wait">´ıÉóºË</option>
+					<option value="pass">ÒÑÍ¨¹ı</option>
+					<option value="fail">Î´Í¨¹ı</option>
+					<option value="paid">ÒÑ½É·Ñ</option>
 				</select>
-				<button onclick="javascript:filter_them();">æœç´¢</button>
+				<button onclick="javascript:filter_them();">ËÑË÷</button>
 			</div>
 			<table>
 				<tr>
-					<td>ç”³è¯·äººä¸­æ–‡å§“å</td>
-					<td>ç”³è¯·äººè‹±æ–‡å§“å</td>
-					<td>æŠ¤ç…§å·</td>
-					<td>ç”³è¯·æäº¤æ—¶é—´</td>
-					<td>ç”³è¯·çŠ¶æ€</td>
-					<td>æ“ä½œ</td>
+					<td>ÉêÇëÈËÖĞÎÄĞÕÃû</td>
+					<td>ÉêÇëÈËÓ¢ÎÄĞÕÃû</td>
+					<td>»¤ÕÕºÅ</td>
+					<td>ÉêÇëÌá½»Ê±¼ä</td>
+					<td>ÉêÇë×´Ì¬</td>
+					<td>²Ù×÷</td>
 				</tr>
 				<?php if (count($records) > 0) {
 						foreach ($records as $one) { 
@@ -66,9 +66,8 @@
 					<td><?php echo $one['submit_time'];?></td>
 					<td><?php echo $one['status'];?></td>
 					<td>
-						<a href="/admin/total_preview/<?php echo $one['uuid'];?>">æŸ¥çœ‹è¯¦ç»†</a> / 
-						<a href="javascript:pay_for_visa('<?php echo $one['uuid'];?>');">ç¼´è´¹</a> / 
-						<a href="/admin/scan_upload/<?php echo $one['uuid'];?>">ä¸Šä¼ æ‰«æä»¶</a> 
+						<a href="/admin/total_preview/<?php echo $one['uuid'];?>">²é¿´ÏêÏ¸</a> / 
+						<a href="javascript:pay_for_visa('<?php echo $one['uuid'];?>');">Í¨¹ıÇ©Ö¤</a> / 
 					</td>
 				</tr>
 				<?php
@@ -84,10 +83,11 @@
 			</table>
 		</div>
 		<div id="step_menu" style="display:inline;">
-			<a href="/admin/audit">å®¡æ ¸ç”³è¯·</a>
-			<a href="/admin/records">å®¡æ ¸è®°å½•</a>
-			<a href="/admin/account">å¸æˆ·ä¿¡æ¯</a>
-			<a href="/admin/password">å¯†ç ä¿®æ”¹</a>
+			<a href="/admin/approve">ÉóÅúÇ©Ö¤</a>
+			<a href="/admin/approved_records">ÉóÅú¼ÇÂ¼</a>
+			<a href="/admin/account">ÕÊ»§ĞÅÏ¢</a>
+			<a href="/admin/password">ÃÜÂëĞŞ¸Ä</a>
+			<a href="/user/logout">ÍË³öµÇÂ¼</a>
 		</div>
 	</body>
 </html>

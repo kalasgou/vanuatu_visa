@@ -8,7 +8,7 @@
 		<link rel="apple-touch-icon-precomposed" href=""/>
 		<link rel="shortcut icon" href=""/>
 		<link rel="stylesheet" type="text/css" href=''/>
-		<script type="text/javascript" src=""/></script>
+		<script type="text/javascript" src=""></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				

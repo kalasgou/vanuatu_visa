@@ -18,7 +18,7 @@ class Admin extends AdminLoginController {
 		}
 	}
 	
-	public function audit($opt = 'wait') {
+	public function audit($opt = 'wait', $page = 0) {
 		$user = $this->user_info;
 		
 		$this->load->helper('util');
@@ -30,8 +30,35 @@ class Admin extends AdminLoginController {
 		$this->load->view('admin_audit', $data);
 	}
 	
-	public function audit_preview($uuid = '') {
+	public function approve($opt = 'paid', $page = 0) {
 		$user = $this->user_info;
+		
+		$this->load->helper('util');
+		$status = text2status($opt);
+		
+		$this->load->model('admin_model', 'adm');
+		$data['records'] = $this->adm->get_applications($user['province_id'], $status);
+		
+		$this->load->view('admin_approve', $data);
+	}
+	
+	public function total_preview($uuid = '') {
+		if ($uuid === '') {
+			show_error('uuid empty error', 500);
+			die();
+		}
+		
+		$user = $this->user_info;
+		$attributes = '*';
+		
+		$this->load->model('admin_model', 'adm');
+		$info = $this->adm->retrieve_some_info($uuid, $user['province_id'], $attributes);
+		
+		if ($info) {
+			$this->load->view('apply_view', $info);
+		} else {
+			show_error('no application available', 500);
+		}
 	}
 	
 	public function auditing($uuid = '', $opt = '') {
@@ -57,20 +84,28 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function approving($uuid = '') {
-		$userid = $this->userid;
+		$user = $this->user_info;
 		$data['uuid'] = $uuid;
+		$data['userid'] = $this->userid;
 		$data['start_time'] = strtotime('today');
 		$data['end_time'] = $data['start_time'] + 86400 * 60;
 		
 		$this->load->model('admin_model', 'adm');
+		$attributes = '*';
+		$info = $this->adm->retrieve_some_info($uuid, $user['province_id'], $attributes);
+		
+		if (!$info) {
+			$msg['tips'] = 'forbidden';
+			$link = '/admin/approve';
+			$location = 'index page';
+			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			show_error($msg, 500);
+		}
 		
 		if (($id = $this->adm->final_audit($data))) {
 			$this->load->helper('util');
 			$visa_no = gen_visa_number($id);
 			$this->adm->update_visa_number($id, $visa_no);
-			
-			$attributes = '*';
-			$info = $this->adm->retrieve_some_info($uuid, $attributes);
 			
 			require '../application/third_party/PHPWord/PHPWord.php';
 			$PHPWord = new PHPWord();
@@ -104,9 +139,52 @@ class Admin extends AdminLoginController {
 			header('Content-Transfer-Encoding: binary');
 			header('Content-Length: '.filesize($path.$visa_no.'.docx'));
 			readfile($path.$visa_no.'.docx');
-			unlink($path.$visa_no.'.docx');
+			//unlink($path.$visa_no.'.docx');
 		}
 	}
+	
+	public function scan_upload($uuid = '') {
+		$userid = $this->userid;
+		
+		$data['uuid'] = $uuid;
+		if ($data['uuid'] === '') {
+			show_error('uuid empty error', 500);
+		}
+		
+		$this->load->view('audit_upload', $data);
+	}
+	
+	private function upload_pics($uuid, $filename) {
+		if (($_FILES[$filename]['type'] == 'image/png') || ($_FILES[$filename]['type'] == 'image/jpeg') ||
+			($_FILES[$filename]['type'] == 'image/pjpeg') || ($_FILES[$filename]['type'] == 'image/gif')) {
+			if ($_FILES[$filename]['error'] > 0) {
+				return FALSE;
+			} else {
+				$path = SCAN_PATH .$uuid .'/';
+				if (file_exists($path) === FALSE) {
+					mkdir($path, 0777);
+				}
+				$destination = $path.$filename;
+				if (move_uploaded_file($_FILES[$filename]['tmp_name'], $destination)) {
+					return TRUE;
+				}
+			}
+		} else {
+			return FALSE;
+		}
+	}
+	
+	public function upload_now($uuid = '') {
+		$scan_files = array('photo', 'passport', 'identity', 'ticket', 'deposition');
+		foreach ($scan_files as $val) {
+			if (!$this->upload_pics($uuid, $val)) {
+				show_error('upload failed', 500);
+			}
+		}
+		
+		header('Location: /admin/total_preview/');
+	}
+	
 }
 
 /* End of file */

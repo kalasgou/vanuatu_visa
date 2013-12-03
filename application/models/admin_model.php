@@ -24,9 +24,10 @@
 			return $query->result_array();
 		}
 		
-		public function retrieve_some_info($uuid, $attributes) {
+		public function retrieve_some_info($uuid, $province_id, $attributes) {
 			$this->admin_db->select($attributes);
 			$this->admin_db->where('uuid', $uuid);
+			$this->admin_db->where('province_id', $province_id);
 			$this->admin_db->limit(1);
 			$query = $this->admin_db->get('visa_applying');
 			
@@ -67,6 +68,7 @@
 		
 		public function final_audit($data) {
 			$this->admin_db->set('uuid', $data['uuid']);
+			$this->admin_db->set('admin_userid', $data['userid']);
 			$this->admin_db->set('start_time', $data['start_time']);
 			$this->admin_db->set('end_time', $data['end_time']);
 			$this->admin_db->insert('visa_approved');

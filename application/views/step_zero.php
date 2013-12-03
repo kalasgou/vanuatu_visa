@@ -7,7 +7,8 @@
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
 		<link rel="shortcut icon" href=""/>
-		<link rel="stylesheet" type="text/css" href='/common.css'/>
+		<link rel="stylesheet" type="text/css" href="/common.css"/>
+		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
 		<script type="text/javascript" src=""></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
@@ -18,13 +19,13 @@
 		</style>
 	</head>
 	<body>
-		<div id="step_menu" style="display:inline;">
-			<a href="/apply/agencies/<?php echo $uuid;?>">选择办事处</a>
-			<a href="/apply/basic_info/<?php echo $uuid;?>">基本个人信息</a>
-			<a href="/apply/passport_info/<?php echo $uuid;?>">护照信息</a>
-			<a href="/apply/travel_info/<?php echo $uuid;?>">行程信息</a>
-			<a href="/apply/complement_info/<?php echo $uuid;?>">其他补充信息</a>
-			<a href="/apply/confirm_info/<?php echo $uuid;?>">所填信息确认</a>
+		<div id="procedure" class="list_group">
+			<a class="list-group-item active">选择办事处</a>
+			<a class="list-group-item" href="/apply/basic_info/<?php echo $uuid;?>">基本个人信息</a>
+			<a class="list-group-item" href="/apply/passport_info/<?php echo $uuid;?>">护照信息</a>
+			<a class="list-group-item" href="/apply/travel_info/<?php echo $uuid;?>">行程信息</a>
+			<a class="list-group-item" href="/apply/complement_info/<?php echo $uuid;?>">其他补充信息</a>
+			<a class="list-group-item" href="/apply/confirm_info/<?php echo $uuid;?>">所填信息确认</a>
 		</div>
 		<p></p>
 		<div id="filling_info">

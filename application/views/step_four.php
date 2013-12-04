@@ -17,17 +17,13 @@
 		</script>
 		<style type="text/css">
 			#children_info input {
-				font-family:宋体;
-				font-size: 18px;
 				text-align: center;
-				line-height: 15px;
 				border-top-width: 0px;
 				border-right-width: 0px;
 				border-bottom-width: 0px;
 				border-left-width: 0px;
 				width: 100%;
 			}
-			th {text-align:center;}
 		</style>
 	</head>
 	<body>
@@ -46,20 +42,24 @@
 					<input type="hidden" name="uuid" value="<?php echo $uuid;?>"/>
 					<p>18、Details of family included in passport 护照内偕行儿童详细信息:<br>
 					<table id="children_info">
-						<tr>
-							<th>Name 姓名</th>
-							<th>Sex 性别</th>
-							<th>Date of birth 出生日期</th>
-							<th>Place of birth 出生地</th>
-						</tr>
-						<?php foreach ($children_info as $kid) { ?>
-						<tr>
-							<td><input type="text" name="child_name[]" value="<?php echo $kid['child_name'];?>"/></td>
-							<td><input type="text" name="child_sex[]" value="<?php echo $kid['child_sex'];?>"/></td>
-							<td><input type="text" name="child_date[]" value="<?php echo $kid['child_date'];?>"/></td>
-							<td><input type="text" name="child_place[]" value="<?php echo $kid['child_place'];?>"/></td>
-						</tr>
-						<?php } ?>
+						<thead>
+							<tr>
+								<th>Name 姓名</th>
+								<th>Sex 性别</th>
+								<th>Date of birth 出生日期</th>
+								<th>Place of birth 出生地</th>
+							</tr>
+						</thead>
+						</tbody>
+							<?php foreach ($children_info as $kid) { ?>
+							<tr>
+								<td><input type="text" name="child_name[]" value="<?php echo $kid['child_name'];?>"/></td>
+								<td><input type="text" name="child_sex[]" value="<?php echo $kid['child_sex'];?>"/></td>
+								<td><input type="text" name="child_date[]" value="<?php echo $kid['child_date'];?>"/></td>
+								<td><input type="text" name="child_place[]" value="<?php echo $kid['child_place'];?>"/></td>
+							</tr>
+							<?php } ?>
+						</tbody>
 					</table></p>
 					<p>19、(a) Been convicted of or have any charges outstanding on a criminal offence in any country<br>
 					是否在任何国家有过犯罪记录:

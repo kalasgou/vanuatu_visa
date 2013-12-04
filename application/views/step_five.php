@@ -142,23 +142,28 @@
 					18、Details of family included in passport<br>&nbsp;&nbsp;
 					护照内偕行儿童详细信息:<br>
 					<table id="children_info">
-						<tr>
-							<th style="width:150px;">Name 姓名</th>
-							<th style="width:120px;">Sex 性别</th>
-							<th style="width:250px;">Date of birth 出生日期</th>
-							<th style="width:250px;">Place of birth 出生地</th>
-						</tr>
-						<?php
-							$children_info = json_decode($children_info, TRUE);
-							foreach ($children_info as $kid) {
-						?>
-						<tr>
-							<td><?php echo $kid['child_name'];?></td>
-							<td><?php echo $kid['child_sex'];?></td>
-							<td><?php echo $kid['child_date'];?></td>
-							<td><?php echo $kid['child_place'];?></td>
-						</tr>
-						<?php } ?>	
+						<thead>
+							<tr>
+								<th style="width:150px;">Name 姓名</th>
+								<th style="width:120px;">Sex 性别</th>
+								<th style="width:250px;">Date of birth 出生日期</th>
+								<th style="width:250px;">Place of birth 出生地</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+								$children_info = json_decode($children_info, TRUE);
+								foreach ($children_info as $kid) {
+							?>
+							
+							<tr>
+								<td><?php echo $kid['child_name'];?></td>
+								<td><?php echo $kid['child_sex'];?></td>
+								<td><?php echo $kid['child_date'];?></td>
+								<td><?php echo $kid['child_place'];?></td>
+							</tr>
+							<?php } ?>
+						</tbody>
 					</table>
 				</div>
 				<?php

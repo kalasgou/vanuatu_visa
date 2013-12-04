@@ -1,33 +1,32 @@
 
-input {
-	font-size:18px;
-	text-align:center;
-	line-height:15px;
-	border-top-width: 0px;
-	border-right-width: 0px;
-	border-bottom-width: 0px;
-	border-left-width: 0px;
-	background: #FFFFF0;
-}
-
 #filling_info input {
+	text-align:center;
 	border-top-style:none;
 	border-right-style:none;
 	border-bottom-style:dotted;
 	border-left-style:none;
 	border-bottom-color:#000000;
 	border-bottom-width:1px;
+	background: #FFFFF0;
 }
 
-table {
+#children_info {
 	border-collapse:collapse;
 	border:1px solid;
 }
 
-th, td {
-	border:1px solid;
-	padding:2px;
+#children_info th {
+	border: 1px solid;
+	padding: 2px;
 	font-weight: normal;
+	text-align: center;
+}
+
+#children_info td {
+	border: 1px solid;
+	padding: 2px;
+	font-weight: normal;
+	height: 30px;
 }
 
 #filling_info {
@@ -52,4 +51,14 @@ th, td {
 	position: relative;
 	margin: 64px;
 	display: inline-block;
+}
+
+#list_box {
+	position: relative;
+	width: 1000px;
+	margin: auto;
+}
+
+#pagination {
+	text-align: center;
 }

@@ -22,8 +22,8 @@
 			<h4>Hello, <?php echo $realname;?>!</h4>
 		</div>
 		<div id="step_menu" style="display:inline;">
-			<a href="/admin/audit">审核管理帐户</a>
-			<a href="/admin/records">管理员查询</a>
+			<a href="/admin/new_admin">审核管理帐户</a>
+			<a href="/admin/cur_admin">管理员查询</a>
 			<a href="/admin/account">帐户信息</a>
 			<a href="/admin/password">密码修改</a>
 			<a href="/user/logout">退出登录</a>

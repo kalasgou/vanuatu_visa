@@ -22,8 +22,8 @@
 			<h4>Hello, <?php echo $realname;?>!</h4>
 		</div>
 		<div id="step_menu" style="display:inline;">
-			<a href="/admin/audit">审批签证</a>
-			<a href="/admin/records">审批记录</a>
+			<a href="/admin/approve">审批签证</a>
+			<a href="/admin/approve_records">审批记录</a>
 			<a href="/admin/account">帐户信息</a>
 			<a href="/admin/password">密码修改</a>
 			<a href="/user/logout">退出登录</a>

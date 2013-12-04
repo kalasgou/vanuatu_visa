@@ -11,12 +11,12 @@
 		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript">
 			function pay_for_visa(uuid) {
-				var fee = parseInt(prompt('ÇëÊäÈëÇ©Ö¤·ÑÓÃ£¬µ¥Î»£ºÈËÃû±Ò'));
+				var fee = parseInt(prompt('è¯·è¾“å…¥ç­¾è¯è´¹ç”¨ï¼Œå•ä½ï¼šäººåå¸'));
 				if (isNaN(fee)) {
-					alert('ÇëÊäÈëÊı×Ö£¡');
+					alert('è¯·è¾“å…¥æ•°å­—ï¼');
 					return;
 				}
-				var message = 'Ç©Ö¤ÉêÇëÁ÷Ë®ºÅ ' + uuid + ' ÒÑ½É¿îRMB ' + fee + '£¬ÇëµÈ´ıÇ©Ö¤Í¨¹ı£¡';
+				var message = 'ç­¾è¯ç”³è¯·æµæ°´å· ' + uuid + ' å·²ç¼´æ¬¾RMB ' + fee + 'ï¼Œè¯·ç­‰å¾…ç­¾è¯é€šè¿‡ï¼';
 				$.ajax({
 					url: '/admin/auditing/' + uuid + '/paid',
 					data: {message: message},
@@ -40,34 +40,41 @@
 		<div>
 			<div>
 				<select id="cur_status">
-					<option value="wait">´ıÉóºË</option>
-					<option value="pass">ÒÑÍ¨¹ı</option>
-					<option value="fail">Î´Í¨¹ı</option>
-					<option value="paid">ÒÑ½É·Ñ</option>
+					<option value="paid">æœªå‘ç­¾è¯</option>
+					<option value="visa">å·²å‘ç­¾è¯</option>
 				</select>
-				<button onclick="javascript:filter_them();">ËÑË÷</button>
+				<button onclick="javascript:filter_them();">æœç´¢</button>
 			</div>
 			<table>
 				<tr>
-					<td>ÉêÇëÈËÖĞÎÄĞÕÃû</td>
-					<td>ÉêÇëÈËÓ¢ÎÄĞÕÃû</td>
-					<td>»¤ÕÕºÅ</td>
-					<td>ÉêÇëÌá½»Ê±¼ä</td>
-					<td>ÉêÇë×´Ì¬</td>
-					<td>²Ù×÷</td>
+					<td>ç”³è¯·æµæ°´å·</td>
+					<td>ç”³è¯·äººä¸­æ–‡å§“å</td>
+					<td>ç”³è¯·äººè‹±æ–‡å§“å</td>
+					<td>æŠ¤ç…§å·</td>
+					<td>ç”³è¯·æäº¤æ—¶é—´</td>
+					<td>å½“å‰çŠ¶æ€</td>
+					<td>å®¡æ ¸æ—¶é—´</td>
+					<td>ç¼´è´¹æ—¶é—´</td>
+					<td>ç­¾å‘æ—¶é—´</td>
+					<td>æ“ä½œ</td>
 				</tr>
 				<?php if (count($records) > 0) {
 						foreach ($records as $one) { 
 				?>
 				<tr>
+					<td><?php echo $one['uuid'];?></td>
 					<td><?php echo $one['name_en'];?></td>
 					<td><?php echo $one['name_cn'];?></td>
 					<td><?php echo $one['passport_number'];?></td>
 					<td><?php echo $one['submit_time'];?></td>
 					<td><?php echo $one['status'];?></td>
+					<td><?php echo $one['audit_time'];?></td>
+					<td><?php echo $one['pay_time'];?></td>
+					<td><?php echo $one['approve_time'];?></td>
 					<td>
-						<a href="/admin/total_preview/<?php echo $one['uuid'];?>">²é¿´ÏêÏ¸</a> / 
-						<a href="javascript:pay_for_visa('<?php echo $one['uuid'];?>');">Í¨¹ıÇ©Ö¤</a> / 
+						<a href="/admin/total_preview/<?php echo $one['uuid'];?>">æŸ¥çœ‹è¯¦ç»†</a> / 
+						<a href="">é€šè¿‡ç­¾è¯</a> / 
+						<a href="">é©³å›ç”³è¯·</a> / 
 					</td>
 				</tr>
 				<?php
@@ -83,11 +90,11 @@
 			</table>
 		</div>
 		<div id="step_menu" style="display:inline;">
-			<a href="/admin/approve">ÉóÅúÇ©Ö¤</a>
-			<a href="/admin/approved_records">ÉóÅú¼ÇÂ¼</a>
-			<a href="/admin/account">ÕÊ»§ĞÅÏ¢</a>
-			<a href="/admin/password">ÃÜÂëĞŞ¸Ä</a>
-			<a href="/user/logout">ÍË³öµÇÂ¼</a>
+			<a href="/admin/approve">å®¡æ‰¹ç­¾è¯</a>
+			<a href="/admin/approved_records">å®¡æ‰¹è®°å½•</a>
+			<a href="/admin/account">å¸æˆ·ä¿¡æ¯</a>
+			<a href="/admin/password">å¯†ç ä¿®æ”¹</a>
+			<a href="/user/logout">é€€å‡ºç™»å½•</a>
 		</div>
 	</body>
 </html>

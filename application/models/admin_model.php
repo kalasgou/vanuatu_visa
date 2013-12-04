@@ -8,17 +8,34 @@
 			$this->admin_db = $this->load->database('default', TRUE);
 		}
 		
-		public function sum_applications($province_id, $status = 1) {
-			$this->admin_db->where('province_id', $province_id);
-			$this->admin_db->where('status', $status);
+		public function sum_applications($data) {
+			$this->admin_db->where('province_id', $data['province_id']);
+			$this->admin_db->where('status', $data['status']);
+			if ($data['uuid'] !== '') {
+				$this->admin_db->where('uuid', $data['uuid']);
+			} else if ($data['passport'] !== '') {
+				$this->admin_db->where('passport_number', $data['passport']);
+			} else if ($data['start_time'] !== '' && $data['end_time'] !== '') {
+				$this->admin_db->where('submit_time >= ', $data['start_time']);
+				$this->admin_db->where('submit_time <= ', $data['end_time']);
+			}
 			return $this->admin_db->count_all_results('visa_applying');
 		}
 		
-		public function get_applications($province_id, $status = 1) {
-			$this->admin_db->select('uuid, name_en, name_cn, status, passport_number, submit_time');
-			$this->admin_db->where('province_id', $province_id);
-			$this->admin_db->where('status', $status);
+		public function get_applications($data) {
+			$this->admin_db->select('uuid, name_en, name_cn, status, passport_number, submit_time, audit_time, pay_time, approve_time');
+			$this->admin_db->where('province_id', $data['province_id']);
+			$this->admin_db->where('status', $data['status']);
+			if ($data['uuid'] !== '') {
+				$this->admin_db->where('uuid', $data['uuid']);
+			} else if ($data['passport'] !== '') {
+				$this->admin_db->where('passport_number', $data['passport']);
+			} else if ($data['start_time'] !== '' && $data['end_time'] !== '') {
+				$this->admin_db->where('submit_time >= ', $data['start_time']);
+				$this->admin_db->where('submit_time <= ', $data['end_time']);
+			}
 			$this->admin_db->order_by('submit_time', 'desc');
+			$this->admin_db->limit(20, 20 * $data['page']);
 			$query = $this->admin_db->get('visa_applying');
 			
 			return $query->result_array();
@@ -48,7 +65,7 @@
 				if ($data['status'] === 21 || $data['status'] === 31) {
 					$this->admin_db->set('audit_time', $update_time);
 				} else if ($data['status'] === 41) {
-					$this->admin_db->set('paid_time', $update_time);
+					$this->admin_db->set('pay_time', $update_time);
 				} else {
 					return FALSE;
 				}

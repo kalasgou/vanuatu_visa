@@ -35,19 +35,21 @@ th, td {
 	width: 800px;
 	height: 100%;
 	background: #FFFFF0;
-	margin: auto;
 	position: relative;
-	top: 36px;
+	top: -320px;
 	padding: 16px;
+	margin: auto;
 }
 
 #next_step {
 	position: relative;
 	float: right;
+	top: 3px;
 }
 
 #procedure {
 	width: 118px;
-	position: fixed;
-	margin: 100px;
+	position: relative;
+	margin: 64px;
+	display: inline-block;
 }

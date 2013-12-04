@@ -189,11 +189,12 @@
 			return $this->apply_db->affected_rows();
 		}
 		
-		public function get_records($userid) {
-			$this->apply_db->select('uuid, name_en, name_cn, status, passport_number, submit_time');
+		public function get_records($userid, $page) {
+			$this->apply_db->select('uuid, name_en, name_cn, status, passport_number, submit_time, audit_time, pay_time, approve_time');
 			$this->apply_db->where('userid', $userid);
 			$this->apply_db->where('status > ', 0);
 			$this->apply_db->order_by('submit_time', 'desc');
+			$this->apply_db->limit(20, 20 * $page);
 			$query = $this->apply_db->get('visa_applying');
 			
 			return $query->result_array();

@@ -18,26 +18,72 @@ class Admin extends AdminLoginController {
 		}
 	}
 	
-	public function audit($opt = 'wait', $page = 0) {
+	public function audit($opt = 'wait', $page = 1) {
 		$user = $this->user_info;
 		
 		$this->load->helper('util');
-		$status = text2status($opt);
+		$data['status'] = text2status($opt);
+		$data['province_id'] = $user['province_id'];
+		$data['page'] = $page - 1;
+		
+		$data['uuid'] = trim($this->input->post('uuid', TRUE));
+		$data['passport'] = trim($this->input->post('passport', TRUE));
+		$data['start_time'] = trim($this->input->post('start_time', TRUE));
+		$data['end_time'] = trim($this->input->post('end_time', TRUE));
 		
 		$this->load->model('admin_model', 'adm');
-		$data['records'] = $this->adm->get_applications($user['province_id'], $status);
+		
+		$this->load->library('pagination');
+		
+		$config['base_url'] = base_url('/admin/audit/'.$opt.'/');
+		$config['uri_segment'] = 4;
+		$config['num_links'] = 2;
+		$config['total_rows'] = $this->adm->sum_applications($data);
+		$config['per_page'] = 20;
+		$config['use_page_numbers'] = TRUE;
+		
+		$config['prev_link'] = '上一页';
+		$config['next_link'] = '下一页';
+		$config['first_link'] = '首 页';
+		$config['last_link'] = '尾 页';
+		
+		$data['pagination'] = $this->pagination->initialize($config);
+		$data['records'] = $this->adm->get_applications($data);
 		
 		$this->load->view('admin_audit', $data);
 	}
 	
-	public function approve($opt = 'paid', $page = 0) {
+	public function approve($opt = 'paid', $page = 1) {
 		$user = $this->user_info;
 		
 		$this->load->helper('util');
-		$status = text2status($opt);
+		$data['status'] = text2status($opt);
+		$data['province_id'] = $user['province_id'];
+		$data['page'] = $page - 1;
+		
+		$data['uuid'] = trim($this->input->post('uuid', TRUE));
+		$data['passport'] = trim($this->input->post('passport', TRUE));
+		$data['start_time'] = trim($this->input->post('start_time', TRUE));
+		$data['end_time'] = trim($this->input->post('end_time', TRUE));
 		
 		$this->load->model('admin_model', 'adm');
-		$data['records'] = $this->adm->get_applications($user['province_id'], $status);
+		
+		$this->load->library('pagination');
+		
+		$config['base_url'] = base_url('/admin/audit/'.$opt.'/');
+		$config['uri_segment'] = 4;
+		$config['num_links'] = 2;
+		$config['total_rows'] = $this->adm->sum_applications($data);
+		$config['per_page'] = 20;
+		$config['use_page_numbers'] = TRUE;
+		
+		$config['prev_link'] = '上一页';
+		$config['next_link'] = '下一页';
+		$config['first_link'] = '首 页';
+		$config['last_link'] = '尾 页';
+		
+		$data['pagination'] = $this->pagination->initialize($config);
+		$data['records'] = $this->adm->get_applications($data);
 		
 		$this->load->view('admin_approve', $data);
 	}
@@ -140,6 +186,8 @@ class Admin extends AdminLoginController {
 			header('Content-Length: '.filesize($path.$visa_no.'.docx'));
 			readfile($path.$visa_no.'.docx');
 			//unlink($path.$visa_no.'.docx');
+			
+			//email();
 		}
 	}
 	

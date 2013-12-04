@@ -19,22 +19,30 @@
 		<div>
 			<table>
 				<tr>
+					<td>申请流水号</td>
 					<td>申请人中文姓名</td>
 					<td>申请人英文姓名</td>
 					<td>护照号</td>
 					<td>申请提交时间</td>
-					<td>申请状态</td>
+					<td>当前状态</td>
+					<td>审核时间</td>
+					<td>缴费时间</td>
+					<td>签发时间</td>
 					<td>操作</td>
 				</tr>
 				<?php if (count($records) > 0) {
 						foreach ($records as $one) { 
 				?>
 				<tr>
+					<td><?php echo $one['uuid'];?></td>
 					<td><?php echo $one['name_en'];?></td>
 					<td><?php echo $one['name_cn'];?></td>
 					<td><?php echo $one['passport_number'];?></td>
 					<td><?php echo $one['submit_time'];?></td>
 					<td><?php echo $one['status'];?></td>
+					<td><?php echo $one['audit_time'];?></td>
+					<td><?php echo $one['pay_time'];?></td>
+					<td><?php echo $one['approve_time'];?></td>
 					<td>
 						<a href="/apply/view/<?php echo $one['uuid'];?>">查看</a>
 						<a href="/apply/agencies/<?php echo $one['uuid'];?>">修改</a>
@@ -53,6 +61,9 @@
 					}
 				?>
 			</table>
+		</div>
+		<div id="pagination">
+			<?php echo $pagination;?>
 		</div>
 		<div id="step_menu" style="display:inline;">
 			<a href="/apply/agencies">签证申请</a>

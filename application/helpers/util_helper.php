@@ -134,11 +134,12 @@
 							'-128' => '负溢出异常',
 							'-1' => '已删除',
 							'0' => '未完成',
-							'1' => '等待审核',
-							'21' => '通过',
-							'31' => '未通过',
+							'11' => '等待审核',
+							'21' => '未通过',
+							'31' => '通过',
 							'41' => '已缴款',
 							'101' => '已出签证',
+							'126' => '过期无效',
 							'127' => '正溢出异常',
 						);
 		
@@ -146,18 +147,33 @@
 	}
 	
 	function text2status($text_string) {
-		$status = 1;
+		$status = '11';
 		
 		switch ($text_string) {
-			case 'drop': $status = -1; break;
-			case 'half': $status = 0; break;
-			case 'wait': $status = 1; break;
-			case 'pass': $status = 21; break;
-			case 'fail': $status = 31; break;
-			case 'paid': $status = 41; break;
-			case 'visa': $status = 101; break;
+			case 'drop': $status = '-1'; break;
+			case 'half': $status = '0'; break;
+			case 'wait': $status = '11'; break;
+			case 'pass': $status = '21'; break;
+			case 'fail': $status = '31'; break;
+			case 'paid': $status = '41'; break;
+			case 'visa': $status = '101'; break;
+			case 'lost': $status = '126'; break;
 		}
 		
 		return $status;
+	}
+	
+	function check_status($uuid, $step_status) {
+		$CI = & get_instance();
+		$CI->load->library('RedisDB');
+		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
+		return $redis->hGet('application_step_current_status', $uuid);
+	}
+	
+	function update_status($uuid, $step_status) {
+		$CI = & get_instance();
+		$CI->load->library('RedisDB');
+		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
+		return $redis->hGet('application_step_current_status', $uuid, $step_status);
 	}
 ?>

@@ -422,7 +422,7 @@ class Apply extends ApplyLoginController {
 		$userid = $this->userid;
 		$status = 0;
 		switch ($opt) {
-			case 'submit': $status = 1; break;
+			case 'submit': $status = 11; break;
 			case 'cancel': $status = -1; break;
 		}
 		
@@ -462,11 +462,28 @@ class Apply extends ApplyLoginController {
 		}
 	}
 	
-	public function records() {
+	public function records($page = 1) {
 		$userid = $this->userid;
-		
 		$this->load->model('apply_model', 'alm');
-		$data['records'] = $this->alm->get_records($userid);
+		
+		$this->load->library('pagination');
+		
+		$config['base_url'] = base_url('/apply/records/');
+		$config['uri_segment'] = 3;
+		$config['num_links'] = 2;
+		$config['total_rows'] = $this->alm->sum_applications($userid);
+		$config['per_page'] = 20;
+		$config['use_page_numbers'] = TRUE;
+		
+		$config['prev_link'] = '上一页';
+		$config['next_link'] = '下一页';
+		$config['first_link'] = '首 页';
+		$config['last_link'] = '尾 页';
+		
+		$this->pagination->initialize($config); 
+		
+		$data['records'] = $this->alm->get_records($userid, $page - 1);
+		$data['pagination'] = $this->pagination->create_links();
 		
 		$this->load->view('apply_records', $data);
 	}

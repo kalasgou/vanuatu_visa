@@ -7,8 +7,9 @@
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
 		<link rel="shortcut icon" href=""/>
-		<link rel="stylesheet" type="text/css" href=''/>
-		<script type="text/javascript" src=""></script>
+		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
+		<!--<link rel="stylesheet" type="text/css" href="/common.css"/>-->
+		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
@@ -17,7 +18,7 @@
 	</head>
 	<body>
 		<div>
-			<form id="" method="post" action="/user/register">
+			<form class="form-horizontal" role="form" method="post" action="/user/register">
 				<div>
 					<h3>普通帐员注册</h3>
 				</div>

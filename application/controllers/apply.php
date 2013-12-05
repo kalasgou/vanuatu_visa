@@ -555,6 +555,13 @@ class Apply extends ApplyLoginController {
 			show_error('no application available');
 		}
 	}
+	
+	function test_hget($str = '') {
+		$this->load->library('RedisDB');
+		$redis = $this->redisdb->instance(REDIS_DEFAULT);
+		echo $redis->hGet('application_status', $str);
+		echo intval($redis->hGet('application_status', $str));
+	}
 }
 
 /* End of file */

@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class User extends LoginController {
+class User extends CI_Controller {
 	
 	protected $goto_page = array(
 							'applicant' => array('apply', 'login', 'register'),
@@ -8,14 +8,6 @@ class User extends LoginController {
 							);
 	
 	public function register() {
-		if ($this->userid > 0) {
-			$msg['tips'] = 'already logined';
-			$link = '/admin_login';
-			$location = 'index page';
-			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
-			show_error($msg);
-		}
-		
 		$user_type = trim($this->input->post('user_type', TRUE));
 		$data['email'] = trim($this->input->post('email', TRUE));
 		$data['password'] = trim($this->input->post('password', TRUE));

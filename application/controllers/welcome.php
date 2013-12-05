@@ -1,39 +1,58 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Welcome extends CI_Controller {
+require APPPATH .'core/LoginController.php';
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -  
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in 
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
+class Welcome extends LoginController {
+	
 	public function index() {
 		$this->load->view('welcome_message');
 	}
 	
 	public function login() {
+		if ($this->userid > 0) {
+			$msg['tips'] = 'already logined';
+			$link = '/apply';
+			$location = 'index page';
+			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$this->load->view('login');
 	}
 	
 	public function register() {
+		if ($this->userid > 0) {
+			$msg['tips'] = 'already logined';
+			$link = '/apply';
+			$location = 'index page';
+			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$this->load->view('register');
 	}
 	
 	public function admin_login() {
+		if ($this->userid > 0) {
+			$msg['tips'] = 'already logined';
+			$link = '/admin';
+			$location = 'index page';
+			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$this->load->view('admin_login');
 	}
 	
 	public function admin_register() {
+		if ($this->userid > 0) {
+			$msg['tips'] = 'already logined';
+			$link = '/admin';
+			$location = 'index page';
+			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$this->load->view('admin_register');
 	}
 }

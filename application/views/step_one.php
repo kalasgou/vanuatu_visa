@@ -73,11 +73,11 @@
 					<input type="text" name="employer" style="width:300px;" value="<?php echo $occupation_info['employer'];?>"/>
 					Tel No.电话:
 					<input type="text" name="employer_tel" style="width:150px;" value="<?php echo $occupation_info['employer_tel'];?>"/><br>
-					&nbsp;&nbsp;&nbsp;(b) Address 单位地址:
+					(b) Address 单位地址:
 					<input type="text" name="employer_addr" style="width:400px;" value="<?php echo $occupation_info['employer_addr'];?>"/></p>
 					<p>9、Home Address 家庭住址:
 					<input type="text" name="home_addr" style="width:400px;" value="<?php echo $home_info['home_addr'];?>"/><br>
-					&nbsp;&nbsp;&nbsp;Tel No.电话:
+					Tel No.电话:
 					<input type="text" name="home_tel" style="width:150px;" value="<?php echo $home_info['home_tel'];?>"/></p>
 					<button id="next_step" type="submit" class="btn btn-success btn-sm">下一步</button>
 				</form>

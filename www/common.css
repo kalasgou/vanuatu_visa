@@ -1,3 +1,6 @@
+body {
+	padding-top: 70px;
+}
 
 #filling_info input {
 	text-align:center;
@@ -29,27 +32,56 @@
 	height: 30px;
 }
 
+#children_info input {
+	text-align: center;
+	border-top-width: 0px;
+	border-right-width: 0px;
+	border-bottom-width: 0px;
+	border-left-width: 0px;
+	width: 100%;
+}
+
+#step_box {
+	position: relative; 
+	margin: auto; 
+	width: 1000px;
+}
+
 #filling_info {
 	border: 1px dotted #000;
-	width: 800px;
+	width: 856px;
 	height: 100%;
 	background: #FFFFF0;
 	position: relative;
-	top: -320px;
+	top: -264px;
+	left: 64px;
 	padding: 16px;
 	margin: auto;
+	font-size: 16px;
+}
+
+#application_form {
+	border: 1px dotted #000;
+	width: 856px;
+	height: 100%;
+	background: #FFFFF0;
+	position: relative;
+	top: -264px;
+	left: 64px;
+	margin: auto;
+	font-size: 16px;
+	padding: 16px;
 }
 
 #next_step {
 	position: relative;
 	float: right;
-	top: 3px;
+	top: 2px;
 }
 
 #procedure {
-	width: 118px;
 	position: relative;
-	margin: 64px;
+	margin: 8px;
 	display: inline-block;
 }
 
@@ -61,4 +93,10 @@
 
 #pagination {
 	text-align: center;
+}
+
+#menu, #hello {
+	position: relative;
+	width: 1000px;
+	margin: auto;
 }

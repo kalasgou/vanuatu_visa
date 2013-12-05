@@ -7,8 +7,8 @@
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
 		<link rel="shortcut icon" href=""/>
-		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
+		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<script type="text/javascript" src=""></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
@@ -17,7 +17,19 @@
 		</script>
 	</head>
 	<body>
-		<div id="step_box" style="position:relative; margin:auto; width:1280px;">
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div id="hello">
+				<h5>你好，<?php echo $user['realname'];?>！</h5>
+			</div>
+			<div id="menu">
+				<a style="color:#1100FF;">签证申请</a> / 
+				<a href="/apply">申请记录</a> / 
+				<a href="/user/account">帐户信息</a> / 
+				<a href="/user/password">密码修改</a> / 
+				<a href="/user/logout">安全登出</a>
+			</div>
+		</nav>
+		<div id="step_box">
 			<div id="procedure" class="list_group">
 				<a class="list-group-item" href="/apply/agencies/<?php echo $uuid;?>">选择办事处</a>
 				<a class="list-group-item" href="/apply/basic_info/<?php echo $uuid;?>">基本个人信息</a>
@@ -54,7 +66,7 @@
 					<input type="text" name="duration" value="<?php echo $detail_info['duration']?>"/></p>
 					<p>17、Source of financial support in Vanuatu 在瓦费用来源:
 					<input type="text" name="financial_source" value="<?php echo $detail_info['financial_source']?>"/></p>
-					<button id="next_step" type="submit">下一步</button>
+					<button id="next_step" type="submit" class="btn btn-success btn-sm">下一步</button>
 				</form>
 			</div>
 		</div>

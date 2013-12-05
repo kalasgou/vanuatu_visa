@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class User extends CI_Controller {
+class User extends LoginController {
 	
 	protected $goto_page = array(
 							'applicant' => array('apply', 'login', 'register'),
@@ -8,6 +8,14 @@ class User extends CI_Controller {
 							);
 	
 	public function register() {
+		if ($this->userid > 0) {
+			$msg['tips'] = 'already logined';
+			$link = '/admin_login';
+			$location = 'index page';
+			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$user_type = trim($this->input->post('user_type', TRUE));
 		$data['email'] = trim($this->input->post('email', TRUE));
 		$data['password'] = trim($this->input->post('password', TRUE));
@@ -73,7 +81,7 @@ class User extends CI_Controller {
 		
 		$this->load->helper('util');
 		if (!check_parameters($data)) {
-			show_error('parameters not enough', 500);
+			show_error('parameters not enough');
 			die();
 		}
 		
@@ -115,9 +123,9 @@ class User extends CI_Controller {
 		$this->load->view('simple_msg_page', $msg);
 	}
 	
-	public function test($id = 0) {
-		$this->load->helper('util');
-		echo gen_passport_number($id);
+	public function account() {
+		$user = $this->user;
+		$this->load->view('account', $user);
 	}
 }
 

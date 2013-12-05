@@ -7,7 +7,8 @@
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
 		<link rel="shortcut icon" href=""/>
-		<link rel="stylesheet" type="text/css" href=''/>
+		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
+		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript">
 			function pay_for_visa(uuid) {
@@ -40,65 +41,87 @@
 		</script>
 	</head>
 	<body>
-		<div>
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div id="hello">
+				<h5>你好，办事处管理员 <?php echo $user['realname'];?>！</h5>
+			</div>
+			<div id="menu">
+				<a style="color:#1100FF;">审核申请</a> / 
+				<a href="/admin/audit_records">审核记录</a> / 
+				<a href="/user/account">帐户信息</a> / 
+				<a href="/user/password">密码修改</a> / 
+				<a href="/user/logout">安全登出</a>
+			</div>
+		</nav>
+		<div id="list_box">
 			<div>
 				<select id="cur_status">
 					<option value="wait">待审核</option>
-					<option value="pass">已通过</option>
 					<option value="fail">未通过</option>
+					<option value="pass">已通过</option>
 					<option value="paid">已缴费</option>
 				</select>
 				<button onclick="javascript:filter_them();">搜索</button>
 			</div>
-			<table>
-				<tr>
-					<td>申请流水号</td>
-					<td>申请人中文姓名</td>
-					<td>申请人英文姓名</td>
-					<td>护照号</td>
-					<td>申请提交时间</td>
-					<td>当前状态</td>
-					<td>审核时间</td>
-					<td>缴费时间</td>
-					<td>签发时间</td>
-					<td>操作</td>
-				</tr>
-				<?php if (count($records) > 0) {
-						foreach ($records as $one) { 
-				?>
-				<tr>
-					<td><?php echo $one['uuid'];?></td>
-					<td><?php echo $one['name_en'];?></td>
-					<td><?php echo $one['name_cn'];?></td>
-					<td><?php echo $one['passport_number'];?></td>
-					<td><?php echo $one['submit_time'];?></td>
-					<td><?php echo $one['status'];?></td>
-					<td><?php echo $one['audit_time'];?></td>
-					<td><?php echo $one['pay_time'];?></td>
-					<td><?php echo $one['approve_time'];?></td>
-					<td>
-						<a href="/admin/total_preview/<?php echo $one['uuid'];?>">查看详细</a> / 
-						<a href="javascript:pay_for_visa('<?php echo $one['uuid'];?>');">缴费</a> / 
-						<a href="/admin/scan_upload/<?php echo $one['uuid'];?>">上传证明</a> 
-					</td>
-				</tr>
-				<?php
+			<table class="table table-hover">
+				<colgroup>
+					<col style="width:11%;"/>
+					<col style="width:18%"/>
+					<col style="width:9%;"/>
+					<col style="width:9%"/>
+					<col style="width:8%;"/>
+					<col style="width:9%"/>
+					<col style="width:9%;"/>
+					<col style="width:9%;"/>
+					<col style="width:18%;"/>
+				</colgroup>
+				<thead>
+					<tr>
+						<th>申请流水号</th>
+						<th>申请人英文/中文姓名</th>
+						<th>护照号</th>
+						<th>提交日期</th>
+						<th>当前状态</th>
+						<th>审核日期</th>
+						<th>缴费日期</th>
+						<th>签发日期</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php if (count($records) > 0) {
+							foreach ($records as $one) { 
+					?>
+					<tr>
+						<td><?php echo $one['uuid'];?></td>
+						<td><?php echo $one['name_en'];?> / <?php echo $one['name_cn'];?></td>
+						<td><?php echo $one['passport_number'];?></td>
+						<td><span title="具体时间 <?php echo $one['submit_time'];?>"><?php echo substr($one['submit_time'], 0, 10);?></span></td>
+						<td><?php echo $one['status_str'];?></td>
+						<td><span title="具体时间 <?php echo $one['audit_time'];?>"><?php echo substr($one['audit_time'], 0, 10);?></span></td>
+						<td><span title="具体时间 <?php echo $one['pay_time'];?>"><?php echo substr($one['pay_time'], 0, 10);?></span></td>
+						<td><span title="具体时间 <?php echo $one['approve_time'];?>"><?php echo substr($one['approve_time'], 0, 10);?></span></td>
+						<td>
+							<a href="/admin/total_preview/<?php echo $one['uuid'];?>">查看详细</a> / 
+							<a href="javascript:pay_for_visa('<?php echo $one['uuid'];?>');">缴费</a> / 
+							<a href="/admin/scan_upload/<?php echo $one['uuid'];?>">上传证明</a> 
+						</td>
+					</tr>
+					<?php
+							}
+						} else {
+					?>
+					<tr>
+						<td colspan="9" style="text-align:center;">nothing got here!</td>
+					</tr>
+					<?php
 						}
-					} else {
-				?>
-				<tr>
-					<td colspan="6">nothing got here!</td>
-				</tr>
-				<?php
-					}
-				?>
+					?>
+				</tbody>
 			</table>
-		</div>
-		<div id="step_menu" style="display:inline;">
-			<a href="/admin/audit">审核申请</a>
-			<a href="/admin/records">审核记录</a>
-			<a href="/admin/account">帐户信息</a>
-			<a href="/admin/password">密码修改</a>
+			<div id="pagination">
+				<?php echo $pagination;?>
+			</div>
 		</div>
 	</body>
 </html>

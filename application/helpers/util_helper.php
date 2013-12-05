@@ -153,8 +153,8 @@
 			case 'drop': $status = '-1'; break;
 			case 'half': $status = '0'; break;
 			case 'wait': $status = '11'; break;
-			case 'pass': $status = '21'; break;
-			case 'fail': $status = '31'; break;
+			case 'fail': $status = '21'; break;
+			case 'pass': $status = '31'; break;
 			case 'paid': $status = '41'; break;
 			case 'visa': $status = '101'; break;
 			case 'lost': $status = '126'; break;
@@ -163,17 +163,28 @@
 		return $status;
 	}
 	
-	function check_status($uuid, $step_status) {
+	function check_status($uuid, $cur_status) {
 		$CI = & get_instance();
 		$CI->load->library('RedisDB');
 		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
-		return $redis->hGet('application_step_current_status', $uuid);
+		return ($cur_status > intval($redis->hGet('application_status', $uuid)) ? FALSE : TRUE);
 	}
 	
-	function update_status($uuid, $step_status) {
+	function update_status($uuid, $forward_status) {
 		$CI = & get_instance();
 		$CI->load->library('RedisDB');
 		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
-		return $redis->hGet('application_step_current_status', $uuid, $step_status);
+		if (intval($redis->hGet('application_status', $uuid)) < 11) {
+			$redis->hSet('application_status', $uuid, $forward_status);
+		} else {
+			$redis->hSet('application_status', $uuid, 11);
+		}
+	}
+	
+	function is_editable($uuid) {
+		$CI = & get_instance();
+		$CI->load->library('RedisDB');
+		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
+		return (intval($redis->hGet('application_status', $uuid)) > 21 ? FALSE : TRUE);
 	}
 ?>

@@ -62,9 +62,9 @@
 			$this->admin_db->insert('visa_auditing');
 			
 			if ($this->admin_db->affected_rows() > 0) {
-				if ($data['status'] === 21 || $data['status'] === 31) {
+				if ($data['status'] == 21 || $data['status'] == 31) {
 					$this->admin_db->set('audit_time', $update_time);
-				} else if ($data['status'] === 41) {
+				} else if ($data['status'] == 41) {
 					$this->admin_db->set('pay_time', $update_time);
 				} else {
 					return FALSE;

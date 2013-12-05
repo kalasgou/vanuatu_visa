@@ -14,14 +14,38 @@ class Apply extends ApplyLoginController {
 		var_dump($cap);
 	}*/
 	
-	public function index() {
-		$this->load->view('apply_index', $this->user_info);
+	public function index($page = 1) {
+		$userid = $this->userid;
+		$this->load->model('apply_model', 'alm');
+		
+		$this->load->helper('util');
+		$this->load->library('pagination');
+		
+		$config['base_url'] = base_url('/apply/records/');
+		$config['uri_segment'] = 3;
+		$config['num_links'] = 2;
+		$config['total_rows'] = $this->alm->sum_applications($userid);
+		$config['per_page'] = 20;
+		$config['use_page_numbers'] = TRUE;
+		
+		$config['prev_link'] = '上一页';
+		$config['next_link'] = '下一页';
+		$config['first_link'] = '首 页';
+		$config['last_link'] = '尾 页';
+		
+		$this->pagination->initialize($config); 
+		
+		$data['user'] = $this->user_info;
+		$data['records'] = $this->alm->get_records($userid, $page - 1);
+		$data['pagination'] = $this->pagination->create_links();
+		
+		foreach ($data['records'] as &$one) {
+			$one['status_str'] = status2text($one['status']);
+		}
+		
+		$this->load->view('apply_records', $data);
 	}
-
-	public function download_pdf($uuid = '') {
-		$this->load->view('application_form');
-	}
-
+	
 	public function agencies($uuid = '') {
 		$data = array(
 					'uuid' => '',
@@ -50,6 +74,7 @@ class Apply extends ApplyLoginController {
 		$this->load->model('apply_model', 'alm');
 		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
 		
+		$data['user'] = $this->user_info;
 		if ($info) {
 			$data['uuid'] = $info['uuid'];
 			$data['province_id'] = $info['province_id'];
@@ -64,19 +89,22 @@ class Apply extends ApplyLoginController {
 		$data['province_id'] = trim($this->input->post('province_id', TRUE));
 		
 		$this->load->helper('util');
+		if (!is_editable($uuid)) {
+			show_error('not editable');
+		}
 		
 		if ($data['uuid'] === '') {
 			$data['uuid'] = hex16to64(uuid(), 0);
 		}
 		
 		if (!check_parameters($data)) {
-			show_error('parameters not enough', 500);
-			die();
+			show_error('parameters not enough');
 		}
 		
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->select_agency($data) > 0) {
+			update_status($data['uuid'], 1);
 			header('Location: '.base_url('/apply/basic_info/'.$data['uuid']));
 		} else {
 			echo 'fail';
@@ -84,6 +112,11 @@ class Apply extends ApplyLoginController {
 	}
 	
 	public function basic_info($uuid = '') {
+		$this->load->helper('util');
+		if (!check_status($uuid, 1)) {
+			show_error('Do not JUMP!!!');
+		}
+		
 		$data = array(
 					'uuid' => '',
 					'name_en' => '',
@@ -112,6 +145,7 @@ class Apply extends ApplyLoginController {
 		$this->load->model('apply_model', 'alm');
 		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
 		
+		$data['user'] = $this->user_info;
 		if ($info) {
 			$data['uuid'] = $info['uuid'];
 			$data['name_en'] = $info['name_en'];
@@ -125,14 +159,10 @@ class Apply extends ApplyLoginController {
 			$data['birth_place'] = $info['birth_place'];
 			
 			$occupation_info = json_decode($info['occupation_info'], TRUE);
-			$data['occupation_info']['occupation'] = $occupation_info['occupation'];
-			$data['occupation_info']['employer'] = $occupation_info['employer'];
-			$data['occupation_info']['employer_tel'] = $occupation_info['employer_tel'];
-			$data['occupation_info']['employer_addr'] = $occupation_info['employer_addr'];
+			$data['occupation_info'] = $occupation_info;
 			
 			$home_info = json_decode($info['home_info'], TRUE);
-			$data['home_info']['home_addr'] = $home_info['home_addr'];
-			$data['home_info']['home_tel'] = $home_info['home_tel'];
+			$data['home_info'] = $home_info;
 		}
 		
 		$this->load->view('step_one', $data);
@@ -160,18 +190,23 @@ class Apply extends ApplyLoginController {
 		$this->load->helper('util');
 		
 		if ($data['uuid'] === '') {
-			show_error('uuid empty error', 500);
+			show_error('uuid empty error');
 			die();
 		}
 		
+		if (!is_editable($uuid)) {
+			show_error('not editable');
+		}
+		
 		if (!check_parameters($data)) {
-			show_error('parameters not enough', 500);
+			show_error('parameters not enough');
 			die();
 		}
 		
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->update_basic_info($data) > 0) {
+			update_status($data['uuid'], 2);
 			header('Location: '.base_url('/apply/passport_info/'.$data['uuid']));
 		} else {
 			echo 'fail';
@@ -179,6 +214,11 @@ class Apply extends ApplyLoginController {
 	}
 	
 	public function passport_info($uuid = '') {
+		$this->load->helper('util');
+		if (!check_status($uuid, 2)) {
+			show_error('Do not JUMP!!!');
+		}
+		
 		$data = array(
 					'uuid' => '',
 					'passport_number' => '',
@@ -192,6 +232,7 @@ class Apply extends ApplyLoginController {
 		$this->load->model('apply_model', 'alm');
 		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
 		
+		$data['user'] = $this->user_info;
 		if ($info) {
 			$data['uuid'] = $info['uuid'];
 			$data['passport_number'] = $info['passport_number'];
@@ -214,18 +255,23 @@ class Apply extends ApplyLoginController {
 		$this->load->helper('util');
 		
 		if ($data['uuid'] === '') {
-			show_error('uuid empty error', 500);
+			show_error('uuid empty error');
 			die();
 		}
 		
+		if (!is_editable($uuid)) {
+			show_error('not editable');
+		}
+		
 		if (!check_parameters($data)) {
-			show_error('parameters not enough', 500);
+			show_error('parameters not enough');
 			die();
 		}
 		
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->update_passport_info($data) > 0) {
+			update_status($data['uuid'], 3);
 			header('Location: '.base_url('/apply/travel_info/'.$data['uuid']));
 		} else {
 			echo 'fail';
@@ -233,6 +279,11 @@ class Apply extends ApplyLoginController {
 	}
 	
 	public function travel_info($uuid = '') {
+		$this->load->helper('util');
+		if (!check_status($uuid, 3)) {
+			show_error('Do not JUMP!!!');
+		}
+		
 		$data = array(
 					'uuid' => '',
 					'purpose' => '',
@@ -256,22 +307,17 @@ class Apply extends ApplyLoginController {
 		$this->load->model('apply_model', 'alm');
 		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
 		
+		$data['user'] = $this->user_info;
 		if ($info) {
 			$data['uuid'] = $info['uuid'];
 			$data['purpose'] = $info['purpose'];
 			$data['destination'] = $info['destination'];
 			
 			$relative_info = json_decode($info['relative_info'], TRUE);
-			$data['relative_info']['relative_name'] = $relative_info['relative_name'];
-			$data['relative_info']['relative_addr'] = $relative_info['relative_addr'];
+			$data['relative_info'] = $relative_info;
 			
 			$detail_info = json_decode($info['detail_info'], TRUE);
-			$data['detail_info']['arrival_number'] = $detail_info['arrival_number'];
-			$data['detail_info']['arrival_date'] = $detail_info['arrival_date'];
-			$data['detail_info']['return_number'] = $detail_info['return_number'];
-			$data['detail_info']['return_date'] = $detail_info['return_date'];
-			$data['detail_info']['duration'] = $detail_info['duration'];
-			$data['detail_info']['financial_source'] = $detail_info['financial_source'];
+			$data['detail_info'] = $detail_info;
 		}
 		
 		$this->load->view('step_three', $data);
@@ -294,13 +340,18 @@ class Apply extends ApplyLoginController {
 		$this->load->helper('util');
 		
 		if ($data['uuid'] === '') {
-			show_error('uuid empty error', 500);
+			show_error('uuid empty error');
 			die();
+		}
+		
+		if (!is_editable($uuid)) {
+			show_error('not editable');
 		}
 		
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->update_travel_info($data) > 0) {
+			update_status($data['uuid'], 4);
 			header('Location: '.base_url('/apply/complement_info/'.$data['uuid']));
 		} else {
 			echo 'fail';
@@ -308,6 +359,11 @@ class Apply extends ApplyLoginController {
 	}
 	
 	public function complement_info($uuid = '') {
+		$this->load->helper('util');
+		if (!check_status($uuid, 4)) {
+			show_error('Do not JUMP!!!');
+		}
+		
 		$data = array(
 					'uuid' => '',
 					'children_info' => array(
@@ -348,6 +404,7 @@ class Apply extends ApplyLoginController {
 		$this->load->model('apply_model', 'alm');
 		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
 		
+		$data['user'] = $this->user_info;
 		if ($info) {
 			$data['uuid'] = $info['uuid'];
 			
@@ -386,13 +443,18 @@ class Apply extends ApplyLoginController {
 		$this->load->helper('util');
 		
 		if ($data['uuid'] === '') {
-			show_error('uuid empty error', 500);
+			show_error('uuid empty error');
 			die();
+		}
+		
+		if (!is_editable($uuid)) {
+			show_error('not editable');
 		}
 		
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->update_complement_info($data) > 0) {
+			update_status($data['uuid'], 5);
 			header('Location: '.base_url('/apply/confirm_info/'.$data['uuid']));
 		} else {
 			echo 'fail';
@@ -400,8 +462,13 @@ class Apply extends ApplyLoginController {
 	}
 	
 	public function confirm_info($uuid = '') {
+		$this->load->helper('util');
+		if (!check_status($uuid, 5)) {
+			show_error('Do not JUMP!!!');
+		}
+		
 		if ($uuid === '') {
-			show_error('uuid empty error', 500);
+			show_error('uuid empty error');
 			die();
 		}
 		
@@ -411,10 +478,11 @@ class Apply extends ApplyLoginController {
 		$this->load->model('apply_model', 'alm');
 		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
 		
+		$info['user'] = $this->user_info;
 		if ($info) {
 			$this->load->view('step_five', $info);
 		} else {
-			show_error('no application available', 500);
+			show_error('no application available');
 		}
 	}
 	
@@ -426,15 +494,22 @@ class Apply extends ApplyLoginController {
 			case 'cancel': $status = -1; break;
 		}
 		
+		$this->load->helper('util');
+		
 		if ($uuid === '') {
-			show_error('uuid empty error', 500);
+			show_error('uuid empty error');
 			die();
+		}
+		
+		if (!is_editable($uuid)) {
+			show_error('not editable');
 		}
 		
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->submit_all_info($userid, $uuid, $status) > 0) {
-			header('Location: '.base_url('/apply/records'));
+			update_status($uuid, $status);
+			header('Location: '.base_url('/apply'));
 		} else {
 			$msg['tips'] = 'do not repeat it';
 			$msg['link'] = '/apply/records';
@@ -445,7 +520,7 @@ class Apply extends ApplyLoginController {
 	
 	public function view($uuid = '') {
 		if ($uuid === '') {
-			show_error('uuid empty error', 500);
+			show_error('uuid empty error');
 			die();
 		}
 		
@@ -458,39 +533,13 @@ class Apply extends ApplyLoginController {
 		if ($info) {
 			$this->load->view('apply_view', $info);
 		} else {
-			show_error('no application available', 500);
+			show_error('no application available');
 		}
-	}
-	
-	public function records($page = 1) {
-		$userid = $this->userid;
-		$this->load->model('apply_model', 'alm');
-		
-		$this->load->library('pagination');
-		
-		$config['base_url'] = base_url('/apply/records/');
-		$config['uri_segment'] = 3;
-		$config['num_links'] = 2;
-		$config['total_rows'] = $this->alm->sum_applications($userid);
-		$config['per_page'] = 20;
-		$config['use_page_numbers'] = TRUE;
-		
-		$config['prev_link'] = '上一页';
-		$config['next_link'] = '下一页';
-		$config['first_link'] = '首 页';
-		$config['last_link'] = '尾 页';
-		
-		$this->pagination->initialize($config); 
-		
-		$data['records'] = $this->alm->get_records($userid, $page - 1);
-		$data['pagination'] = $this->pagination->create_links();
-		
-		$this->load->view('apply_records', $data);
 	}
 	
 	public function download_form($uuid = '') {
 		if ($uuid === '') {
-			show_error('uuid empty error', 500);
+			show_error('uuid empty error');
 			die();
 		}
 		
@@ -503,7 +552,7 @@ class Apply extends ApplyLoginController {
 		if ($info) {
 			$this->load->view('form_for_download', $info);
 		} else {
-			show_error('no application available', 500);
+			show_error('no application available');
 		}
 	}
 }

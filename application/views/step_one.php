@@ -7,8 +7,8 @@
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
 		<link rel="shortcut icon" href=""/>
-		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
+		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
@@ -20,7 +20,19 @@
 		</style>
 	</head>
 	<body>
-		<div id="step_box" style="position:relative; margin:auto; width:1280px;">
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div id="hello">
+				<h5>你好，<?php echo $user['realname'];?>！</h5>
+			</div>
+			<div id="menu">
+				<a style="color:#1100FF;">签证申请</a> / 
+				<a href="/apply">申请记录</a> / 
+				<a href="/user/account">帐户信息</a> / 
+				<a href="/user/password">密码修改</a> / 
+				<a href="/user/logout">安全登出</a>
+			</div>
+		</nav>
+		<div id="step_box">
 			<div id="procedure" class="list_group">
 				<a class="list-group-item" href="/apply/agencies/<?php echo $uuid;?>">选择办事处</a>
 				<a class="list-group-item active">基本个人信息</a>
@@ -45,16 +57,16 @@
 					<p>3、Nationality 国籍:
 					<input type="text" name="nationality" value="<?php echo $nationality;?>"/></p>
 					<p>4、Date of Birth 出生日期:
-					Day 日<input type="text" name="birth_day" style="width:100px;" value="<?php echo $birth_day;?>"/>&nbsp;/&nbsp;
-					Month 月<input type="text" name="birth_month" style="width:100px;" value="<?php echo $birth_month;?>"/>&nbsp;/&nbsp;
-					Year 年<input type="text" name="birth_year" style="width:100px;" value="<?php echo $birth_year;?>"/></p>
+					Day 日<input type="text" name="birth_day" style="width:100px;" placeholder="dd" value="<?php echo $birth_day;?>"/>&nbsp;/&nbsp;
+					Month 月<input type="text" name="birth_month" style="width:100px;" placeholder="mm" value="<?php echo $birth_month;?>"/>&nbsp;/&nbsp;
+					Year 年<input type="text" name="birth_year" style="width:100px;" placeholder="yyyy" value="<?php echo $birth_year;?>"/></p>
 					<p>5、Place of birth 出生地点:
 					<input type="text" name="birth_place" value="<?php echo $birth_place;?>"/></p>
 					<p>6、Family Situation 婚姻状况:
-					Married已婚<input type="radio" name="family" value="4" <?php echo ($family == 3 ? 'checked="checked"' : '')?>/>
-					Single单身<input type="radio" name="family" value="5" <?php echo ($family == 3 ? 'checked="checked"' : '')?>/>
-					Widowed丧偶<input type="radio" name="family" value="6" <?php echo ($family == 3 ? 'checked="checked"' : '')?>/>
-					Divorced离异<input type="radio" name="family" value="7" <?php echo ($family == 3 ? 'checked="checked"' : '')?>/></p>
+					Married已婚<input type="radio" name="family" value="4" <?php echo ($family == 4 ? 'checked="checked"' : '')?>/>
+					Single单身<input type="radio" name="family" value="5" <?php echo ($family == 5 ? 'checked="checked"' : '')?>/>
+					Widowed丧偶<input type="radio" name="family" value="6" <?php echo ($family == 6 ? 'checked="checked"' : '')?>/>
+					Divorced离异<input type="radio" name="family" value="7" <?php echo ($family == 7 ? 'checked="checked"' : '')?>/></p>
 					<p>7、Occupation 职业:
 					<input type="text" name="occupation" value="<?php echo $occupation_info['occupation'];?>"/></p>
 					<p>8、(a) Employer 就业单位:
@@ -67,7 +79,7 @@
 					<input type="text" name="home_addr" style="width:400px;" value="<?php echo $home_info['home_addr'];?>"/><br>
 					&nbsp;&nbsp;&nbsp;Tel No.电话:
 					<input type="text" name="home_tel" style="width:150px;" value="<?php echo $home_info['home_tel'];?>"/></p>
-					<button id="next_step" type="submit">下一步</button>
+					<button id="next_step" type="submit" class="btn btn-success btn-sm">下一步</button>
 				</form>
 			</div>
 		</div>

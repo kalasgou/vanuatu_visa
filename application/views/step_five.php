@@ -7,8 +7,8 @@
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
 		<link rel="shortcut icon" href=""/>
-		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
+		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<script type="text/javascript" src=""></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
@@ -16,19 +16,28 @@
 			});
 		</script>
 		<style type="text/css">
-			body {font-family:droid;}
-			#application_form div {padding:4px 12px; font-size:18px;}
+			#application_form div {padding:4px;}
 			#answer {display:inline-block; border-bottom:1px dotted #000; text-align:center;}
 			#option {display:inline-block;}
 			table {border-collapse:collapse; border:1px solid; text-align:center;}
 			th, td {border:1px solid; padding:8px; font-weight: normal; text-align:center;}
-			#application_form {border:1px dotted #000; width:800px; height:100%; background:#FFFFF0; margin:auto;}
-			#form_button {width:800px; height:100%; margin:18px auto; text-align:center; font-size:18px;}
-			#procedure {width:118px; position:fixed; margin:100px;}
+			#form_button {position:relative; top:-220px; text-align:center; font-size:18px;}
 		</style>
 	</head>
 	<body>
-		<div id="step_box" style="position:relative; margin:auto; width:1280px;">
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div id="hello">
+				<h5>你好，<?php echo $user['realname'];?>！</h5>
+			</div>
+			<div id="menu">
+				<a style="color:#1100FF;">签证申请</a> / 
+				<a href="/apply">申请记录</a> / 
+				<a href="/user/account">帐户信息</a> / 
+				<a href="/user/password">密码修改</a> / 
+				<a href="/user/logout">安全登出</a>
+			</div>
+		</nav>
+		<div id="step_box">
 			<div id="procedure" class="list_group">
 				<a class="list-group-item" href="/apply/agencies/<?php echo $uuid;?>">选择办事处</a>
 				<a class="list-group-item" href="/apply/basic_info/<?php echo $uuid;?>">基本个人信息</a>
@@ -188,10 +197,10 @@
 					22、Have you ever been refused entry to Vanuatu?<br>
 					您曾经被瓦努阿图拒签过吗？ Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'on' ? 'checked="checked"' : 'disabled="disabled"')?>/></span> When何时 <span id="answer" style="width:150px;"><?php echo $behaviour_info['refuse_date'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'off' ? 'checked="checked"' : 'disabled="disabled"')?>/></span><br>
 				</div>
-			</div>
-			<div id="form_button">
-				<a href="/apply/submit_all_info/<?php echo $uuid;?>/submit">确认</a>
-				<a href="/apply/submit_all_info/<?php echo $uuid;?>/cancel">取消</a>
+				<div id="next_step">
+					<a class="btn btn-success" href="/apply/submit_all_info/<?php echo $uuid;?>/submit">确认</a>
+					<a class="btn btn-warning" href="/apply/submit_all_info/<?php echo $uuid;?>/cancel">取消</a>
+				</div>
 			</div>
 		</div>
 	</body>

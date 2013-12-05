@@ -6,8 +6,8 @@ class Admin extends AdminLoginController {
 
 	public function index() {
 		switch (intval($this->permission)) {
-			case 3: $this->load->view('agency_admin_index', $this->user_info); break;
-			case 2: $this->load->view('embassy_admin_index', $this->user_info); break;
+			case 3: header('Location: '. base_url('/admin/audit')); break;
+			case 2: header('Location: '. base_url('/admin/approve')); break;
 			case 1: $this->load->view('system_admin_index', $this->user_info); break;
 			default : 
 				$msg['tips'] = 'account forbidden';
@@ -19,11 +19,9 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function audit($opt = 'wait', $page = 1) {
-		$user = $this->user_info;
-		
 		$this->load->helper('util');
 		$data['status'] = text2status($opt);
-		$data['province_id'] = $user['province_id'];
+		$data['province_id'] = $this->user_info['province_id'];
 		$data['page'] = $page - 1;
 		
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
@@ -47,8 +45,13 @@ class Admin extends AdminLoginController {
 		$config['first_link'] = '�� ҳ';
 		$config['last_link'] = 'β ҳ';
 		
+		$data['user'] = $this->user_info;
 		$data['pagination'] = $this->pagination->initialize($config);
 		$data['records'] = $this->adm->get_applications($data);
+		
+		foreach ($data['records'] as &$one) {
+			$one['status_str'] = status2text($one['status']);
+		}
 		
 		$this->load->view('admin_audit', $data);
 	}
@@ -58,7 +61,7 @@ class Admin extends AdminLoginController {
 		
 		$this->load->helper('util');
 		$data['status'] = text2status($opt);
-		$data['province_id'] = $user['province_id'];
+		$data['province_id'] = $this->user_info['province_id'];
 		$data['page'] = $page - 1;
 		
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
@@ -82,8 +85,13 @@ class Admin extends AdminLoginController {
 		$config['first_link'] = '�� ҳ';
 		$config['last_link'] = 'β ҳ';
 		
+		$data['user'] = $this->user_info;
 		$data['pagination'] = $this->pagination->initialize($config);
 		$data['records'] = $this->adm->get_applications($data);
+		
+		foreach ($data['records'] as &$one) {
+			$one['status_str'] = status2text($one['status']);
+		}
 		
 		$this->load->view('admin_approve', $data);
 	}
@@ -130,7 +138,6 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function approving($uuid = '') {
-		$user = $this->user_info;
 		$data['uuid'] = $uuid;
 		$data['userid'] = $this->userid;
 		$data['start_time'] = strtotime('today');
@@ -138,7 +145,7 @@ class Admin extends AdminLoginController {
 		
 		$this->load->model('admin_model', 'adm');
 		$attributes = '*';
-		$info = $this->adm->retrieve_some_info($uuid, $user['province_id'], $attributes);
+		$info = $this->adm->retrieve_some_info($uuid, $this->user_info['province_id'], $attributes);
 		
 		if (!$info) {
 			$msg['tips'] = 'forbidden';

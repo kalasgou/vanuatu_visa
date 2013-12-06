@@ -39,11 +39,13 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('HASH_COST_LOG2', 	8);
 define('HASH_PORTABLE', 	FALSE);
 
-define('VISA_PATH',			'/var/visa_file/');
-define('SCAN_PATH',			'/var/scan_file/');
-define('CAPTCHA_PATH',		'/var/captcha_pic/');
+define('VISA_PATH',			'/data/file/visa_file/');
+define('SCAN_PATH',			'/data/file/scan_file/');
+define('CAPTCHA_PATH',		'/data/file/captcha/');
 
 define('REDIS_DEFAULT', 	'/tmp/redis_6379.sock');
+
+define('FILE_DOMAIN',		'http://file.visa2vanuatu.cn/');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

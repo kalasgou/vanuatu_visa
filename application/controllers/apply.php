@@ -21,10 +21,10 @@ class Apply extends ApplyLoginController {
 		$this->load->helper('util');
 		$this->load->library('pagination');
 		
-		$config['base_url'] = base_url('/apply/records/');
+		$config['base_url'] = '/apply/index/';
 		$config['uri_segment'] = 3;
 		$config['num_links'] = 2;
-		$config['total_rows'] = $this->alm->sum_applications($userid);
+		$config['total_rows'] = 100;//$this->alm->sum_applications($userid);
 		$config['per_page'] = 20;
 		$config['use_page_numbers'] = TRUE;
 		
@@ -554,13 +554,6 @@ class Apply extends ApplyLoginController {
 		} else {
 			show_error('no application available');
 		}
-	}
-	
-	function test_hget($str = '') {
-		$this->load->library('RedisDB');
-		$redis = $this->redisdb->instance(REDIS_DEFAULT);
-		echo $redis->hGet('application_status', $str);
-		echo intval($redis->hGet('application_status', $str));
 	}
 }
 

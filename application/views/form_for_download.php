@@ -15,15 +15,30 @@
 			});
 		</script>
 		<style type="text/css">
-			body {font-family:droid;}
-			#application_form div {padding:4px 12px; font-size:18px;}
+			#application_form div {position:relative; padding:4px 12px; font-size:16px; top:24px;}
 			#answer {display:inline-block; border-bottom:1px dotted #000; text-align:center;}
 			#option {display:inline-block;}
 			table {border-collapse:collapse; border:1px solid; text-align:center;}
 			th, td {border:1px solid; padding:8px; font-weight: normal;}
+			#signature {display:inline-block; border-bottom:1px dotted #000; width:250px;}
+			#annoucement {text-align:center;}
 		</style>
 	</head>
 	<body>
+		<div>
+			<div id="annoucement"><img src="/var/www.visa2vanuatu.cn/www/vanuatu.jpg" style="width:80px;"/></div>
+			<div id="annoucement"><b>THE REPUBLIC OF VANUATU</b></div>
+			<div id="annoucement"><b>APPLICATION FOR A VISA FOR VANUATU</b></div>
+			<div id="annoucement"><b>瓦努阿图共和国签证申请表</b></div>
+		</div>
+		<br>
+		<div>
+			<div style="position:relative; float:right;">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+			<div style="position:relative; float:right; width:130px; height:170px; border:1px solid; text-align:center; border:1px solid; font-size:8px; font-style:italic;">
+				<br><br><br><br><br><br><br>Attach 1 passport size photograph<br>请附1张护照照片
+			</div>
+		</div>
+		<br>
 		<div id="application_form">
 			<div>
 				1、Full name 姓名:
@@ -169,6 +184,17 @@
 				22、Have you ever been refused entry to Vanuatu?<br>
 				您曾经被瓦努阿图拒签过吗？ Yes 是 <span id="option"><input type="checkbox"/></span>When 何时 <span id="answer" style="width:200px;"><?php echo $behaviour_info['refuse_date'];?></span>No 否 <span id="option"><input type="checkbox"/></span><br>
 			</div>
+			<div>23、I declare that the information given in this application is true and correct to the best of my knowledge and belief.<br>
+				我声明，本人在本申请表中所做之回答就本人所知均属实无误。<br>
+				Signature 签字 <span id="signature"><?php for ($i = 1; $i < 50; $i ++) echo '&nbsp;';?></span>
+				Date 日期 <span id="signature"><?php for ($i = 1; $i < 50; $i ++) echo '&nbsp;';?></span><br>
+				<span>(The holder of a visitor visa must not work or study in Vanuatu. 旅游签证持有者在旅游期间不得在瓦努阿图工作或学习。)<span>
+			</div>
+			<div style="margin-top:100px; margin-bottom:12px;"><b style="border-bottom:1px solid #000;">RESERVED FOR EMBASSY</b></div> 
+			<div>Valid until: ………………………………………………………………………………………………………</div>
+			<div>Date of Issue: …………………………………………………………………………………………………</div>
+			<div>No. Visa: …………………………………………………………………………………………………………</div>
+			<div>Comment / Remarks: …………………………………………………………………………………………</div>
 		</div>
 	</body>
 </html>
@@ -183,9 +209,4 @@
 	$mpdf->SetAutoFont(AUTOFONT_ALL);
 	$mpdf->WriteHTML($HTMLoutput);
 	$mpdf->Output('application_form.pdf', 'D');
-	/*require '../application/third_party/dompdf/dompdf_config.inc.php';
-	$dompdf = new DOMPDF();
-	$dompdf->load_html($HTMLoutput);
-	$dompdf->render();
-	$dompdf->stream('sample.pdf');*/
 ?>

@@ -24,8 +24,16 @@
 						<col>
 					</colgroup>
 					<tr>
-						<th colspan="1" style="text-align:center;"><h4>扫描件上传</h4></th>
+						<th colspan="1" style="text-align:center;">
+							<h4>扫描件上传</h4>
+						</th>
 					</tr>
+					<tr>
+						<td colspan="2" style="text-align:center;">
+							<span>你现在要处理的是申请流水号为<b><?php echo $uuid;?></b>，申请人为<b><?php echo $name_en.'/'.$name_cn;?></b>的签证申请，请核实无误后再上传证明文件。</span>
+						</td>
+					</tr>
+					<tr></tr>
 					<tr>
 						<th>签证相片：</th>
 						<td><input type="file" name="photo"/></td>

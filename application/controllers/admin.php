@@ -18,27 +18,31 @@ class Admin extends AdminLoginController {
 		}
 	}
 	
-	public function audit($opt = 'wait', $page = 1) {
+	public function audit($orderby = '1', $page = 1) {
 		$this->load->helper('util');
 		$data['status'] = text2status($opt);
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['page'] = $page - 1;
 		
-		$data['uuid'] = trim($this->input->post('uuid', TRUE));
-		$data['passport'] = trim($this->input->post('passport', TRUE));
-		$data['start_time'] = trim($this->input->post('start_time', TRUE));
-		$data['end_time'] = trim($this->input->post('end_time', TRUE));
+		$data['uuid'] = trim($this->input->get('uuid', TRUE));
+		$data['passport'] = trim($this->input->get('passport', TRUE));
+		$data['start_time'] = trim($this->input->get('start_time', TRUE));
+		$data['end_time'] = trim($this->input->get('end_time', TRUE));
 		
 		$this->load->model('admin_model', 'adm');
 		
 		$this->load->library('pagination');
 		
-		$config['base_url'] = base_url('/admin/audit/'.$opt.'/');
+		$config['base_url'] = '/admin/audit/'.$opt.'/';
 		$config['uri_segment'] = 4;
 		$config['num_links'] = 2;
 		$config['total_rows'] = $this->adm->sum_applications($data);
 		$config['per_page'] = 20;
 		$config['use_page_numbers'] = TRUE;
+		if (count($_GET) > 0) {
+			$config['suffix'] = '?'.http_build_query($_GET, '', "&");
+			$config['first_url'] = $config['base_url'].'1?'.http_build_query($_GET, '', "&");
+		}
 		
 		$config['prev_link'] = '上一页';
 		$config['next_link'] = '下一页';
@@ -64,21 +68,25 @@ class Admin extends AdminLoginController {
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['page'] = $page - 1;
 		
-		$data['uuid'] = trim($this->input->post('uuid', TRUE));
-		$data['passport'] = trim($this->input->post('passport', TRUE));
-		$data['start_time'] = trim($this->input->post('start_time', TRUE));
-		$data['end_time'] = trim($this->input->post('end_time', TRUE));
+		$data['uuid'] = trim($this->input->get('uuid', TRUE));
+		$data['passport'] = trim($this->input->get('passport', TRUE));
+		$data['start_time'] = trim($this->input->get('start_time', TRUE));
+		$data['end_time'] = trim($this->input->get('end_time', TRUE));
 		
 		$this->load->model('admin_model', 'adm');
 		
 		$this->load->library('pagination');
 		
-		$config['base_url'] = base_url('/admin/audit/'.$opt.'/');
+		$config['base_url'] = '/admin/audit/'.$opt.'/';
 		$config['uri_segment'] = 4;
 		$config['num_links'] = 2;
 		$config['total_rows'] = $this->adm->sum_applications($data);
 		$config['per_page'] = 20;
 		$config['use_page_numbers'] = TRUE;
+		if (count($_GET) > 0) {
+			$config['suffix'] = '?'.http_build_query($_GET, '', "&");
+			$config['first_url'] = $config['base_url'].'1?'.http_build_query($_GET, '', "&");
+		}
 		
 		$config['prev_link'] = '上一页';
 		$config['next_link'] = '下一页';
@@ -109,9 +117,16 @@ class Admin extends AdminLoginController {
 		$info = $this->adm->retrieve_some_info($uuid, $user['province_id'], $attributes);
 		
 		if ($info) {
+			if ($info['status'] >= 41) {
+				$info['photo_pic'] = FILE_DOMAIN .$uuid .'/photo';
+				$info['passport_pic'] = FILE_DOMAIN .$uuid .'/passport';
+				$info['identity_pic'] = FILE_DOMAIN .$uuid .'/identity';
+				$info['ticket_pic'] = FILE_DOMAIN .$uuid .'/ticket';
+				$info['deposition_pic'] = FILE_DOMAIN .$uuid .'/deposition';
+			}
 			$this->load->view('apply_view', $info);
 		} else {
-			show_error('no application available', 500);
+			show_error('no application available');
 		}
 	}
 	
@@ -199,14 +214,22 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function scan_upload($uuid = '') {
-		$userid = $this->userid;
-		
-		$data['uuid'] = $uuid;
-		if ($data['uuid'] === '') {
-			show_error('uuid empty error', 500);
+		$uuid = $uuid;
+		if ($uuid === '') {
+			show_error('uuid empty error');
 		}
 		
-		$this->load->view('audit_upload', $data);
+		$user = $this->user_info;
+		$attributes = '*';
+		
+		$this->load->model('admin_model', 'adm');
+		$info = $this->adm->retrieve_some_info($uuid, $user['province_id'], $attributes);
+		
+		if ($info) {
+			$this->load->view('audit_upload', $info);
+		} else {
+			show_error('no application available');
+		}
 	}
 	
 	private function upload_pics($uuid, $filename) {

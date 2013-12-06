@@ -39,6 +39,9 @@
 				location.href = '/admin/audit/' + $('#cur_status').val() + '/';
 			}
 		</script>
+		<style type="text/css">
+			.form-control {width: 60px;}
+		</style>
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -55,13 +58,32 @@
 		</nav>
 		<div id="list_box">
 			<div>
-				<select id="cur_status">
-					<option value="wait">待审核</option>
-					<option value="fail">未通过</option>
-					<option value="pass">已通过</option>
-					<option value="paid">已缴费</option>
-				</select>
-				<button onclick="javascript:filter_them();">搜索</button>
+				<div>
+					<select id="orderby">
+						<option value="1">申请状态</option>
+						<option value="2">申请流水号</option>
+						<option value="3">护照号</option>
+						<option value="4">日期范围</option>
+					</select>
+				</div>
+				<div>
+					<select id="cur_status">
+						<option value="wait">待审核</option>
+						<option value="fail">未通过</option>
+						<option value="pass">已通过</option>
+						<option value="paid">已缴费</option>
+					</select>
+				</div>
+				<div>
+					<input id="uuid" name="uuid" style="display:none"/>
+				</div>
+				<div>
+					<input id="passport" name="passport" style="display:none"/>
+				</div>
+				<div>
+					<input id="date_range" style="display:none"/>
+				</div>
+				<div><button onclick="javascript:filter_them();">搜索</button></div>
 			</div>
 			<table class="table table-hover">
 				<colgroup>

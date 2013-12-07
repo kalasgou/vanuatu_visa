@@ -5,7 +5,7 @@ require APPPATH .'core/LoginController.php';
 class Welcome extends LoginController {
 	
 	public function index() {
-		$this->load->view('welcome_message');
+		$this->load->view('welcome');
 	}
 	
 	public function login() {

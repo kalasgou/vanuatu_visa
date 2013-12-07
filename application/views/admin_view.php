@@ -23,8 +23,6 @@
 			#option {display:inline-block;}
 			table {border-collapse:collapse; border:1px solid; text-align:center;}
 			th, td {border:1px solid; padding:8px; font-weight: normal; text-align:center;}
-			#form_button {position:relative; top:-220px; text-align:center; font-size:18px;}
-			#scan_file {}
 		</style>
 	</head>
 	<body>
@@ -178,6 +176,12 @@
 				22、Have you ever been refused entry to Vanuatu?<br>
 				您曾经被瓦努阿图拒签过吗？ Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'on' ? 'checked="checked"' : 'disabled="disabled"');?>/></span> When何时 <span id="answer" style="width:150px;"><?php echo $behaviour_info['refuse_date'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'off' ? 'checked="checked"' : 'disabled="disabled"');?>/></span><br>
 			</div>
+			<?php if ($status < 41) { ?>
+			<div id="next_step">
+				<a class="btn btn-success" href="javascript:pass_or_not(<?php echo $uuid;?>, 'pass');">通过</a>
+				<a class="btn btn-warning" href="javascript:pass_or_not(<?php echo $uuid;?>, 'fail');">不通过</a>
+			</div>
+			<?php } ?>
 			<?php if ($status >= 41) { ?>
 			<div id="scan_file">
 				<div>签证相片:<img src="<?php echo $photo_pic?>" alt="签证相片"/></div>
@@ -187,6 +191,12 @@
 				<div>银行存款证明<img src="<?php echo $deposition_pic?>" alt="银行存款证明"/></div>
 			</div>
 			<? } ?>
+			<?php if ($status == 41) { ?>
+			<div id="next_step">
+				<a class="btn btn-success" href="javascript:visa_or_not(<?php echo $uuid;?>, 'pass');">成功</a>
+				<a class="btn btn-warning" href="javascript:visa_or_not(<?php echo $uuid;?>, 'fail');">拒签</a>
+			</div>
+			<?php } ?>
 		</div>
 	</body>
 </html>

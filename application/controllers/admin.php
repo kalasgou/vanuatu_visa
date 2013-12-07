@@ -8,7 +8,7 @@ class Admin extends AdminLoginController {
 		switch (intval($this->permission)) {
 			case 3: header('Location: '. base_url('/admin/audit')); break;
 			case 2: header('Location: '. base_url('/admin/approve')); break;
-			case 1: $this->load->view('system_admin_index', $this->user_info); break;
+			case 1: header('Location: '. base_url('/admin/permit')); break;
 			default : 
 				$msg['tips'] = 'account forbidden';
 				$link = '/admin_login';
@@ -18,14 +18,24 @@ class Admin extends AdminLoginController {
 		}
 	}
 	
-	public function audit($orderby = '1', $page = 1) {
+	public function audit($page = 1) {
+		if ($this->user_info['permission'] != 3) {
+			$msg['tips'] = 'account forbidden';
+			$link = '/admin_login';
+			$location = 'index page';
+			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$this->load->helper('util');
-		$data['status'] = text2status($opt);
+		
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['page'] = $page - 1;
 		
-		$data['uuid'] = trim($this->input->get('uuid', TRUE));
-		$data['passport'] = trim($this->input->get('passport', TRUE));
+		$status = trim($this->input->get('cur_status', TRUE));
+		$data['status'] = text2status(($status === '' ? 'wait' : $status));
+		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
+		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
 		
@@ -33,8 +43,8 @@ class Admin extends AdminLoginController {
 		
 		$this->load->library('pagination');
 		
-		$config['base_url'] = '/admin/audit/'.$opt.'/';
-		$config['uri_segment'] = 4;
+		$config['base_url'] = '/admin/audit/';
+		$config['uri_segment'] = 3;
 		$config['num_links'] = 2;
 		$config['total_rows'] = $this->adm->sum_applications($data);
 		$config['per_page'] = 20;
@@ -44,13 +54,15 @@ class Admin extends AdminLoginController {
 			$config['first_url'] = $config['base_url'].'1?'.http_build_query($_GET, '', "&");
 		}
 		
-		$config['prev_link'] = '��һҳ';
-		$config['next_link'] = '��һҳ';
-		$config['first_link'] = '�� ҳ';
-		$config['last_link'] = 'β ҳ';
+		$config['prev_link'] = '上一页';
+		$config['next_link'] = '下一页';
+		$config['first_link'] = '首 页';
+		$config['last_link'] = '尾 页';
+		
+		$this->pagination->initialize($config);
 		
 		$data['user'] = $this->user_info;
-		$data['pagination'] = $this->pagination->initialize($config);
+		$data['pagination'] = $this->pagination->create_links();
 		$data['records'] = $this->adm->get_applications($data);
 		
 		foreach ($data['records'] as &$one) {
@@ -60,16 +72,24 @@ class Admin extends AdminLoginController {
 		$this->load->view('admin_audit', $data);
 	}
 	
-	public function approve($opt = 'paid', $page = 1) {
-		$user = $this->user_info;
+	public function approve($page = 1) {
+		if ($this->user_info['permission'] != 2) {
+			$msg['tips'] = 'account forbidden';
+			$link = '/admin_login';
+			$location = 'index page';
+			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			show_error($msg);
+		}
 		
 		$this->load->helper('util');
-		$data['status'] = text2status($opt);
+		
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['page'] = $page - 1;
 		
-		$data['uuid'] = trim($this->input->get('uuid', TRUE));
-		$data['passport'] = trim($this->input->get('passport', TRUE));
+		$status = trim($this->input->get('cur_status', TRUE));
+		$data['status'] = text2status(($status === '' ? 'wait' : $status));
+		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
+		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
 		
@@ -77,8 +97,8 @@ class Admin extends AdminLoginController {
 		
 		$this->load->library('pagination');
 		
-		$config['base_url'] = '/admin/audit/'.$opt.'/';
-		$config['uri_segment'] = 4;
+		$config['base_url'] = '/admin/approve/';
+		$config['uri_segment'] = 3;
 		$config['num_links'] = 2;
 		$config['total_rows'] = $this->adm->sum_applications($data);
 		$config['per_page'] = 20;
@@ -88,13 +108,15 @@ class Admin extends AdminLoginController {
 			$config['first_url'] = $config['base_url'].'1?'.http_build_query($_GET, '', "&");
 		}
 		
-		$config['prev_link'] = '��һҳ';
-		$config['next_link'] = '��һҳ';
-		$config['first_link'] = '�� ҳ';
-		$config['last_link'] = 'β ҳ';
+		$config['prev_link'] = '上一页';
+		$config['next_link'] = '下一页';
+		$config['first_link'] = '首 页';
+		$config['last_link'] = '尾 页';
+		
+		$this->pagination->initialize($config);
 		
 		$data['user'] = $this->user_info;
-		$data['pagination'] = $this->pagination->initialize($config);
+		$data['pagination'] = $this->pagination->create_links();
 		$data['records'] = $this->adm->get_applications($data);
 		
 		foreach ($data['records'] as &$one) {
@@ -102,6 +124,108 @@ class Admin extends AdminLoginController {
 		}
 		
 		$this->load->view('admin_approve', $data);
+	}
+	
+	public function permit($page = 1) {
+		if ($this->user_info['permission'] != 1) {
+			$msg['tips'] = 'account forbidden';
+			$link = '/admin_login';
+			$location = 'index page';
+			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$this->load->helper('util');
+		
+		$data['page'] = $page - 1;
+		$data['status'] = intval($this->input->get('account_status', TRUE));
+		$data['province_id'] = intval($this->input->get('province_id', TRUE));
+		
+		$this->load->model('user_model', 'user');
+		
+		$this->load->library('pagination');
+		
+		$config['base_url'] = '/admin/permit/';
+		$config['uri_segment'] = 3;
+		$config['num_links'] = 2;
+		$config['total_rows'] = $this->user->sum_administrator($data['status']);
+		$config['per_page'] = 20;
+		$config['use_page_numbers'] = TRUE;
+		if (count($_GET) > 0) {
+			$config['suffix'] = '?'.http_build_query($_GET, '', "&");
+			$config['first_url'] = $config['base_url'].'1?'.http_build_query($_GET, '', "&");
+		}
+		
+		$config['prev_link'] = '上一页';
+		$config['next_link'] = '下一页';
+		$config['first_link'] = '首 页';
+		$config['last_link'] = '尾 页';
+		
+		$this->pagination->initialize($config);
+		
+		$data['user'] = $this->user_info;
+		$data['pagination'] = $this->pagination->create_links();
+		$data['users'] = $this->user->get_administrators($data);
+		
+		$provinces = array('1' => '北京', '2' => '广州', '3' => '上海');
+		$permissions = array('1' => '系统管理员', '2' => '大使馆管理员', '3' => '办事处管理员');
+		$accounts = array('-1' => '已失效', '0' => '正常', '1' => '未激活');
+		foreach ($data['users'] as &$one) {
+			$one['status_str'] = $accounts[$one['status']];
+			$one['province_str'] = $provinces[$one['province_id']];
+			$one['permission_str'] = $permissions[$one['permission']];
+		}
+		
+		$this->load->view('admin_permit', $data);
+	}
+	
+	public function ordinary($page = 1) {
+		if ($this->user_info['permission'] != 1) {
+			$msg['tips'] = 'account forbidden';
+			$link = '/admin_login';
+			$location = 'index page';
+			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$this->load->helper('util');
+		
+		$data['page'] = $page - 1;
+		$data['status'] = intval($this->input->get('account_status', TRUE));
+		$data['email'] = trim($this->input->get('email', TRUE));
+		
+		$this->load->model('user_model', 'user');
+		
+		$this->load->library('pagination');
+		
+		$config['base_url'] = '/admin/ordinary/';
+		$config['uri_segment'] = 3;
+		$config['num_links'] = 2;
+		$config['total_rows'] = $this->user->sum_applicant($data['status']);
+		$config['per_page'] = 20;
+		$config['use_page_numbers'] = TRUE;
+		if (count($_GET) > 0) {
+			$config['suffix'] = '?'.http_build_query($_GET, '', "&");
+			$config['first_url'] = $config['base_url'].'1?'.http_build_query($_GET, '', "&");
+		}
+		
+		$config['prev_link'] = '上一页';
+		$config['next_link'] = '下一页';
+		$config['first_link'] = '首 页';
+		$config['last_link'] = '尾 页';
+		
+		$this->pagination->initialize($config);
+		
+		$data['user'] = $this->user_info;
+		$data['pagination'] = $this->pagination->create_links();
+		$data['users'] = $this->user->get_applicants($data);
+		
+		$accounts = array('-1' => '已失效', '0' => '正常', '1' => '未激活');
+		foreach ($data['users'] as &$one) {
+			$one['status_str'] = $accounts[$one['status']];
+		}
+		
+		$this->load->view('admin_ordinary', $data);
 	}
 	
 	public function total_preview($uuid = '') {
@@ -124,7 +248,7 @@ class Admin extends AdminLoginController {
 				$info['ticket_pic'] = FILE_DOMAIN .$uuid .'/ticket';
 				$info['deposition_pic'] = FILE_DOMAIN .$uuid .'/deposition';
 			}
-			$this->load->view('apply_view', $info);
+			$this->load->view('admin_view', $info);
 		} else {
 			show_error('no application available');
 		}
@@ -134,6 +258,7 @@ class Admin extends AdminLoginController {
 		$data['userid'] = $this->userid;
 		$data['uuid'] = $uuid;
 		$data['message'] = trim($this->input->post('message', TRUE));
+		$data['fee'] = trim($this->input->post('fee', TRUE));
 		
 		$this->load->helper('util');
 		$data['status'] = text2status($opt);
@@ -192,7 +317,7 @@ class Admin extends AdminLoginController {
 			$document->setValue('place_of_issue_p', $info['passport_place']);
 			$document->setValue('date_of_issue_p', date('j M, Y', $info['passport_date']));
 			$document->setValue('date_of_expiry_p', date('j M, Y', $info['passport_expiry']));
-			$document->setValue('visa_fee', 'RMB180');
+			$document->setValue('visa_fee', 'RMB'.$info['fee']);
 			
 			$path = VISA_PATH .$uuid.'/';
 			if (file_exists($path) === FALSE) {

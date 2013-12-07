@@ -69,6 +69,40 @@
 			return $query->row_array();
 		}
 		
+		public function sum_applicant($status) {
+			$this->user_db->where('status', $status);
+			
+			return $this->user_db->count_all_results('applicant');
+		} 
+		
+		public function get_applicants($data) {
+			if ($data['email'] !== '') {
+				$search = array('email' => $data['email']);
+			} else {
+				$search = array('status' => $data['status']);
+			}
+			$query = $this->user_db->get_where('applicant', $search, 20, 20 * $data['page']);
+			
+			return $query->result_array();
+		}
+		
+		public function sum_administrator($status) {
+			$this->user_db->where('status', $status);
+			
+			return $this->user_db->count_all_results('administrator');
+		} 
+		
+		public function get_administrators($data) {
+			if ($data['province_id'] !== 0) {
+				$search = array('province_id' => $data['province_id']);
+			} else {
+				$search = array('status' => $data['status']);
+			}
+			$query = $this->user_db->get_where('administrator', $search, 20, 20 * $data['page']);
+			
+			return $query->result_array();
+		}
+		
 		function __call($foo, $bar) {
 			return FALSE;
 		}

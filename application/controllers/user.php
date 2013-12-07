@@ -104,7 +104,6 @@ class User extends CI_Controller {
 	}
 	
 	public function logout() {
-		//$userid = $this->userid;
 		$local_key = trim($this->input->cookie('local_key'));
 		$this->load->model('user_model', 'user');
 		$this->user->pop_cookie($local_key);
@@ -116,8 +115,10 @@ class User extends CI_Controller {
 	}
 	
 	public function account() {
-		$user = $this->user;
-		$this->load->view('account', $user);
+		$provinces = array('1' => '北京', '2' => '广州', '3' => '上海');
+		$permissions = array('1' => '系统管理员', '2' => '大使馆管理员', '3' => '办事处管理员', '10000' => '普通用户');
+		$accounts = array('-1' => '已失效', '0' => '正常', '1' => '未激活');
+		$this->load->view('account', $this->user_info);
 	}
 }
 

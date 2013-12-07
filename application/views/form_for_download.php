@@ -7,13 +7,6 @@
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
 		<link rel="shortcut icon" href=""/>
-		<link rel="stylesheet" type="text/css" href=''/>
-		<script type="text/javascript" src=""></script>
-		<script type="text/javascript">
-			$(document).ready(function(){
-				
-			});
-		</script>
 		<style type="text/css">
 			#application_form div {position:relative; padding:4px 12px; font-size:16px; top:24px;}
 			#answer {display:inline-block; border-bottom:1px dotted #000; text-align:center;}
@@ -47,9 +40,9 @@
 			</div>
 			<div>
 				2、Mr.先生
-				<span id="option"><input type="checkbox" checked="checked"/></span>
-				Mrs.女士 <span id="option"><input type="checkbox"/></span>
-				Miss小姐 <span id="option"><input type="checkbox"/></span>
+				<span id="option"><input type="checkbox" <?php echo ($gender == 1 ? 'checked="checked"' : '');?>/></span>
+				Mrs.女士 <span id="option"><input type="checkbox" <?php echo ($gender == 2 ? 'checked="checked"' : '');?>/></span>
+				Miss小姐 <span id="option"><input type="checkbox" <?php echo ($gender == 3 ? 'checked="checked"' : '');?>/></span>
 			</div>
 			<div>3、Nationality 国籍:
 				<span id="answer" style="width:200px;"><?php echo $nationality;?></span>
@@ -66,10 +59,10 @@
 			</div>
 			<div>
 				6、Family Situation 婚姻状况:
-				Married 已婚 <span id="option"><input type="checkbox"/></span>
-				Single 单身 <span id="option"><input type="checkbox" checked="checked"/></span>
-				Widowed 丧偶 <span id="option"><input type="checkbox"/></span>
-				Divorced 离异 <span id="option"><input type="checkbox"/></span>
+				Married 已婚 <span id="option"><input type="checkbox" <?php echo ($family == 4 ? 'checked="checked"' : '');?>/></span>
+				Single 单身 <span id="option"><input type="checkbox" <?php echo ($family == 5 ? 'checked="checked"' : '');?>/></span>
+				Widowed 丧偶 <span id="option"><input type="checkbox" <?php echo ($family == 6 ? 'checked="checked"' : '');?>/></span>
+				Divorced 离异 <span id="option"><input type="checkbox" <?php echo ($family == 7 ? 'checked="checked"' : '');?>/></span>
 			</div>
 			<?php
 				$occupation_info = json_decode($occupation_info, TRUE);
@@ -101,10 +94,10 @@
 			</div>
 			<div>
 				11、Purpose of Visit 访瓦目的:<br>
-				Tourism 旅游 <span id="option"><input type="checkbox" checked="checked"/></span>
-				Visiting Relative 探亲 <span id="option"><input type="checkbox"/></span>
-				Business 商务 <span id="option"><input type="checkbox"/></span>
-				Other 其他 <span id="option"><input type="checkbox"/></span>
+				Tourism 旅游 <span id="option"><input type="checkbox" <?php echo ($purpose == 8 ? 'checked="checked"' : '');?>/></span>
+				Visiting Relative 探亲 <span id="option"><input type="checkbox" <?php echo ($purpose == 9 ? 'checked="checked"' : '');?>/></span>
+				Business 商务 <span id="option"><input type="checkbox" <?php echo ($purpose == 10 ? 'checked="checked"' : '');?>/></span>
+				Other 其他 <span id="option"><input type="checkbox" <?php echo ($purpose == 11 ? 'checked="checked"' : '');?>/></span>
 			</div>
 			<div>
 				12、Address in Vanuatu 在瓦地址:
@@ -167,22 +160,22 @@
 			?>
 			<div>
 				19、(a) Been convicted of or have any charges outstanding on a criminal offence in any country<br>
-				是否在任何国家有过犯罪记录: Yes 是 <span id="option"><input type="checkbox"/></span>Where 哪一国家 <span id="answer" style="width:200px;"><?php echo $behaviour_info['crime_country'];?></span>No 否 <span id="option"><input type="checkbox"/></span><br>
+				是否在任何国家有过犯罪记录: Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['criminal'] === 'on' ? 'checked="checked"' : '');?>/></span> Where哪一国家 <span id="answer" style="width:200px;"><?php echo $behaviour_info['crime_country'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['criminal'] === 'off' ? 'checked="checked"' : '');?>/></span><br>
 				(b) Been deported or excluded from any country<br>
-				是否有被任何国家驱逐出境的经历: Yes 是 <span id="option"><input type="checkbox"/></span>Where 哪一国家 <span id="answer" style="width:200px;"><?php echo $behaviour_info['deport_country'];?></span>No 否 <span id="option"><input type="checkbox"/></span>
+				是否有被任何国家驱逐出境的经历: Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['deported'] === 'on' ? 'checked="checked"' : '');?>/></span> Where哪一国家 <span id="answer" style="width:200px;"><?php echo $behaviour_info['deport_country'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['deported'] === 'off' ? 'checked="checked"' : '');?>/></span>
 			</div>
 			<div>
 				20、Details of previous visits? 您曾经到过瓦努阿图吗？<br>
-				Yes 有 <span id="option"><input type="checkbox"/></span>
-				No 没有 <span id="option"><input type="checkbox"/></span>
+				Yes有 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['visited'] === 'on' ? 'checked="checked"' : '');?>/></span>
+				No没有 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['visited'] === 'off' ? 'checked="checked"' : '');?>/></span>
 			</div>
 			<div>
 				21、Have you ever applied for a work, residence or student permit before in Vanuatu?<br>
-				您是否曾经在瓦努阿图申请过工作、居留或学生签证？ Yes 是 <span id="option"><input type="checkbox"/></span>When 何时 <span id="answer" style="width:200px;"><?php echo $behaviour_info['apply_date'];?></span>No 否 <span id="option"><input type="checkbox"/></span><br>
+				您是否曾经在瓦努阿图申请过工作、居留或学生签证？ Yes是 <span id="option"><input type="checkbox"  <?php echo ($behaviour_info['applied'] === 'on' ? 'checked="checked"' : '');?>/></span> When何时 <span id="answer" style="width:200px;"><?php echo $behaviour_info['apply_date'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['applied'] === 'off' ? 'checked="checked"' : '');?>/></span><br>
 			</div>
 			<div>
 				22、Have you ever been refused entry to Vanuatu?<br>
-				您曾经被瓦努阿图拒签过吗？ Yes 是 <span id="option"><input type="checkbox"/></span>When 何时 <span id="answer" style="width:200px;"><?php echo $behaviour_info['refuse_date'];?></span>No 否 <span id="option"><input type="checkbox"/></span><br>
+				您曾经被瓦努阿图拒签过吗？ Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'on' ? 'checked="checked"' : '');?>/></span> When何时 <span id="answer" style="width:200px;"><?php echo $behaviour_info['refuse_date'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'off' ? 'checked="checked"' : '')?>/></span><br>
 			</div>
 			<div>23、I declare that the information given in this application is true and correct to the best of my knowledge and belief.<br>
 				我声明，本人在本申请表中所做之回答就本人所知均属实无误。<br>

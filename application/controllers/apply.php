@@ -58,13 +58,13 @@ class Apply extends ApplyLoginController {
 							),
 						array(
 							'id' => '2',
-							'province_cn' => '上海办事处',
-							'location_cn' => '上海XXXXXXXXXX',
+							'province_cn' => '广州办事处',
+							'location_cn' => '广州XXXXXXXXXX',
 							),
 						array(
 							'id' => '3',
-							'province_cn' => '广州办事处',
-							'location_cn' => '广州XXXXXXXXXX',
+							'province_cn' => '上海办事处',
+							'location_cn' => '上海XXXXXXXXXX',
 							),
 						),
 				);
@@ -531,6 +531,13 @@ class Apply extends ApplyLoginController {
 		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
 		
 		if ($info) {
+			if ($info['status'] >= 41) {
+				$info['photo_pic'] = FILE_DOMAIN .$uuid .'/photo';
+				$info['passport_pic'] = FILE_DOMAIN .$uuid .'/passport';
+				$info['identity_pic'] = FILE_DOMAIN .$uuid .'/identity';
+				$info['ticket_pic'] = FILE_DOMAIN .$uuid .'/ticket';
+				$info['deposition_pic'] = FILE_DOMAIN .$uuid .'/deposition';
+			}
 			$this->load->view('apply_view', $info);
 		} else {
 			show_error('no application available');

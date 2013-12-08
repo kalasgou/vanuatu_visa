@@ -138,6 +138,7 @@
 							'21' => '未通过',
 							'31' => '通过',
 							'41' => '已缴款',
+							'91' => '被拒签',
 							'101' => '已出签证',
 							'126' => '过期无效',
 							'127' => '正溢出异常',
@@ -156,6 +157,7 @@
 			case 'fail': $status = '21'; break;
 			case 'pass': $status = '31'; break;
 			case 'paid': $status = '41'; break;
+			case 'oops': $status = '91'; break;
 			case 'visa': $status = '101'; break;
 			case 'lost': $status = '126'; break;
 		}

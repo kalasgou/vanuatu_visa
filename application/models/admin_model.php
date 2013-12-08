@@ -64,11 +64,14 @@
 			$this->admin_db->insert('visa_auditing');
 			
 			if ($this->admin_db->affected_rows() > 0) {
-				if ($data['status'] == 21 || $data['status'] == 31) {
+				if ($data['status'] === '21' || $data['status'] === '31') {
 					$this->admin_db->set('audit_time', $update_time);
-				} else if ($data['status'] == 41) {
+				} else if ($data['status'] === '41') {
 					$this->admin_db->set('pay_time', $update_time);
 					$this->admin_db->set('fee', $data['fee']);
+				} else if ($data['status'] === '91' || $data['status'] === '101') {
+					$this->admin_db->set('approve_time', $update_time);
+					$this->admin_db->set('visa_no', $data['visa_no']);
 				} else {
 					return FALSE;
 				}
@@ -107,5 +110,6 @@
 			
 			return $this->admin_db->affected_rows();
 		}
+		
 	}
 ?>

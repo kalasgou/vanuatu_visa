@@ -9,7 +9,7 @@ class Welcome extends LoginController {
 	}
 	
 	public function login() {
-		if ($this->userid > 0) {
+		if ($this->userid > 0 && $this->status == 1) {
 			$msg['tips'] = 'already logined';
 			$link = '/apply';
 			$location = 'index page';
@@ -21,7 +21,7 @@ class Welcome extends LoginController {
 	}
 	
 	public function register() {
-		if ($this->userid > 0) {
+		if ($this->userid > 0 && $this->status == 1) {
 			$msg['tips'] = 'already logined';
 			$link = '/apply';
 			$location = 'index page';
@@ -33,7 +33,7 @@ class Welcome extends LoginController {
 	}
 	
 	public function admin_login() {
-		if ($this->userid > 0) {
+		if ($this->userid > 0 && $this->status == 1) {
 			$msg['tips'] = 'already logined';
 			$link = '/admin';
 			$location = 'index page';
@@ -45,7 +45,7 @@ class Welcome extends LoginController {
 	}
 	
 	public function admin_register() {
-		if ($this->userid > 0) {
+		if ($this->userid > 0 && $this->status == 1) {
 			$msg['tips'] = 'already logined';
 			$link = '/admin';
 			$location = 'index page';

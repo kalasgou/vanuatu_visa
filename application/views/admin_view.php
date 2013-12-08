@@ -9,11 +9,53 @@
 		<link rel="shortcut icon" href=""/>
 		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
-		<script type="text/javascript" src=""></script>
+		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
 			});
+			
+			function pass_or_not(uuid, opt) {
+				var message = '';
+				if (opt === 'pass') {
+					message = 'Pass OK';
+				} else if (opt === 'fail') {
+					message = 'Pass fail';
+				}
+				$.ajax({
+					url: '/admin/auditing/' + uuid + '/' + opt,
+					data: {message: message},
+					type: 'POST',
+					dataType: 'json',
+					success: function (json) {
+						switch (json.msg) {
+							case 'success': alert('对申请号 ' + uuid + ' 审核操作成功！'); break;
+							case 'fail': alert('出错了'); break;
+						}
+					},
+					error: function() {
+						alert('Network Error');
+					}
+				});
+			}
+			
+			function visa_or_not(uuid, opt) {
+				$.ajax({
+					url: '/admin/approving/' + uuid + '/' + opt,
+					data: {},
+					type: 'POST',
+					dataType: 'json',
+					success: function(json) {
+						switch (json.msg) {
+							case 'success': alert('对申请号 ' + uuid + ' 审批操作成功！'); break;
+							case 'fail': alert('出错了'); break;
+						}
+					},
+					error: function() {
+						alert('Network Error');
+					}
+				});
+			}
 		</script>
 		<style type="text/css">
 			body {padding:0px;}
@@ -23,6 +65,7 @@
 			#option {display:inline-block;}
 			table {border-collapse:collapse; border:1px solid; text-align:center;}
 			th, td {border:1px solid; padding:8px; font-weight: normal; text-align:center;}
+			img {width:100%;}
 		</style>
 	</head>
 	<body>
@@ -109,13 +152,13 @@
 				$detail_info = json_decode($detail_info, TRUE);
 			?>
 			<div>
-				14、Details of arrival in Vanuatu 抵瓦航班号:<br>&nbsp;&nbsp;
-				<span id="answer" style="width:200px;"><?php echo $detail_info['arrival_number'];?></span>
+				14、Details of arrival in Vanuatu <br>
+				抵瓦航班号: <span id="answer" style="width:200px;"><?php echo $detail_info['arrival_number'];?></span>
 				日期: <span id="answer" style="width:200px;"><?php echo $detail_info['arrival_date'];?></span>
 			</div>
 			<div>
-				15、Details of return ticket 回程航班号:<br>&nbsp;&nbsp;
-				<span id="answer" style="width:200px;"><?php echo $detail_info['return_number'];?></span>
+				15、Details of return ticket <br>
+				回程航班号: <span id="answer" style="width:200px;"><?php echo $detail_info['return_number'];?></span>
 				日期: <span id="answer" style="width:200px;"><?php echo $detail_info['return_number'];?></span>
 			</div>
 			<div>
@@ -176,25 +219,25 @@
 				22、Have you ever been refused entry to Vanuatu?<br>
 				您曾经被瓦努阿图拒签过吗？ Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'on' ? 'checked="checked"' : 'disabled="disabled"');?>/></span> When何时 <span id="answer" style="width:150px;"><?php echo $behaviour_info['refuse_date'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'off' ? 'checked="checked"' : 'disabled="disabled"');?>/></span><br>
 			</div>
-			<?php if ($status < 41) { ?>
+			<?php if ($status < 41 && $user['permission'] == 3) { ?>
 			<div id="next_step">
-				<a class="btn btn-success" href="javascript:pass_or_not(<?php echo $uuid;?>, 'pass');">通过</a>
-				<a class="btn btn-warning" href="javascript:pass_or_not(<?php echo $uuid;?>, 'fail');">不通过</a>
+				<a class="btn btn-success" href="javascript:pass_or_not('<?php echo $uuid;?>', 'pass');">通过</a>
+				<a class="btn btn-warning" href="javascript:pass_or_not('<?php echo $uuid;?>', 'fail');">驳回</a>
 			</div>
 			<?php } ?>
 			<?php if ($status >= 41) { ?>
 			<div id="scan_file">
 				<div>签证相片:<img src="<?php echo $photo_pic?>" alt="签证相片"/></div>
-				<div>护照<img src="<?php echo $passport_pic?>" alt="护照"/></div>
-				<div>身份证<img src="<?php echo $identity_pic?>" alt="身份证"/></div>
-				<div>往返机票<img src="<?php echo $ticket_pic?>" alt="往返机票"/></div>
-				<div>银行存款证明<img src="<?php echo $deposition_pic?>" alt="银行存款证明"/></div>
+				<div>护照:<img src="<?php echo $passport_pic?>" alt="护照"/></div>
+				<div>身份证:<img src="<?php echo $identity_pic?>" alt="身份证"/></div>
+				<div>往返机票:<img src="<?php echo $ticket_pic?>" alt="往返机票"/></div>
+				<div>银行存款证明:<img src="<?php echo $deposition_pic?>" alt="银行存款证明"/></div>
 			</div>
 			<? } ?>
-			<?php if ($status == 41) { ?>
+			<?php if ($status == 41 && $user['permission'] == 2) { ?>
 			<div id="next_step">
-				<a class="btn btn-success" href="javascript:visa_or_not(<?php echo $uuid;?>, 'pass');">成功</a>
-				<a class="btn btn-warning" href="javascript:visa_or_not(<?php echo $uuid;?>, 'fail');">拒签</a>
+				<a class="btn btn-success" href="javascript:visa_or_not('<?php echo $uuid;?>', 'visa');">同意</a>
+				<a class="btn btn-warning" href="javascript:visa_or_not('<?php echo $uuid;?>', 'oops');">拒签</a>
 			</div>
 			<?php } ?>
 		</div>

@@ -130,13 +130,13 @@
 					$detail_info = json_decode($detail_info, TRUE);
 				?>
 				<div>
-					14、Details of arrival in Vanuatu 抵瓦航班号:<br>&nbsp;&nbsp;
-					<span id="answer" style="width:200px;"><?php echo $detail_info['arrival_number'];?></span>
+					14、Details of arrival in Vanuatu <br>
+					抵瓦航班号: <span id="answer" style="width:200px;"><?php echo $detail_info['arrival_number'];?></span>
 					日期: <span id="answer" style="width:200px;"><?php echo $detail_info['arrival_date'];?></span>
 				</div>
 				<div>
-					15、Details of return ticket 回程航班号:<br>&nbsp;&nbsp;
-					<span id="answer" style="width:200px;"><?php echo $detail_info['return_number'];?></span>
+					15、Details of return ticket <br>
+					回程航班号: <span id="answer" style="width:200px;"><?php echo $detail_info['return_number'];?></span>
 					日期: <span id="answer" style="width:200px;"><?php echo $detail_info['return_number'];?></span>
 				</div>
 				<div>

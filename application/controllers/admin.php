@@ -87,7 +87,7 @@ class Admin extends AdminLoginController {
 		$data['page'] = $page - 1;
 		
 		$status = trim($this->input->get('cur_status', TRUE));
-		$data['status'] = text2status(($status === '' ? 'wait' : $status));
+		$data['status'] = text2status(($status === '' ? 'paid' : $status));
 		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
@@ -234,20 +234,21 @@ class Admin extends AdminLoginController {
 			die();
 		}
 		
-		$user = $this->user_info;
 		$attributes = '*';
 		
 		$this->load->model('admin_model', 'adm');
-		$info = $this->adm->retrieve_some_info($uuid, $user['province_id'], $attributes);
+		$info = $this->adm->retrieve_some_info($uuid, $this->user_info['province_id'], $attributes);
 		
 		if ($info) {
 			if ($info['status'] >= 41) {
-				$info['photo_pic'] = FILE_DOMAIN .$uuid .'/photo';
-				$info['passport_pic'] = FILE_DOMAIN .$uuid .'/passport';
-				$info['identity_pic'] = FILE_DOMAIN .$uuid .'/identity';
-				$info['ticket_pic'] = FILE_DOMAIN .$uuid .'/ticket';
-				$info['deposition_pic'] = FILE_DOMAIN .$uuid .'/deposition';
+				$info['photo_pic'] = SCAN_DOMAIN .$uuid .'/photo';
+				$info['passport_pic'] = SCAN_DOMAIN .$uuid .'/passport';
+				$info['identity_pic'] = SCAN_DOMAIN .$uuid .'/identity';
+				$info['ticket_pic'] = SCAN_DOMAIN .$uuid .'/ticket';
+				$info['deposition_pic'] = SCAN_DOMAIN .$uuid .'/deposition';
 			}
+			
+			$info['user'] = $this->user_info;
 			$this->load->view('admin_view', $info);
 		} else {
 			show_error('no application available');
@@ -277,65 +278,89 @@ class Admin extends AdminLoginController {
 		echo json_encode($ret);
 	}
 	
-	public function approving($uuid = '') {
+	public function approving($uuid = '', $opt = '') {
 		$data['uuid'] = $uuid;
 		$data['userid'] = $this->userid;
-		$data['start_time'] = strtotime('today');
-		$data['end_time'] = $data['start_time'] + 86400 * 60;
+		$data['visa_no'] = '';
+		$data['message'] = '';
+		
+		$this->load->helper('util');
+		$data['status'] = text2status($opt);
 		
 		$this->load->model('admin_model', 'adm');
-		$attributes = '*';
-		$info = $this->adm->retrieve_some_info($uuid, $this->user_info['province_id'], $attributes);
 		
-		if (!$info) {
-			$msg['tips'] = 'forbidden';
-			$link = '/admin/approve';
-			$location = 'index page';
-			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
-			show_error($msg, 500);
-		}
-		
-		if (($id = $this->adm->final_audit($data))) {
-			$this->load->helper('util');
-			$visa_no = gen_visa_number($id);
-			$this->adm->update_visa_number($id, $visa_no);
+		if ($data['status'] === '101') {
+			$data['start_time'] = strtotime('today');
+			$data['end_time'] = $data['start_time'] + 86400 * 60;
 			
-			require '../application/third_party/PHPWord/PHPWord.php';
-			$PHPWord = new PHPWord();
-
-			$document = $PHPWord->loadTemplate('/var/visa_file/visa_template.docx');
-
-			$document->setValue('name', $info['name_en'].'/'.$info['name_cn']);
-			$document->setValue('visa_no', $visa_no);
-			$document->setValue('date_of_issue_v', date('j M, Y', $data['start_time']));
-			$document->setValue('date_of_expiry_v', date('j M, Y', $data['end_time']));
-			$document->setValue('sex', ($info['gender'] > 1 ? 'Female' : 'Male'));
-			$document->setValue('place_of_birth', $info['birth_place']);
-			$document->setValue('passport_no', $info['passport_number']);
-			$document->setValue('date_of_birth', date('j M, Y', strtotime($info['birth_year'].'-'.$info['birth_month'].'-'.$info['birth_day'])));
-			$document->setValue('type', 'P');
-			$document->setValue('place_of_issue_p', $info['passport_place']);
-			$document->setValue('date_of_issue_p', date('j M, Y', $info['passport_date']));
-			$document->setValue('date_of_expiry_p', date('j M, Y', $info['passport_expiry']));
-			$document->setValue('visa_fee', 'RMB'.$info['fee']);
+			$attributes = '*';
+			$info = $this->adm->retrieve_some_info($uuid, $this->user_info['province_id'], $attributes);
 			
-			$path = VISA_PATH .$uuid.'/';
-			if (file_exists($path) === FALSE) {
-				mkdir($path, 0777);
+			if (!$info) {
+				$msg['tips'] = 'forbidden';
+				$link = '/admin/approve';
+				$location = 'index page';
+				$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+				show_error($msg, 500);
 			}
+			
+			if (($id = $this->adm->final_audit($data))) {
+				$this->load->helper('util');
+				$data['visa_no'] = gen_visa_number($id);
+				$this->adm->update_visa_number($id, $data['visa_no']);
+				$data['message'] = 'Application '.$data['uuid'].' Got Visa '.$data['visa_no'];
+				
+				/*require '../application/third_party/PHPWord/PHPWord.php';
+				$PHPWord = new PHPWord();
 
-			$document->save($path.$visa_no.'.docx');
-			
-			header('Content-Description: File Transfer');
-			header('Content-Type: application/force-download');
-			header('Content-Disposition: attachment; filename='.basename($path.$visa_no.'.docx'));
-			header('Content-Transfer-Encoding: binary');
-			header('Content-Length: '.filesize($path.$visa_no.'.docx'));
-			readfile($path.$visa_no.'.docx');
-			//unlink($path.$visa_no.'.docx');
-			
-			//email();
+				$document = $PHPWord->loadTemplate(VISA_PATH .'visa_template.docx');
+
+				$document->setValue('name', $info['name_en'].'/'.$info['name_cn']);
+				$document->setValue('visa_no', $visa_no);
+				$document->setValue('date_of_issue_v', date('j M, Y', $data['start_time']));
+				$document->setValue('date_of_expiry_v', date('j M, Y', $data['end_time']));
+				$document->setValue('sex', ($info['gender'] > 1 ? 'Female' : 'Male'));
+				$document->setValue('place_of_birth', $info['birth_place']);
+				$document->setValue('passport_no', $info['passport_number']);
+				$document->setValue('date_of_birth', date('j M, Y', strtotime($info['birth_year'].'-'.$info['birth_month'].'-'.$info['birth_day'])));
+				$document->setValue('type', 'P');
+				$document->setValue('place_of_issue_p', $info['passport_place']);
+				$document->setValue('date_of_issue_p', date('j M, Y', $info['passport_date']));
+				$document->setValue('date_of_expiry_p', date('j M, Y', $info['passport_expiry']));
+				$document->setValue('visa_fee', 'RMB'.$info['fee']);
+				
+				$path = VISA_PATH .$uuid.'/';
+				if (file_exists($path) === FALSE) {
+					mkdir($path, 0777);
+				}
+
+				$document->save($path.$visa_no.'.docx');*/
+				
+				/*header('Content-Description: File Transfer');
+				header('Content-Type: application/force-download');
+				header('Content-Disposition: attachment; filename='.basename($path.$visa_no.'.docx'));
+				header('Content-Transfer-Encoding: binary');
+				header('Content-Length: '.filesize($path.$visa_no.'.docx'));
+				readfile($path.$visa_no.'.docx');
+				//unlink($path.$visa_no.'.docx');
+				
+				//email();*/
+			}
+		} else if ($data['status'] === '91') {
+			$data['visa_no'] = 'Refused';
+			$data['message'] = 'Application Refused for Visa';
+		} else {
+			$ret['msg'] = 'fail';
 		}
+		
+		$ret['msg'] = 'success';
+		echo json_encode($ret);
+		
+		$this->adm->auditing_application($data);
+	}
+	
+	public function batch_approving() {
+		
 	}
 	
 	public function scan_upload($uuid = '') {
@@ -385,7 +410,7 @@ class Admin extends AdminLoginController {
 			}
 		}
 		
-		header('Location: /admin/total_preview/');
+		header('Location: /admin/total_preview/'.$uuid);
 	}
 	
 }

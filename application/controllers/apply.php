@@ -532,11 +532,11 @@ class Apply extends ApplyLoginController {
 		
 		if ($info) {
 			if ($info['status'] >= 41) {
-				$info['photo_pic'] = FILE_DOMAIN .$uuid .'/photo';
-				$info['passport_pic'] = FILE_DOMAIN .$uuid .'/passport';
-				$info['identity_pic'] = FILE_DOMAIN .$uuid .'/identity';
-				$info['ticket_pic'] = FILE_DOMAIN .$uuid .'/ticket';
-				$info['deposition_pic'] = FILE_DOMAIN .$uuid .'/deposition';
+				$info['photo_pic'] = SCAN_DOMAIN .$uuid .'/photo';
+				$info['passport_pic'] = SCAN_DOMAIN .$uuid .'/passport';
+				$info['identity_pic'] = SCAN_DOMAIN .$uuid .'/identity';
+				$info['ticket_pic'] = SCAN_DOMAIN .$uuid .'/ticket';
+				$info['deposition_pic'] = SCAN_DOMAIN .$uuid .'/deposition';
 			}
 			$this->load->view('apply_view', $info);
 		} else {

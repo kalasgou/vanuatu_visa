@@ -45,7 +45,9 @@ define('CAPTCHA_PATH',		'/data/file/captcha/');
 
 define('REDIS_DEFAULT', 	'/tmp/redis_6379.sock');
 
-define('FILE_DOMAIN',		'http://file.visa2vanuatu.cn/');
+define('SCAN_DOMAIN',		'http://file.visa2vanuatu.cn/scan_file/');
+define('VISA_DOMAIN',		'http://file.visa2vanuatu.cn/visa_file/');
+define('CAPTCHA_DOMAIN',	'http://file.visa2vanuatu.cn/captcha/');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

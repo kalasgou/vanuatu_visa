@@ -23,8 +23,7 @@
 			#option {display:inline-block;}
 			table {border-collapse:collapse; border:1px solid; text-align:center;}
 			th, td {border:1px solid; padding:8px; font-weight: normal; text-align:center;}
-			#form_button {position:relative; top:-220px; text-align:center; font-size:18px;}
-			#scan_file {}
+			img {width:100%;}
 		</style>
 	</head>
 	<body>
@@ -111,13 +110,13 @@
 				$detail_info = json_decode($detail_info, TRUE);
 			?>
 			<div>
-				14、Details of arrival in Vanuatu 抵瓦航班号:<br>&nbsp;&nbsp;
-				<span id="answer" style="width:200px;"><?php echo $detail_info['arrival_number'];?></span>
+				14、Details of arrival in Vanuatu <br>
+				抵瓦航班号: <span id="answer" style="width:200px;"><?php echo $detail_info['arrival_number'];?></span>
 				日期: <span id="answer" style="width:200px;"><?php echo $detail_info['arrival_date'];?></span>
 			</div>
 			<div>
-				15、Details of return ticket 回程航班号:<br>&nbsp;&nbsp;
-				<span id="answer" style="width:200px;"><?php echo $detail_info['return_number'];?></span>
+				15、Details of return ticket <br>
+				回程航班号: <span id="answer" style="width:200px;"><?php echo $detail_info['return_number'];?></span>
 				日期: <span id="answer" style="width:200px;"><?php echo $detail_info['return_number'];?></span>
 			</div>
 			<div>
@@ -181,10 +180,10 @@
 			<?php if ($status >= 41) { ?>
 			<div id="scan_file">
 				<div>签证相片:<img src="<?php echo $photo_pic?>" alt="签证相片"/></div>
-				<div>护照<img src="<?php echo $passport_pic?>" alt="护照"/></div>
-				<div>身份证<img src="<?php echo $identity_pic?>" alt="身份证"/></div>
-				<div>往返机票<img src="<?php echo $ticket_pic?>" alt="往返机票"/></div>
-				<div>银行存款证明<img src="<?php echo $deposition_pic?>" alt="银行存款证明"/></div>
+				<div>护照:<img src="<?php echo $passport_pic?>" alt="护照"/></div>
+				<div>身份证:<img src="<?php echo $identity_pic?>" alt="身份证"/></div>
+				<div>往返机票:<img src="<?php echo $ticket_pic?>" alt="往返机票"/></div>
+				<div>银行存款证明:<img src="<?php echo $deposition_pic?>" alt="银行存款证明"/></div>
 			</div>
 			<? } ?>
 		</div>

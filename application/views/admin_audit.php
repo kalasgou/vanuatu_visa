@@ -15,7 +15,7 @@
 			function pay_for_visa(uuid, this_a) {
 				var fee = parseInt(prompt('请输入签证费用，单位：人名币'));
 				if (isNaN(fee)) {
-					alert('请输入数字！');
+					alert('请输入正整数！');
 					return;
 				}
 				var message = '签证申请流水号 ' + uuid + ' 已缴款RMB ' + fee + '，请等待签证通过！';
@@ -157,10 +157,15 @@
 						<td><span title="具体时间 <?php echo $one['approve_time'];?>"><?php echo substr($one['approve_time'], 0, 10);?></span></td>
 						<td>
 							<a href="/admin/total_preview/<?php echo $one['uuid'];?>">查看详细</a> / 
-							<?php if ($one['status'] < 41) { ?>
-								<a href="javascript:pay_for_visa('<?php echo $one['uuid'];?>');">缴费</a> / 
+							<?php if ($one['status'] < 31) { ?>
+								<a href="javascript:pass_for_fee('<?php echo $one['uuid'];?>');">通过审核</a> 
 							<?php } ?>
+							<?php if ($one['status'] == 31) { ?>
+								<a href="javascript:pay_for_visa('<?php echo $one['uuid'];?>');">缴费</a> 
+							<?php } ?>
+							<?php if ($one['status'] == 41) { ?>
 							<a href="/admin/scan_upload/<?php echo $one['uuid'];?>">上传证明</a>
+							<?php } ?>
 						</td>
 					</tr>
 					<?php

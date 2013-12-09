@@ -39,6 +39,8 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('HASH_COST_LOG2', 	8);
 define('HASH_PORTABLE', 	FALSE);
 
+define('VISA_TEMPLATE',		'/data/file/visa_file/visa_template.docx');
+
 define('VISA_PATH',			'/data/file/visa_file/');
 define('SCAN_PATH',			'/data/file/scan_file/');
 define('CAPTCHA_PATH',		'/data/file/captcha/');

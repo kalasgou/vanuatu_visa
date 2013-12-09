@@ -230,7 +230,7 @@ class Admin extends AdminLoginController {
 	
 	public function total_preview($uuid = '') {
 		if ($uuid === '') {
-			show_error('uuid empty error', 500);
+			show_error('uuid empty error');
 			die();
 		}
 		
@@ -265,7 +265,7 @@ class Admin extends AdminLoginController {
 		$data['status'] = text2status($opt);
 		
 		if ($data['uuid'] === '') {
-			show_error('uuid empty error', 500);
+			show_error('uuid empty error');
 		}
 		
 		$this->load->model('admin_model', 'adm');
@@ -301,7 +301,7 @@ class Admin extends AdminLoginController {
 				$link = '/admin/approve';
 				$location = 'index page';
 				$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
-				show_error($msg, 500);
+				show_error($msg);
 			}
 			
 			if (($id = $this->adm->final_audit($data))) {
@@ -310,13 +310,13 @@ class Admin extends AdminLoginController {
 				$this->adm->update_visa_number($id, $data['visa_no']);
 				$data['message'] = 'Application '.$data['uuid'].' Got Visa '.$data['visa_no'];
 				
-				/*require '../application/third_party/PHPWord/PHPWord.php';
+				require '../application/third_party/PHPWord/PHPWord.php';
 				$PHPWord = new PHPWord();
 
-				$document = $PHPWord->loadTemplate(VISA_PATH .'visa_template.docx');
+				$document = $PHPWord->loadTemplate(VISA_TEMPLATE);
 
 				$document->setValue('name', $info['name_en'].'/'.$info['name_cn']);
-				$document->setValue('visa_no', $visa_no);
+				$document->setValue('visa_no', $data['visa_no']);
 				$document->setValue('date_of_issue_v', date('j M, Y', $data['start_time']));
 				$document->setValue('date_of_expiry_v', date('j M, Y', $data['end_time']));
 				$document->setValue('sex', ($info['gender'] > 1 ? 'Female' : 'Male'));
@@ -334,17 +334,17 @@ class Admin extends AdminLoginController {
 					mkdir($path, 0777);
 				}
 
-				$document->save($path.$visa_no.'.docx');*/
+				$document->save($path.$data['visa_no'].'.docx');
 				
-				/*header('Content-Description: File Transfer');
+				header('Content-Description: File Transfer');
 				header('Content-Type: application/force-download');
-				header('Content-Disposition: attachment; filename='.basename($path.$visa_no.'.docx'));
+				header('Content-Disposition: attachment; filename='.basename($path.$data['visa_no'].'.docx'));
 				header('Content-Transfer-Encoding: binary');
-				header('Content-Length: '.filesize($path.$visa_no.'.docx'));
-				readfile($path.$visa_no.'.docx');
-				//unlink($path.$visa_no.'.docx');
+				header('Content-Length: '.filesize($path.$data['visa_no'].'.docx'));
+				readfile($path.$data['visa_no'].'.docx');
+				//unlink($path.$data['visa_no'].'.docx');
 				
-				//email();*/
+				//email();
 			}
 		} else if ($data['status'] === '91') {
 			$data['visa_no'] = 'Refused';
@@ -406,7 +406,7 @@ class Admin extends AdminLoginController {
 		$scan_files = array('photo', 'passport', 'identity', 'ticket', 'deposition');
 		foreach ($scan_files as $val) {
 			if (!$this->upload_pics($uuid, $val)) {
-				show_error('upload failed', 500);
+				show_error('upload failed');
 			}
 		}
 		

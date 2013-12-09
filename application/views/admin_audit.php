@@ -156,7 +156,7 @@
 						<td><span title="具体时间 <?php echo $one['pay_time'];?>"><?php echo substr($one['pay_time'], 0, 10);?></span></td>
 						<td><span title="具体时间 <?php echo $one['approve_time'];?>"><?php echo substr($one['approve_time'], 0, 10);?></span></td>
 						<td>
-							<a href="/admin/total_preview/<?php echo $one['uuid'];?>">查看详细</a> / 
+							<a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank">查看详细</a> / 
 							<?php if ($one['status'] < 31) { ?>
 								<a href="javascript:pass_for_fee('<?php echo $one['uuid'];?>');">通过审核</a> 
 							<?php } ?>
@@ -164,7 +164,7 @@
 								<a href="javascript:pay_for_visa('<?php echo $one['uuid'];?>');">缴费</a> 
 							<?php } ?>
 							<?php if ($one['status'] == 41) { ?>
-							<a href="/admin/scan_upload/<?php echo $one['uuid'];?>">上传证明</a>
+							<a href="/admin/scan_upload/<?php echo $one['uuid'];?>" target="_blank">上传证明</a>
 							<?php } ?>
 						</td>
 					</tr>

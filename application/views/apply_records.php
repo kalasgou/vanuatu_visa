@@ -69,10 +69,10 @@
 						<td><span title="具体时间 <?php echo $one['pay_time'];?>"><?php echo substr($one['pay_time'], 0, 10);?></span></td>
 						<td><span title="具体时间 <?php echo $one['approve_time'];?>"><?php echo substr($one['approve_time'], 0, 10);?></span></td>
 						<td>
-							<a href="/apply/view/<?php echo $one['uuid'];?>">查看</a>
+							<a href="/apply/view/<?php echo $one['uuid'];?>" target="_blank">查看</a>
 							<?php if ($one['status'] <= 21) { ?><a href="/apply/agencies/<?php echo $one['uuid'];?>">修改</a><?php } ?>
-							<a href="/apply/download_form/<?php echo $one['uuid'];?>">下载申请表</a>
-							<?php if ($one['status'] == 101) { ?><a href="/apply/download_visa/<?php echo $one['uuid'];?>">下载签证</a><?php } ?>
+							<a href="/apply/download_form/<?php echo $one['uuid'];?>" target="_blank">下载申请表</a>
+							<?php if ($one['status'] == 101) { ?><a href="/apply/download_visa/<?php echo $one['uuid'];?>" target="_blank">下载签证</a><?php } ?>
 						</td>
 					</tr>
 					<?php

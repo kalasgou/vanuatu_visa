@@ -125,7 +125,7 @@
 						<td><span title="具体时间 <?php echo $one['pay_time'];?>"><?php echo substr($one['pay_time'], 0, 10);?></span></td>
 						<td><span title="具体时间 <?php echo $one['approve_time'];?>"><?php echo substr($one['approve_time'], 0, 10);?></span></td>
 						<td>
-							<a href="/admin/total_preview/<?php echo $one['uuid'];?>">查看详细</a>
+							<a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank">查看详细</a>
 							<?php if ($one['status'] == 41) { ?> / 
 								<a href="/admin/approving/<?php echo $one['uuid'];?>/visa">通过签证</a>
 							<?php } ?>

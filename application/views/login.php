@@ -10,10 +10,25 @@
 		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="/jshash/md5-min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
 			});
+			
+			function reshape_password() {
+				var password = $('#inputPassword3').val();
+				if (password.length < 6) {
+					return false;
+				} else {
+					$('#inputPassword3').val(hex_md5(password));
+					return true;
+				}
+			}
+			
+			function submit_form() {
+				return reshape_password();
+			}
 		</script>
 		<style type="text/css">
 			.form-control {width:220px;}
@@ -21,7 +36,7 @@
 	</head>
 	<body>
 		<div>
-			<form class="form-horizontal" role="form" method="post" action="/user/login">
+			<form id="login_form" class="form-horizontal" role="form" method="post" action="/user/login" onsubmit="return submit_form();">
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<h3>普通帐号登录</h3>
@@ -30,13 +45,13 @@
 				<div class="form-group">
 					<label for="inputEmail3" class="col-sm-2 control-label">邮箱:</label>
 					<div class="col-sm-10">
-						<input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email">
+						<input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="inputPassword3" class="col-sm-2 control-label">密码:</label>
 					<div class="col-sm-10">
-						<input type="password" class="form-control" name="password" id="inputPassword3" placeholder="Password">
+						<input type="password" class="form-control" name="password" id="inputPassword3" placeholder="Password"/>
 					</div>
 				</div>
 				<div>

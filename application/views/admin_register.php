@@ -10,6 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="/jshash/md5.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				

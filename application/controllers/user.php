@@ -1,6 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class User extends CI_Controller {
+require APPPATH .'core/LoginController.php';
+
+class User extends LoginController {
 	
 	protected $goto_page = array(
 							'applicant' => array('apply', 'login', 'register'),
@@ -90,7 +92,7 @@ class User extends CI_Controller {
 				$this->user->push_cookie($user);
 				header('Location: ' .base_url() .$this->goto_page[$user_type]['0']);
 			} else {
-				$msg['tips'] = 'this account not existed';
+				$msg['tips'] = 'password error';
 				$msg['link'] = '/'.$this->goto_page[$user_type]['1'];
 				$msg['location'] = 'index page';
 				$this->load->view('simple_msg_page', $msg);
@@ -115,10 +117,61 @@ class User extends CI_Controller {
 	}
 	
 	public function account() {
+		$user = $this->user_info;
+		
 		$provinces = array('1' => '北京', '2' => '广州', '3' => '上海');
 		$permissions = array('1' => '系统管理员', '2' => '大使馆管理员', '3' => '办事处管理员', '10000' => '普通用户');
-		$accounts = array('-1' => '已失效', '0' => '正常', '1' => '未激活');
-		$this->load->view('account', $this->user_info);
+		$accounts = array('-1' => '已失效', '0' => '未激活', '1' => '正常');
+		
+		if (isset($user['province_id'])) {
+			$user['province_str'] = $provinces[$user['province_id']];
+		}
+		$user['permission_str'] = $permissions[$user['permission']];
+		$user['status_str'] = $accounts[$user['status']];
+		
+		$this->load->view('account', $user);
+	}
+	
+	public function update() {
+		$user_type = trim($this->input->post('user_type', TRUE));
+	}
+	
+	public function password() {
+		$user_type = trim($this->input->post('user_type', TRUE));
+		$data['old_pswd'] = trim($this->input->post('old_password', TRUE));
+		$data['new_pswd'] = trim($this->input->post('new_password', TRUE));
+	}
+	
+	public function check_email() {
+		$user_type = trim($this->input->post('user_type', TRUE));
+		$email = trim($this->input->post('email', TRUE));
+		
+		$this->load->model('user_model', 'user');
+		$func_name = $user_type.'_email_available';
+		
+		$ret['msg'] = 'success';
+		
+		if ($this->user->func_name($email) > 0) {
+			$ret['msg'] = 'fail';
+		}
+		
+		echo json_encode($ret);
+	}
+	
+	public function check_nickname() {
+		$user_type = trim($this->input->post('user_type', TRUE));
+		$nickname = trim($this->input->post('nickname', TRUE));
+		
+		$this->load->model('user_model', 'user');
+		$func_name = $user_type.'_nickname_available';
+		
+		$ret['msg'] = 'success';
+		
+		if ($this->user->func_name($nickname) > 0) {
+			$ret['msg'] = 'fail';
+		}
+		
+		echo json_encode($ret);
 	}
 }
 

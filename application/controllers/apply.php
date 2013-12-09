@@ -547,7 +547,6 @@ class Apply extends ApplyLoginController {
 	public function download_form($uuid = '') {
 		if ($uuid === '') {
 			show_error('uuid empty error');
-			die();
 		}
 		
 		$userid = $this->userid;
@@ -561,6 +560,34 @@ class Apply extends ApplyLoginController {
 		} else {
 			show_error('no application available');
 		}
+	}
+	
+	public function download_visa($uuid = '') {
+		if ($uuid === '') {
+			show_error('uuid empty error');
+		}
+		
+		$userid = $this->userid;
+		$attributes = 'visa_no';
+		
+		$this->load->model('apply_model', 'alm');
+		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		
+		if (!$info || $info['visa_no'] === '') {
+			show_error('Bad Request');
+		}
+		
+		$filename = VISA_PATH .$uuid.'/'.$info['visa_no'].'.docx';
+		if (!file_exists($filename)) {
+			show_error('Cannot Find Visa File');
+		}
+		
+		header('Content-Description: File Transfer');
+		header('Content-Type: application/force-download');
+		header('Content-Disposition: attachment; filename='.basename($filename));
+		header('Content-Transfer-Encoding: binary');
+		header('Content-Length: '.filesize($filename));
+		readfile($filename);
 	}
 }
 

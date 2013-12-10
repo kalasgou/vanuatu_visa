@@ -12,7 +12,7 @@
 			#answer {display:inline-block; border-bottom:1px dotted #000; text-align:center;}
 			#option {display:inline-block;}
 			table {border-collapse:collapse; border:1px solid; text-align:center;}
-			th, td {border:1px solid; padding:8px; font-weight: normal;}
+			th, td {border:1px solid; padding:8px; font-weight: normal; height:36px;}
 			#signature {display:inline-block; border-bottom:1px dotted #000; width:250px;}
 			#annoucement {text-align:center;}
 		</style>

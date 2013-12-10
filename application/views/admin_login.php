@@ -11,10 +11,15 @@
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="/jshash/md5.js"></script>
+		<script type="text/javascript" src="/simple.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
 			});
+			
+			function submit_form() {
+				return check_login_email() && reshape_password();
+			}
 		</script>
 		<style type="text/css">
 			.form-control {width:220px;}
@@ -22,7 +27,7 @@
 	</head>
 	<body>
 		<div>
-			<form class="form-horizontal" role="form" method="post" method="post" action="/user/login">
+			<form class="form-horizontal" role="form" method="post" method="post" action="/user/login" onsubmit="return submit_form();">
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<h3>管理帐号登录</h3>
@@ -32,12 +37,16 @@
 					<label for="inputEmail3" class="col-sm-2 control-label">邮箱:</label>
 					<div class="col-sm-10">
 						<input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email"/>
+						<span id="email_correct" class="correct_tips">OK</span>
+						<span id="email_error" class="error_tips">Email Not Correct</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="inputPassword3" class="col-sm-2 control-label">密码:</label>
 					<div class="col-sm-10">
 						<input type="password" class="form-control" name="password" id="inputPassword3" placeholder="Password"/>
+						<span id="pswd_correct" class="correct_tips">OK</span>
+						<span id="pswd_short" class="error_tips">Password Length less than 6</span>
 					</div>
 				</div>
 				<div>

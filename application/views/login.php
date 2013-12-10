@@ -11,23 +11,14 @@
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="/jshash/md5-min.js"></script>
+		<script type="text/javascript" src="/simple.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
 			});
 			
-			function reshape_password() {
-				var password = $('#inputPassword3').val();
-				if (password.length < 6) {
-					return false;
-				} else {
-					$('#inputPassword3').val(hex_md5(password));
-					return true;
-				}
-			}
-			
 			function submit_form() {
-				return reshape_password();
+				return check_login_email() && reshape_password();
 			}
 		</script>
 		<style type="text/css">
@@ -46,12 +37,16 @@
 					<label for="inputEmail3" class="col-sm-2 control-label">邮箱:</label>
 					<div class="col-sm-10">
 						<input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email"/>
+						<span id="email_correct" class="correct_tips">OK</span>
+						<span id="email_error" class="error_tips">Email Not Correct</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="inputPassword3" class="col-sm-2 control-label">密码:</label>
 					<div class="col-sm-10">
 						<input type="password" class="form-control" name="password" id="inputPassword3" placeholder="Password"/>
+						<span id="pswd_correct" class="correct_tips">OK</span>
+						<span id="pswd_short" class="error_tips">Password Length less than 6</span>
 					</div>
 				</div>
 				<div>

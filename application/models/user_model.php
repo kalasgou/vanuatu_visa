@@ -103,25 +103,25 @@
 			return $query->result_array();
 		}
 		
-		function applicant_email_available($email) {
+		public function applicant_email_available($email) {
 			$this->user_db->where('email', $email);
 			
 			return $this->user_db->count_all_results('applicant');
 		}
 		
-		function administrator_email_available($email) {
+		public function administrator_email_available($email) {
 			$this->user_db->where('email', $email);
 			
 			return $this->user_db->count_all_results('administrator');
 		}
 		
-		function applicant_nickname_available($nickname) {
+		public function applicant_nickname_available($nickname) {
 			$this->user_db->where('nickname', $nickname);
 			
 			return $this->user_db->count_all_results('applicant');
 		} 
 		
-		function __call($foo, $bar) {
+		public function __call($foo, $bar) {
 			return FALSE;
 		}
 	}

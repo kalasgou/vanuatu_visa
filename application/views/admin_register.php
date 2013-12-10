@@ -11,10 +11,15 @@
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="/jshash/md5.js"></script>
+		<script type="text/javascript" src="/simple.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
 			});
+			
+			function submit_form() {
+				return check_register_email() && check_password() && check_realname() && reshape_password();
+			}
 		</script>
 		<style type="text/css">
 			.form-control {width:256px;}
@@ -22,34 +27,44 @@
 	</head>
 	<body>
 		<div>
-			<form class="form-horizontal" role="form" method="post" action="/user/register">
+			<form class="form-horizontal" role="form" method="post" action="/user/register" onsubmit="return submit_form();">
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<h3>管理帐号注册</h3>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputEmail3" class="col-sm-2 control-label">请输入邮箱(将作为您的登录帐号):</label>
+					<label for="inputEmail3" class="col-sm-2 control-label">请输入登录邮箱:</label>
 					<div class="col-sm-10">
 						<input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email"/>
+						<span id="email_correct" class="correct_tips">OK</span>
+						<span id="email_error" class="error_tips">Email Not Correct</span>
+						<span id="email_used" class="error_tips">Email is used thus not available</span>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputPassword3" class="col-sm-2 control-label">设定登录密码(长度至少六位):</label>
+					<label for="inputPassword3" class="col-sm-2 control-label">设定密码(长度至少六位):</label>
 					<div class="col-sm-10">
 						<input type="password" class="form-control" name="password" id="inputPassword3" placeholder="Password"/>
+						<span id="pswd_correct" class="correct_tips">OK</span>
+						<span id="pswd_short" class="error_tips">Password Length less than 6</span>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputPassword3" class="col-sm-2 control-label">确定登录密码:</label>
+					<label for="inputPassword3" class="col-sm-2 control-label">确定密码:</label>
 					<div class="col-sm-10">
 						<input type="password" class="form-control" name="password_confirm" id="inputPassword3" placeholder="Confirm Password"/>
+						<span id="pswd_correct" class="correct_tips">OK</span>
+						<span id="pswd_firm_short" class="error_tips">Password Length less than 6</span>
+						<span id="pswd_different" class="error_tips">Password not the same</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="inputRealname3" class="col-sm-2 control-label">真实姓名:</label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" name="realname" id="inputRealname3" placeholder="Real Name"/>
+						<span id="realname_correct" class="correct_tips">OK</span>
+						<span id="realname_empty" class="error_tips">Realname should not be empty</span>
 					</div>
 				</div>
 				<div class="form-group">
@@ -72,7 +87,7 @@
 					</div>
 				</div>
 				<div>
-					<input type="hidden" name="user_type" value="administrator"/>
+					<input type="hidden" id="user_type" name="user_type" value="administrator"/>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">

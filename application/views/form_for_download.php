@@ -83,14 +83,14 @@
 			<div>
 				9、Home Address 家庭住址:
 				<span id="answer" style="width:200px;"><?php echo $home_info['home_addr'];?></span><br>
-				Tel No.电话: <span id="answer" style="width:200px;"><?php echo $home_info['home_tel'];?></span><br>
+				Tel No.电话: <span id="answer" style="width:200px;"><?php echo $home_info['home_tel'];?></span>
 			</div>
 			<div>
 				10、Passport 护照:<br>
 				(a) Number 护照号 <span id="answer" style="width:200px;"><?php echo $passport_number;?></span>
 				(b) Place of Issue 发照地 <span id="answer" style="width:200px;"><?php echo $passport_place;?></span><br>
-				(c) Date of Issue 发照日期 <span id="answer" style="width:200px;"><?php echo $passport_date;?></span>
-				(d) Expiry Date 有效日期至 <span id="answer" style="width:200px;"><?php echo $passport_expiry;?></span>
+				(c) Date of Issue 发照日期 <span id="answer" style="width:200px;"><?php echo date('Y-m-d', $passport_date);?></span>
+				(d) Expiry Date 有效日期至 <span id="answer" style="width:200px;"><?php echo date('Y-m-d', $passport_expiry);?></span>
 			</div>
 			<div>
 				11、Purpose of Visit 访瓦目的:<br>
@@ -98,6 +98,7 @@
 				Visiting Relative 探亲 <span id="option"><input type="checkbox" <?php echo ($purpose == 9 ? 'checked="checked"' : '');?>/></span>
 				Business 商务 <span id="option"><input type="checkbox" <?php echo ($purpose == 10 ? 'checked="checked"' : '');?>/></span>
 				Other 其他 <span id="option"><input type="checkbox" <?php echo ($purpose == 11 ? 'checked="checked"' : '');?>/></span>
+				<span id="answer" style="width:128px;"><?php echo $other_purpose;?></span>
 			</div>
 			<div>
 				12、Address in Vanuatu 在瓦地址:

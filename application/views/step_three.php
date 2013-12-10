@@ -9,6 +9,8 @@
 		<link rel="shortcut icon" href=""/>
 		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
+		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="/My97DatePicker/WdatePicker.js"></script>
 		<script type="text/javascript" src=""></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
@@ -46,7 +48,8 @@
 					Tourism 旅游<input type="radio" name="purpose" value="8" <?php echo ($purpose == 8 ? 'checked="checked"' : '')?>/>
 					Visiting Relative 探亲<input type="radio" name="purpose" value="9" <?php echo ($purpose == 9 ? 'checked="checked"' : '')?>/>
 					Business 商务<input type="radio" name="purpose" value="10" <?php echo ($purpose == 10 ? 'checked="checked"' : '')?>/>
-					Other 其他<input type="radio" name="purpose" value="11" <?php echo ($purpose == 11 ? 'checked="checked"' : '')?>/></p>
+					Other 其他<input type="radio" name="purpose" value="11" <?php echo ($purpose == 11 ? 'checked="checked"' : '')?>/>
+					<input type="text" name="other_purpose" style="width:128px" value="<?php echo $other_purpose;?>"/></p>
 					<p>12、Address in Vanuatu 在瓦地址:
 					<input type="text" name="destination" style="width:300px" value="<?php echo $destination;?>"/></p>
 					<p>13、Details of Family in Vanuatu if visiting relative 如属探亲在瓦亲属概况:<br>
@@ -57,11 +60,11 @@
 					<p>14、Details of arrival in Vanuatu 抵瓦航班号:
 					<input type="text" name="arrival_number" style="width:150px" value="<?php echo $detail_info['arrival_number']?>"/>
 					日期:
-					<input type="text" name="arrival_date" style="width:150px" value="<?php echo $detail_info['arrival_date']?>"/></p>
+					<input type="text" name="arrival_date" style="width:150px" value="<?php echo $detail_info['arrival_date']?>" onclick="WdatePicker({readOnly:true, dateFmt:'yyyy-MM-dd'})"/></p>
 					<p>15、Details of return ticket 回程航班号:
 					<input type="text" name="return_number" style="width:150px" value="<?php echo $detail_info['return_number']?>"/>
 					日期:
-					<input type="text" name="return_date" style="width:150px" value="<?php echo $detail_info['return_date']?>"/></p>
+					<input type="text" name="return_date" style="width:150px" value="<?php echo $detail_info['return_date']?>" onclick="WdatePicker({readOnly:true, dateFmt:'yyyy-MM-dd'})"/></p>
 					<p>16、Proposed duration of stay 拟在瓦逗留时间:
 					<input type="text" name="duration" value="<?php echo $detail_info['duration']?>"/></p>
 					<p>17、Source of financial support in Vanuatu 在瓦费用来源:

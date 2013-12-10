@@ -151,7 +151,7 @@ class User extends LoginController {
 		
 		$ret['msg'] = 'success';
 		
-		if ($this->user->func_name($email) > 0) {
+		if ($this->user->$func_name($email) > 0) {
 			$ret['msg'] = 'fail';
 		}
 		
@@ -167,7 +167,7 @@ class User extends LoginController {
 		
 		$ret['msg'] = 'success';
 		
-		if ($this->user->func_name($nickname) > 0) {
+		if ($this->user->$func_name($nickname) > 0) {
 			$ret['msg'] = 'fail';
 		}
 		

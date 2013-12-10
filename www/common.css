@@ -103,7 +103,10 @@ body {
 
 .correct_tips {
 	display: none;
+	color: green;
 }
 
 .error_tips {
+	display: none;
+	color: red;
 }

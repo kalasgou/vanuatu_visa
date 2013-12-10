@@ -97,8 +97,8 @@
 						'uuid' => $data['uuid'],
 						'passport_number' => $data['passport_number'],
 						'passport_place' => $data['passport_place'],
-						'passport_date' => $data['passport_date'],
-						'passport_expiry' => $data['passport_expiry'],
+						'passport_date' => strtotime($data['passport_date']),
+						'passport_expiry' => strtotime($data['passport_expiry']),
 						'modify_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
 					);
 			
@@ -108,9 +108,10 @@
 		}
 		
 		public function update_travel_info($data) {
-			$sql = 	'INSERT INTO visa_applying (uuid, purpose, destination, relative_info, detail_info, modify_time) '.
-					'VALUES (?, ?, ?, ?, ? ,?) ON DUPLICATE KEY UPDATE '.
+			$sql = 	'INSERT INTO visa_applying (uuid, purpose, other_purpose, destination, relative_info, detail_info, modify_time) '.
+					'VALUES (?, ?, ?, ?, ?, ? ,?) ON DUPLICATE KEY UPDATE '.
 					'purpose = VALUES(purpose), '.
+					'other_purpose = VALUES(other_purpose), '.
 					'destination = VALUES(destination), '.
 					'relative_info = VALUES(relative_info), '.
 					'detail_info = VALUES(detail_info), '.
@@ -118,6 +119,7 @@
 			$args = array(
 						'uuid' => $data['uuid'],
 						'purpose' => $data['purpose'],
+						'other_purpose' => $data['other_purpose'],
 						'destination' => $data['destination'],
 						'relative_info' => json_encode(array(
 							'relative_name' => $data['relative_name'],

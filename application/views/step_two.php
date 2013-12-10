@@ -9,6 +9,8 @@
 		<link rel="shortcut icon" href=""/>
 		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
+		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="/My97DatePicker/WdatePicker.js"></script>
 		<script type="text/javascript" src=""></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
@@ -45,8 +47,8 @@
 					<p>10、Passport 护照:<br>
 					(a) Number 护照号<input type="text" name="passport_number" value="<?php echo $passport_number;?>"/>
 					(b) Place of Issue 发照地<input type="text" name="passport_place" value="<?php echo $passport_place;?>"/><br>
-					(c) Date of Issue发照日期<input type="text" name="passport_date" style="width:150px" value="<?php echo $passport_date;?>"/>
-					(d) Expiry Date 有效日期至<input type="text" name="passport_expiry" style="width:150px" value="<?php echo $passport_expiry;?>"/></P>
+					(c) Date of Issue发照日期<input type="text" name="passport_date" style="width:150px" value="<?php echo $passport_date;?>" onclick="WdatePicker({readOnly:true, dateFmt:'yyyy-MM-dd'})"/>
+					(d) Expiry Date 有效日期至<input type="text" name="passport_expiry" style="width:150px" value="<?php echo $passport_expiry;?>" onclick="WdatePicker({readOnly:true, dateFmt:'yyyy-MM-dd'})"/></P>
 					<button id="next_step" type="submit" class="btn btn-success btn-sm">下一步</button>
 				</form>
 			</div>

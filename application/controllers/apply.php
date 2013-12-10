@@ -237,8 +237,8 @@ class Apply extends ApplyLoginController {
 			$data['uuid'] = $info['uuid'];
 			$data['passport_number'] = $info['passport_number'];
 			$data['passport_place'] = $info['passport_place'];
-			$data['passport_date'] = $info['passport_date'];
-			$data['passport_expiry'] = $info['passport_expiry'];
+			$data['passport_date'] = date('Y-m-d', $info['passport_date']);
+			$data['passport_expiry'] = date('Y-m-d', $info['passport_expiry']);
 		}
 		
 		$this->load->view('step_two', $data);
@@ -287,6 +287,7 @@ class Apply extends ApplyLoginController {
 		$data = array(
 					'uuid' => '',
 					'purpose' => '',
+					'other_purpose' => '',
 					'destination' => '',
 					'relative_info' => array(
 						'relative_name' => '',
@@ -302,7 +303,7 @@ class Apply extends ApplyLoginController {
 						),
 				);
 		$userid = $this->userid;
-		$attributes = 'uuid, purpose, destination, relative_info, detail_info';
+		$attributes = 'uuid, purpose, other_purpose, destination, relative_info, detail_info';
 		
 		$this->load->model('apply_model', 'alm');
 		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
@@ -311,6 +312,7 @@ class Apply extends ApplyLoginController {
 		if ($info) {
 			$data['uuid'] = $info['uuid'];
 			$data['purpose'] = $info['purpose'];
+			$data['other_purpose'] = $info['other_purpose'];
 			$data['destination'] = $info['destination'];
 			
 			$relative_info = json_decode($info['relative_info'], TRUE);
@@ -327,6 +329,7 @@ class Apply extends ApplyLoginController {
 		$data['userid'] = trim($this->input->post('userid', TRUE));
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
 		$data['purpose'] = trim($this->input->post('purpose', TRUE));
+		$data['other_purpose'] = trim($this->input->post('other_purpose', TRUE));
 		$data['destination'] = trim($this->input->post('destination', TRUE));
 		$data['relative_name'] = trim($this->input->post('relative_name', TRUE));
 		$data['relative_addr'] = trim($this->input->post('relative_addr', TRUE));

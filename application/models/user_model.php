@@ -48,13 +48,21 @@
 		public function applicant_register($data) {
 			$this->user_db->insert('applicant', $data);
 			
-			return $this->user_db->affected_rows();
+			if ($this->user_db->affected_rows() > 0) {
+				return $this->user_db->insert_id();
+			} 
+			
+			return -1;
 		}
 		
 		public function administrator_register($data) {
 			$this->user_db->insert('administrator', $data);
 			
-			return $this->user_db->affected_rows();
+			if ($this->user_db->affected_rows() > 0) {
+				return $this->user_db->insert_id();
+			} 
+			
+			return -1;
 		}
 		
 		public function applicant_login($email) {

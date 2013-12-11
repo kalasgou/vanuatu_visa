@@ -271,6 +271,9 @@ class Admin extends AdminLoginController {
 		$this->load->model('admin_model', 'adm');
 		if ($this->adm->auditing_application($data)) {
 			$ret['msg'] = 'success';
+			
+			update_status($data['uuid'], $data['status']);
+			push_email_queue($opt.'_notification', $data['uuid']);
 		} else {
 			$ret['msg'] = 'fail';
 		}
@@ -283,6 +286,10 @@ class Admin extends AdminLoginController {
 		$data['userid'] = $this->userid;
 		$data['visa_no'] = '';
 		$data['message'] = '';
+		
+		if ($data['uuid'] === '') {
+			show_error('uuid empty error');
+		}
 		
 		$this->load->helper('util');
 		$data['status'] = text2status($opt);
@@ -305,7 +312,6 @@ class Admin extends AdminLoginController {
 			}
 			
 			if (($id = $this->adm->final_audit($data))) {
-				$this->load->helper('util');
 				$data['visa_no'] = gen_visa_number($id);
 				$this->adm->update_visa_number($id, $data['visa_no']);
 				$data['message'] = 'Application '.$data['uuid'].' Got Visa '.$data['visa_no'];
@@ -336,19 +342,15 @@ class Admin extends AdminLoginController {
 
 				$document->save($path.$data['visa_no'].'.docx');
 				
-				header('Content-Description: File Transfer');
-				header('Content-Type: application/force-download');
-				header('Content-Disposition: attachment; filename='.basename($path.$data['visa_no'].'.docx'));
-				header('Content-Transfer-Encoding: binary');
-				header('Content-Length: '.filesize($path.$data['visa_no'].'.docx'));
-				readfile($path.$data['visa_no'].'.docx');
-				//unlink($path.$data['visa_no'].'.docx');
-				
-				//email();
+				update_status($data['uuid'], $data['status']);
+				push_email_queue($opt.'_notification', $data['uuid']);
 			}
 		} else if ($data['status'] === '91') {
 			$data['visa_no'] = 'Refused';
 			$data['message'] = 'Application Refused for Visa';
+			
+			update_status($data['uuid'], $data['status']);
+			push_email_queue($opt.'_notification', $data['uuid']);
 		} else {
 			$ret['msg'] = 'fail';
 		}
@@ -411,6 +413,9 @@ class Admin extends AdminLoginController {
 		}
 		
 		header('Location: /admin/total_preview/'.$uuid);
+	}
+	
+	public function download_excel() {
 	}
 	
 }

@@ -60,25 +60,34 @@
 		include '../application/third_party/PHPMailer/class.smtp.php';
 		
 		$mail = new PHPMailer();
-		$mail->CharSet = 'utf8';
-		$mail->IsSMTP();
+		
 		$mail->SMTPDebug = FALSE;
-
+	
+		$mail->isSMTP();		
 		$mail->SMTPAuth = TRUE;
 		$mail->SMTPSecure = 'ssl';
 		$mail->Host = 'smtp.exmail.qq.com';
 		$mail->Port = 465;
+		$mail->Username = '305858854@qq.com';
+		$mail->Password = 'dudu98319270';
 
-		$mail->Username = 'do_not_reply@appletree.cn';
-		$mail->Password = 'RKx6gmVWpUaY123';
-		$mail->From = 'do_not_reply@appletree.cn';
-		$mail->FromName = 'AppleTree';
+		$mail->From = '305858854@qq.com';
+		$mail->FromName = 'kalasgou';
+		$mail->addAddress($data['email'], $data['user']);
+		$mail->addReplyTo('305858854@qq.com');
+		$mail->addCC('305858854@qq.com');
 		
-		$mail->AddAddress($data['email'], $data['nickname']);
+		if (isset($data['visa_file'])) {
+			$mail->addAttachment($data['visa_file'], 'Visa签证.doc');
+		}
 		
-		$mail->IsHTML(TRUE);
+		$mail->isHTML(TRUE);
+		$mail->CharSet = 'utf8';
+		$mail->WordWrap = 50;	
+		
 		$mail->Subject = $data['subject'];
 		$mail->Body = $data['content'];
+		$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 		
 		$sent = $mail->Send();
 		unset($mail);
@@ -136,11 +145,12 @@
 							'0' => '未完成',
 							'11' => '等待审核',
 							'21' => '未通过',
-							'31' => '通过',
+							'31' => '通过审核',
 							'41' => '已缴款',
 							'91' => '被拒签',
 							'101' => '已出签证',
-							'126' => '过期无效',
+							'125' => '申请过期无效',
+							'126' => '签证过期无效',
 							'127' => '正溢出异常',
 						);
 		
@@ -159,7 +169,8 @@
 			case 'paid': $status = '41'; break;
 			case 'oops': $status = '91'; break;
 			case 'visa': $status = '101'; break;
-			case 'lost': $status = '126'; break;
+			case 'lost': $status = '125'; break;
+			case 'best': $status = '126'; break;
 		}
 		
 		return $status;
@@ -178,6 +189,8 @@
 		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
 		if (intval($redis->hGet('application_status', $uuid)) < 11) {
 			$redis->hSet('application_status', $uuid, $forward_status);
+		} else if ($forward_status > 11) {
+			$redis->hSet('application_status', $uuid, $forward_status);
 		} else {
 			$redis->hSet('application_status', $uuid, 11);
 		}
@@ -188,5 +201,19 @@
 		$CI->load->library('RedisDB');
 		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
 		return (intval($redis->hGet('application_status', $uuid)) > 21 ? FALSE : TRUE);
+	}
+	
+	function push_email_queue($key, $id) {
+		$CI = & get_instance();
+		$CI->load->library('RedisDB');
+		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
+		$redis->lPush($key, $id);
+	}
+	
+	function pop_email_queue($key) {
+		$CI = & get_instance();
+		$CI->load->library('RedisDB');
+		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
+		return $redis->rPop($key);
 	}
 ?>

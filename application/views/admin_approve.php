@@ -41,6 +41,24 @@
 					default : return;
 				}
 			}
+			
+			function visa_it(uuid, opt, this_a) {
+				$.ajax({
+					url: '/admin/approving/' + uuid + '/' + opt,
+					data: {},
+					type: 'POST',
+					dataType: 'json',
+					success: function(json) {
+						switch (json.msg) {
+							case 'success': alert('对申请号 ' + uuid + ' 审批操作成功！'); this_a.innerHTML = '签证成功'; this_a.style.color = '#DDDDDD'; break;
+							case 'fail': alert('出错了'); break;
+						}
+					},
+					error: function() {
+						alert('Network Error');
+					}
+				});
+			}
 		</script>
 	</head>
 	<body>
@@ -127,7 +145,7 @@
 						<td>
 							<a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank">查看详细</a>
 							<?php if ($one['status'] == 41) { ?> / 
-								<a href="/admin/approving/<?php echo $one['uuid'];?>/visa">通过签证</a>
+								<a href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'visa', this);">通过签证</a>
 							<?php } ?>
 						</td>
 					</tr>

@@ -26,7 +26,7 @@
 					dataType: 'json',
 					success: function(json) {
 						switch(json.msg) {
-							case 'success': alert('缴费成功！请上传证明扫描文件。'); break;
+							case 'success': alert('缴费成功！请上传证明扫描文件。'); this_a.innerHTML = '已缴费'; this_a.style.color = '#DDDDDD'; break;
 							case 'fail': alert('缴费失败！请稍后再试或联系网站管理员。'); break;
 						}
 					},
@@ -64,6 +64,30 @@
 					case '4' : $('#start_time').val(start_time); $('#end_time').val(end_time); break;
 					default : return;
 				}
+			}
+			
+			function pass_for_fee(uuid, opt, this_a) {
+				var message = '';
+				if (opt === 'pass') {
+					message = 'Pass OK';
+				} else if (opt === 'fail') {
+					message = 'Pass fail';
+				}
+				$.ajax({
+					url: '/admin/auditing/' + uuid + '/' + opt,
+					data: {message: message},
+					type: 'POST',
+					dataType: 'json',
+					success: function (json) {
+						switch (json.msg) {
+							case 'success': alert('对申请号 ' + uuid + ' 审核操作成功！'); this_a.innerHTML = '已审核'; this_a.style.color = '#DDDDDD'; break;
+							case 'fail': alert('出错了'); break;
+						}
+					},
+					error: function() {
+						alert('Network Error');
+					}
+				});
 			}
 		</script>
 		<style type="text/css">
@@ -158,10 +182,10 @@
 						<td>
 							<a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank">查看详细</a> / 
 							<?php if ($one['status'] < 31) { ?>
-								<a href="javascript:pass_for_fee('<?php echo $one['uuid'];?>');">通过审核</a> 
+								<a href="javascript:void(0);" onclick="pass_for_fee('<?php echo $one['uuid'];?>', 'pass', this);">通过审核</a> 
 							<?php } ?>
 							<?php if ($one['status'] == 31) { ?>
-								<a href="javascript:pay_for_visa('<?php echo $one['uuid'];?>');">缴费</a> 
+								<a href="javascript:void(0);" onclick="pay_for_visa('<?php echo $one['uuid'];?>', this);">缴费</a> 
 							<?php } ?>
 							<?php if ($one['status'] == 41) { ?>
 							<a href="/admin/scan_upload/<?php echo $one['uuid'];?>" target="_blank">上传证明</a>

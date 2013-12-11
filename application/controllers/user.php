@@ -26,18 +26,15 @@ class User extends LoginController {
 				break;
 			default :
 				show_error('forbidden', 500);
-				die();
 		}
 		
 		$this->load->helper('util');
 		if (!check_parameters($data)) {
 			show_error('parameters not enough', 500);
-			die();
 		}
 		
 		if (!email_verify($data['email'])) {
 			show_error('email incorrect', 500);
-			die();
 		}
 		
 		$data['reg_ip'] = ip2long($this->input->ip_address());
@@ -49,17 +46,21 @@ class User extends LoginController {
 		$data['password'] = $hasher->HashPassword($data['password']);
 		if (strlen($data['password']) < 20) {
 			show_error('password hash too short', 500);
-			die();
 		}
 		
 		$this->load->model('user_model', 'user');
 		$func_name = $user_type.'_register';
 		
-		if ($this->user->$func_name($data) > 0) {
+		if (($userid = $this->user->$func_name($data)) > 0) {
 			$msg['tips'] = 'register success';
 			$msg['link'] = '/'.$this->goto_page[$user_type]['1'];
 			$msg['location'] = 'index page';
 			$this->load->view('simple_msg_page', $msg);
+			
+			$this->load->library('RedisDB');
+			$redis = $this->redisdb->instance(REDIS_DEFAULT);
+			$redis->setex(md5($userid.'_'.$data['email'].'_'.$data['reg_time']), 3600, $userid);
+			push_email_queue($user_type.'_register_notification', $userid);
 		} else {
 			$msg['tips'] = 'register fail';
 			$msg['link'] = '/'.$this->goto_page[$user_type]['2'];
@@ -76,7 +77,6 @@ class User extends LoginController {
 		$this->load->helper('util');
 		if (!check_parameters($data)) {
 			show_error('parameters not enough');
-			die();
 		}
 		
 		$this->load->model('user_model', 'user');

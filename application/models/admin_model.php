@@ -53,6 +53,19 @@
 			return $query->row_array();
 		}
 		
+		public function retrieve_records($data, $page) {
+			$this->admin_db->select('uuid, name_cn, name_en, birth_day, birth_month, birth_year, gender, nationality, passport_number, submit_time, status, audit_time, pay_time, fee, approve_time, visa_no');
+			$this->admin_db->where('province_id', $data['province_id']);
+			$this->admin_db->where('status >= ', 11);
+			$this->admin_db->where('submit_time >= ', $data['start_time']);
+			$this->admin_db->where('submit_time <= ', $data['end_time']);
+			$this->admin_db->order_by('submit_time', 'desc');
+			$this->admin_db->limit(1000, 1000 * $page);
+			$query = $this->admin_db->get('visa_applying');
+			
+			return $query->result_array();
+		}
+		
 		public function auditing_application($data) {
 			$update_time = date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);
 			

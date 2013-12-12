@@ -127,7 +127,15 @@
 			$this->user_db->where('nickname', $nickname);
 			
 			return $this->user_db->count_all_results('applicant');
-		} 
+		}
+		
+		public function change_account_status($data) {
+			$this->user_db->set('status', $data['status']);
+			$this->user_db->where('userid', $data['userid']);
+			$this->user_db->update($data['user_type']);
+			
+			return $this->user_db->affected_rows();
+		}
 		
 		public function __call($foo, $bar) {
 			return FALSE;

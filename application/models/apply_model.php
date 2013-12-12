@@ -201,5 +201,20 @@
 			
 			return $query->result_array();
 		}
+		
+		public function check_passport_available($userid, $passport_number) {
+			$this->apply_db->select('uuid, status');
+			$this->apply_db->where('userid', $userid);
+			$this->apply_db->where('passport_number', $passport_number);
+			$this->apply_db->where('status >= ', 11);
+			$this->apply_db->where('status <= ', 101);
+			$query = $this->apply_db->get('visa_applying');
+			
+			if ($query->num_rows() > 0) {
+				
+			} else {
+				return FALSE;
+			}
+		}
 	}
 ?>

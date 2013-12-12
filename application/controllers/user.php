@@ -19,36 +19,43 @@ class User extends LoginController {
 			case 'applicant':
 				$data['nickname'] = trim($this->input->post('nickname', TRUE));
 				$data['phone'] = trim($this->input->post('phone', TRUE));
+				$data['status'] = 0;
 				break;
 			case 'administrator':
 				$data['permission'] = trim($this->input->post('permission', TRUE));
 				$data['province_id'] = trim($this->input->post('province_id', TRUE));
+				$data['status'] = -1;
 				break;
 			default :
-				show_error('forbidden', 500);
+				show_error('forbidden');
 		}
 		
 		$this->load->helper('util');
 		if (!check_parameters($data)) {
-			show_error('parameters not enough', 500);
+			show_error('parameters not enough');
 		}
 		
 		if (!email_verify($data['email'])) {
-			show_error('email incorrect', 500);
+			show_error('email incorrect');
+		}
+		
+		$this->load->model('user_model', 'user');
+		$func_name = $user_type.'_email_available';
+		
+		if ($this->user->$func_name($data['email']) > 0) {
+			show_error('email not available');
 		}
 		
 		$data['reg_ip'] = ip2long($this->input->ip_address());
 		$data['reg_time'] = date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);
-		$data['status'] = 0;
 		
 		require '../application/third_party/pass/PasswordHash.php';
 		$hasher = new PasswordHash(HASH_COST_LOG2, HASH_PORTABLE);
 		$data['password'] = $hasher->HashPassword($data['password']);
 		if (strlen($data['password']) < 20) {
-			show_error('password hash too short', 500);
+			show_error('password hash too short');
 		}
 		
-		$this->load->model('user_model', 'user');
 		$func_name = $user_type.'_register';
 		
 		if (($userid = $this->user->$func_name($data)) > 0) {

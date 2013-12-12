@@ -11,6 +11,7 @@
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="/My97DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="/simple.js"></script>
 		<script type="text/javascript">
 			function what_is_selected() {
 				$('#od' + selected).css('display', 'none');
@@ -114,9 +115,9 @@
 						<td><?php echo $one['status_str'];?></td>
 						<td>
 							<?php if ($one['status'] == 0) { ?>
-								<a href="javascript:change_account_status('<?php echo $one['userid'];?>', 1);">激活</a>
+								<a href="javascript:void(0);" onclick="change_account_status('administrator', '<?php echo $one['userid'];?>', 'yes', this);">激活</a>
 							<?php } else if ($one['status'] == 1) { ?>
-								<a href="javascript:change_account_status('<?php echo $one['userid'];?>', -1);">注销</a>
+								<a href="javascript:void(0);" onclick="change_account_status('administrator', '<?php echo $one['userid'];?>', 'no', this);">注销</a>
 							<?php } ?>
 						</td>
 					</tr>

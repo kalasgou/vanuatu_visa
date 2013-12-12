@@ -139,3 +139,133 @@ function check_login_email() {
 	
 	return true;
 }
+
+function change_account_status(user_type, userid, opt, this_a) {
+	$.ajax({
+		url: '/admin/activate_account',
+		data: {user_type: user_type, userid: userid, activate: opt},
+		type: 'POST',
+		dataType: 'json',
+		success: function(json) {
+			switch (json.msg) {
+				case 'success': alert('对ID: ' + userid + ' 用户帐户操作成功！');  this_a.innerHTML = '已更新'; this_a.style.color = '#DDDDDD'; break;
+				case 'fail': alert('出错了'); break;
+			}
+		},
+		error: function() {
+			alert('Network Error');
+		}
+	});
+}
+
+function pass_or_not(uuid, opt) {
+	var message = '';
+	if (opt === 'pass') {
+		message = 'Pass OK';
+	} else if (opt === 'fail') {
+		message = 'Pass fail';
+	}
+	$.ajax({
+		url: '/admin/auditing/' + uuid + '/' + opt,
+		data: {message: message},
+		type: 'POST',
+		dataType: 'json',
+		success: function (json) {
+			switch (json.msg) {
+				case 'success': alert('对申请号 ' + uuid + ' 审核操作成功！'); break;
+				case 'fail': alert('出错了'); break;
+			}
+		},
+		error: function() {
+			alert('Network Error');
+		}
+	});
+}
+
+function visa_or_not(uuid, opt) {
+	$.ajax({
+		url: '/admin/approving/' + uuid + '/' + opt,
+		data: {},
+		type: 'POST',
+		dataType: 'json',
+		success: function(json) {
+			switch (json.msg) {
+				case 'success': alert('对申请号 ' + uuid + ' 审批操作成功！'); break;
+				case 'fail': alert('出错了'); break;
+			}
+		},
+		error: function() {
+			alert('Network Error');
+		}
+	});
+}
+
+function pass_for_fee(uuid, opt, this_a) {
+	var message = '';
+	if (opt === 'pass') {
+		message = 'Pass OK';
+	} else if (opt === 'fail') {
+		message = 'Pass fail';
+	}
+	$.ajax({
+		url: '/admin/auditing/' + uuid + '/' + opt,
+		data: {message: message},
+		type: 'POST',
+		dataType: 'json',
+		success: function (json) {
+			switch (json.msg) {
+				case 'success': alert('对申请号 ' + uuid + ' 审核操作成功！'); this_a.innerHTML = '已审核'; this_a.style.color = '#DDDDDD'; break;
+				case 'fail': alert('出错了'); break;
+			}
+		},
+		error: function() {
+			alert('Network Error');
+		}
+	});
+}
+
+function visa_it(uuid, opt, this_a) {
+	$.ajax({
+		url: '/admin/approving/' + uuid + '/' + opt,
+		data: {},
+		type: 'POST',
+		dataType: 'json',
+		success: function(json) {
+			switch (json.msg) {
+				case 'success': alert('对申请号 ' + uuid + ' 审批操作成功！'); this_a.innerHTML = '签证成功'; this_a.style.color = '#DDDDDD'; break;
+				case 'fail': alert('出错了'); break;
+			}
+		},
+		error: function() {
+			alert('Network Error');
+		}
+	});
+}
+
+function pay_for_visa(uuid, this_a) {
+	var fee = parseInt(prompt('请输入签证费用，单位：人名币'));
+	if (isNaN(fee)) {
+		alert('请输入正整数！');
+		return;
+	}
+	var message = '签证申请流水号 ' + uuid + ' 已缴款RMB ' + fee + '，请等待签证通过！';
+	$.ajax({
+		url: '/admin/auditing/' + uuid + '/paid',
+		data: {message: message, fee: fee},
+		type: 'POST',
+		dataType: 'json',
+		success: function(json) {
+			switch(json.msg) {
+				case 'success': alert('缴费成功！请上传证明扫描文件。'); this_a.innerHTML = '已缴费'; this_a.style.color = '#DDDDDD'; break;
+				case 'fail': alert('缴费失败！请稍后再试或联系网站管理员。'); break;
+			}
+		},
+		error: function() {
+			alert('Network Error');
+		}
+	});
+}
+
+function download_excel() {
+	location.href = '/admin/download_excel?start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val();
+}

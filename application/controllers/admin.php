@@ -19,7 +19,7 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function audit($page = 1) {
-		if ($this->user_info['permission'] != 3) {
+		if ($this->permission != 3) {
 			$msg['tips'] = 'account forbidden';
 			$link = '/admin_login';
 			$location = 'index page';
@@ -73,7 +73,7 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function approve($page = 1) {
-		if ($this->user_info['permission'] != 2) {
+		if ($this->permission != 2) {
 			$msg['tips'] = 'account forbidden';
 			$link = '/admin_login';
 			$location = 'index page';
@@ -127,7 +127,7 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function permit($page = 1) {
-		if ($this->user_info['permission'] != 1) {
+		if ($this->permission != 1) {
 			$msg['tips'] = 'account forbidden';
 			$link = '/admin_login';
 			$location = 'index page';
@@ -180,7 +180,7 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function ordinary($page = 1) {
-		if ($this->user_info['permission'] != 1) {
+		if ($this->permission != 1) {
 			$msg['tips'] = 'account forbidden';
 			$link = '/admin_login';
 			$location = 'index page';
@@ -416,8 +416,110 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function download_excel() {
+		$data['province_id'] = $this->user_info['province_id'];
+		$data['start_time'] = trim($this->input->get('start_time', TRUE));
+		$data['end_time'] = trim($this->input->get('end_time', TRUE));
+		
+		$this->load->helper('util');
+		if (!check_parameters($data)) die();
+		
+		require '../application/third_party/PHPExcel/PHPExcel.php';
+		
+		$excel = new PHPExcel();
+		
+		// Set Head Titles
+		$excel	->setActiveSheetIndex(0)
+				->setCellValue('A1', '')
+				->setCellValue('B1', '申请流水号')
+				->setCellValue('C1', '申请人中文/英文姓名')
+				->setCellValue('D1', '出生日期')
+				->setCellValue('E1', '性别')
+				->setCellValue('F1', '国籍')
+				->setCellValue('G1', '护照号')
+				->setCellValue('H1', '申请时间')
+				->setCellValue('I1', '当前申请状态')
+				->setCellValue('J1', '审核时间')
+				->setCellValue('K1', '缴费时间')
+				->setCellValue('L1', '签证费用')
+				->setCellValue('M1', '签证时间')
+				->setCellValue('N1', '签证编号');
+		
+		$page = 0;
+		$this->load->model('admin_model', 'adm');
+		while ($records = $this->adm->retrieve_records($data, $page)) {
+			// Set Cell Content
+			$i = 1;
+			foreach ($records as $one) {
+				$cur_column = $i + 1;
+				$excel	->setActiveSheetIndex(0)
+						->setCellValue('A'.$cur_column, $i)
+						->setCellValue('B'.$cur_column, $one['uuid'])
+						->setCellValue('C'.$cur_column, $one['name_cn'].'/'.$one['name_en'])
+						->setCellValue('D'.$cur_column, date('Y-m-d', strtotime($one['birth_year'].'-'.$one['birth_month'].'-'.$one['birth_day'])))
+						->setCellValue('E'.$cur_column, ($one['gender'] == 1 ? '男' : '女'))
+						->setCellValue('F'.$cur_column, $one['nationality'])
+						->setCellValue('G'.$cur_column, $one['passport_number'])
+						->setCellValue('H'.$cur_column, $one['submit_time'])
+						->setCellValue('I'.$cur_column, status2text($one['status']))
+						->setCellValue('J'.$cur_column, $one['audit_time'])
+						->setCellValue('K'.$cur_column, $one['pay_time'])
+						->setCellValue('L'.$cur_column, 'RMB'.$one['fee'])
+						->setCellValue('M'.$cur_column, $one['approve_time'])
+						->setCellValue('N'.$cur_column, $one['visa_no']);
+				$i ++;
+			}
+			$page ++;
+		}
+		
+		$excel->getActiveSheet()->getColumnDimension('B')->setWidth(16);
+		$excel->getActiveSheet()->getColumnDimension('C')->setWidth(24);
+		$excel->getActiveSheet()->getColumnDimension('D')->setWidth(12);
+		$excel->getActiveSheet()->getColumnDimension('E')->setWidth(8);
+		$excel->getActiveSheet()->getColumnDimension('F')->setWidth(16);
+		$excel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+		$excel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+		$excel->getActiveSheet()->getColumnDimension('I')->setWidth(16);
+		$excel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+		$excel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+		$excel->getActiveSheet()->getColumnDimension('L')->setWidth(12);
+		$excel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
+		$excel->getActiveSheet()->getColumnDimension('N')->setWidth(12);
+		$excel->getActiveSheet()->setTitle('申请记录');
+		$excel->setActiveSheetIndex(0);
+		
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="'.$data['start_time'].'至'.$data['end_time'].'.xlsx"');
+		header('Cache-Control: max-age=0');
+		
+		$objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+		$objWriter->save('php://output');
+		exit(0);
 	}
 	
+	public function activate_account() {
+		if ($this->permission != 1) {
+			$msg['tips'] = 'account forbidden';
+			$link = '/admin_login';
+			$location = 'index page';
+			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data['userid'] = trim($this->input->post('userid', TRUE));
+		$data['user_type'] = trim($this->input->post('user_type', TRUE));
+		$activate = trim($this->input->post('activate', TRUE));
+		$data['status'] = $activate === 'yes' ? 1 : ($activate === 'no' ? -1 : 0);
+		
+		$this->load->model('user_model', 'user');
+		
+		$ret['msg'] = 'fail';
+		
+		if ($this->user->change_account_status($data) > 0) {
+			$ret['msg'] = 'success';
+		}
+		
+		echo json_encode($ret);
+	}
 }
 
 /* End of file */

@@ -14,48 +14,6 @@
 			$(document).ready(function(){
 				
 			});
-			
-			function pass_or_not(uuid, opt) {
-				var message = '';
-				if (opt === 'pass') {
-					message = 'Pass OK';
-				} else if (opt === 'fail') {
-					message = 'Pass fail';
-				}
-				$.ajax({
-					url: '/admin/auditing/' + uuid + '/' + opt,
-					data: {message: message},
-					type: 'POST',
-					dataType: 'json',
-					success: function (json) {
-						switch (json.msg) {
-							case 'success': alert('对申请号 ' + uuid + ' 审核操作成功！'); break;
-							case 'fail': alert('出错了'); break;
-						}
-					},
-					error: function() {
-						alert('Network Error');
-					}
-				});
-			}
-			
-			function visa_or_not(uuid, opt) {
-				$.ajax({
-					url: '/admin/approving/' + uuid + '/' + opt,
-					data: {},
-					type: 'POST',
-					dataType: 'json',
-					success: function(json) {
-						switch (json.msg) {
-							case 'success': alert('对申请号 ' + uuid + ' 审批操作成功！'); break;
-							case 'fail': alert('出错了'); break;
-						}
-					},
-					error: function() {
-						alert('Network Error');
-					}
-				});
-			}
 		</script>
 		<style type="text/css">
 			body {padding:0px;}

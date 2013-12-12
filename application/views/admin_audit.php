@@ -11,31 +11,8 @@
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="/My97DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="/simple.js"></script>
 		<script type="text/javascript">
-			function pay_for_visa(uuid, this_a) {
-				var fee = parseInt(prompt('请输入签证费用，单位：人名币'));
-				if (isNaN(fee)) {
-					alert('请输入正整数！');
-					return;
-				}
-				var message = '签证申请流水号 ' + uuid + ' 已缴款RMB ' + fee + '，请等待签证通过！';
-				$.ajax({
-					url: '/admin/auditing/' + uuid + '/paid',
-					data: {message: message, fee: fee},
-					type: 'POST',
-					dataType: 'json',
-					success: function(json) {
-						switch(json.msg) {
-							case 'success': alert('缴费成功！请上传证明扫描文件。'); this_a.innerHTML = '已缴费'; this_a.style.color = '#DDDDDD'; break;
-							case 'fail': alert('缴费失败！请稍后再试或联系网站管理员。'); break;
-						}
-					},
-					error: function() {
-						alert('Network Error');
-					}
-				});
-			}
-			
 			function what_is_selected() {
 				$('#od' + selected).css('display', 'none');
 				selected = $('#orderby').val();
@@ -64,30 +41,6 @@
 					case '4' : $('#start_time').val(start_time); $('#end_time').val(end_time); break;
 					default : return;
 				}
-			}
-			
-			function pass_for_fee(uuid, opt, this_a) {
-				var message = '';
-				if (opt === 'pass') {
-					message = 'Pass OK';
-				} else if (opt === 'fail') {
-					message = 'Pass fail';
-				}
-				$.ajax({
-					url: '/admin/auditing/' + uuid + '/' + opt,
-					data: {message: message},
-					type: 'POST',
-					dataType: 'json',
-					success: function (json) {
-						switch (json.msg) {
-							case 'success': alert('对申请号 ' + uuid + ' 审核操作成功！'); this_a.innerHTML = '已审核'; this_a.style.color = '#DDDDDD'; break;
-							case 'fail': alert('出错了'); break;
-						}
-					},
-					error: function() {
-						alert('Network Error');
-					}
-				});
 			}
 		</script>
 		<style type="text/css">
@@ -136,6 +89,7 @@
 				<div id="od4" style="display:none">
 					&nbsp;请输入需要查询的日期范围:&nbsp;<input id="start_time" type="text" placeholder="起始日期" onclick="WdatePicker({readOnly:true, dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d'})"/> ~ 
 					<input id="end_time" type="text" placeholder="结束日期" onclick="WdatePicker({readOnly:true, dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d'})"/>
+					<a href="javascript:void(0)" onclick="download_excel();" target="_blank">导出Excel表格</a>
 				</div>
 				<div style="display:inline-block;">
 					<button onclick="javascript:filter_them(selected);">搜索</button>

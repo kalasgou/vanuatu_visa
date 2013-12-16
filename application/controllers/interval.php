@@ -4,12 +4,14 @@
 		
 		public function __construct() {
 			parent::__construct();
-			if (!$this->input->is_cli_request()) {
+			/*if (!$this->input->is_cli_request()) {
 				die('forbidden');
-			}
+			}*/
 		}
 		
-		public function regt_noti() {
+		public function regt_noti($uuid) {
+			$this->load->model('interval_model', 'ivm');
+			var_dump($this->ivm->combined_info($uuid));
 		}
 		
 		public function pswd_noti() {

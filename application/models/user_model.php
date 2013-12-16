@@ -137,6 +137,24 @@
 			return $this->user_db->affected_rows();
 		}
 		
+		public function applicant_info($userid) {
+			$this->user_db->select('email, nickname, realname');
+			$this->user_db->where('userid', $userid);
+			$this->user_db->limit(1);
+			$query = $this->user_db->get('applicant');
+			
+			return $query->row_array();
+		}
+		
+		public function administrator_info($userid) {
+			$this->user_db->select('email, realname');
+			$this->user_db->where('userid', $userid);
+			$this->user_db->limit(1);
+			$query = $this->user_db->get('administrator');
+			
+			return $query->row_array();
+		}
+		
 		public function __call($foo, $bar) {
 			return FALSE;
 		}

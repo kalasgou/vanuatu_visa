@@ -69,7 +69,7 @@
 		$mail->Host = 'smtp.exmail.qq.com';
 		$mail->Port = 465;
 		$mail->Username = '305858854@qq.com';
-		$mail->Password = 'dudu98319270';
+		$mail->Password = '';
 
 		$mail->From = '305858854@qq.com';
 		$mail->FromName = 'kalasgou';

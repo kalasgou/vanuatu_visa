@@ -202,19 +202,27 @@
 			return $query->result_array();
 		}
 		
-		public function check_passport_available($userid, $passport_number) {
-			$this->apply_db->select('uuid, status');
-			$this->apply_db->where('userid', $userid);
-			$this->apply_db->where('passport_number', $passport_number);
-			$this->apply_db->where('status >= ', 11);
-			$this->apply_db->where('status <= ', 101);
+		public function check_passport_available($uuid, $passport_number) {
+			$this->apply_db->select('passport_number');
+			$this->apply_db->where('uuid', $uuid);
 			$query = $this->apply_db->get('visa_applying');
 			
-			if ($query->num_rows() > 0) {
-				
+			$row = $query->row_array();
+			
+			if (strcmp($passport_number, $row['passport_number']) === 0) {
+				return TRUE;
 			} else {
-				return FALSE;
+				$sql_a = 'SELECT uuid FROM visa_applying WHERE passport_number = "'.$passport_number.'" AND status >= 11 AND status <= 41';
+				$sql_b = 'SELECT uuid FROM visa_applying WHERE passport_number = "'.$passport_number.'" AND status = 101 AND approve_time >= "'.date('Y-m-d H:i:s', strtotime('-60 days')).'"';
+				$sql = $sql_a.' UNION ALL '.$sql_b;
+				$query = $this->apply_db->query($sql);
+				
+				if ($query->num_rows() === 0) {
+					return TRUE;
+				}
 			}
+			
+			return FALSE;
 		}
 	}
 ?>

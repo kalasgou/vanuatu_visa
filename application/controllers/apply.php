@@ -191,16 +191,14 @@ class Apply extends ApplyLoginController {
 		
 		if ($data['uuid'] === '') {
 			show_error('uuid empty error');
-			die();
 		}
 		
-		if (!is_editable($uuid)) {
+		if (!is_editable($data['uuid'])) {
 			show_error('not editable');
 		}
 		
 		if (!check_parameters($data)) {
 			show_error('parameters not enough');
-			die();
 		}
 		
 		$this->load->model('apply_model', 'alm');
@@ -256,19 +254,21 @@ class Apply extends ApplyLoginController {
 		
 		if ($data['uuid'] === '') {
 			show_error('uuid empty error');
-			die();
 		}
 		
-		if (!is_editable($uuid)) {
+		if (!is_editable($data['uuid'])) {
 			show_error('not editable');
 		}
 		
 		if (!check_parameters($data)) {
 			show_error('parameters not enough');
-			die();
 		}
 		
 		$this->load->model('apply_model', 'alm');
+		
+		if (!$this->alm->check_passport_available($data['uuid'], $data['passport_number'])) {
+			show_error('passport not available');
+		}
 		
 		if ($this->alm->update_passport_info($data) > 0) {
 			update_status($data['uuid'], 3);
@@ -344,10 +344,9 @@ class Apply extends ApplyLoginController {
 		
 		if ($data['uuid'] === '') {
 			show_error('uuid empty error');
-			die();
 		}
 		
-		if (!is_editable($uuid)) {
+		if (!is_editable($data['uuid'])) {
 			show_error('not editable');
 		}
 		
@@ -447,10 +446,9 @@ class Apply extends ApplyLoginController {
 		
 		if ($data['uuid'] === '') {
 			show_error('uuid empty error');
-			die();
 		}
 		
-		if (!is_editable($uuid)) {
+		if (!is_editable($data['uuid'])) {
 			show_error('not editable');
 		}
 		
@@ -472,7 +470,6 @@ class Apply extends ApplyLoginController {
 		
 		if ($uuid === '') {
 			show_error('uuid empty error');
-			die();
 		}
 		
 		$userid = $this->userid;
@@ -501,10 +498,9 @@ class Apply extends ApplyLoginController {
 		
 		if ($uuid === '') {
 			show_error('uuid empty error');
-			die();
 		}
 		
-		if (!is_editable($uuid)) {
+		if (!is_editable($data['uuid'])) {
 			show_error('not editable');
 		}
 		
@@ -524,7 +520,6 @@ class Apply extends ApplyLoginController {
 	public function view($uuid = '') {
 		if ($uuid === '') {
 			show_error('uuid empty error');
-			die();
 		}
 		
 		$userid = $this->userid;

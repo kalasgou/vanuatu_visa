@@ -138,7 +138,7 @@
 		}
 		
 		public function applicant_info($userid) {
-			$this->user_db->select('email, nickname, realname');
+			$this->user_db->select('userid, email, nickname, realname, status');
 			$this->user_db->where('userid', $userid);
 			$this->user_db->limit(1);
 			$query = $this->user_db->get('applicant');
@@ -147,7 +147,7 @@
 		}
 		
 		public function administrator_info($userid) {
-			$this->user_db->select('email, realname');
+			$this->user_db->select('userid, email, realname, status');
 			$this->user_db->where('userid', $userid);
 			$this->user_db->limit(1);
 			$query = $this->user_db->get('administrator');

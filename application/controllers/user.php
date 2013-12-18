@@ -64,10 +64,18 @@ class User extends LoginController {
 			$msg['location'] = 'index page';
 			$this->load->view('simple_msg_page', $msg);
 			
+			// account activation
 			$this->load->library('RedisDB');
 			$redis = $this->redisdb->instance(REDIS_DEFAULT);
-			$redis->setex(md5($userid.'_'.$data['email'].'_'.$data['reg_time']), 3600, $userid);
-			push_email_queue($user_type.'_register_notification', $userid);
+			
+			$hash_key = md5($userid.'_'.$data['email'].'_'.$data['reg_time']);
+			$info['userid'] = $userid;
+			$info['user_type'] = $user_type;
+			$redis->setex($hash_key, 3600, json_encode($info));
+			
+			$info['hash_key'] = $hash_key;
+			$info['email'] = $data['email'];
+			push_email_queue('register_notification', json_encode($info));
 		} else {
 			$msg['tips'] = 'register fail';
 			$msg['link'] = '/'.$this->goto_page[$user_type]['2'];
@@ -175,6 +183,67 @@ class User extends LoginController {
 		$ret['msg'] = 'success';
 		
 		if ($this->user->$func_name($nickname) > 0) {
+			$ret['msg'] = 'fail';
+		}
+		
+		echo json_encode($ret);
+	}
+	
+	public function activate($hash_key = '') {
+		$this->load->library('RedisDB');
+		$redis = $this->redisdb->instance(REDIS_DEFAULT);
+		
+		if (($info = json_decode($redis->get($hash_key), TRUE)) !== NULL) {
+			switch ($info['user_type']) {
+				case 'applicant': $info['status'] = 1; break;
+				case 'administrator': $info['status'] = 0; break;
+				default : $info['status'] = 0;
+			}
+			
+			$this->load->model('user_model', 'user');
+			if ($this->user->change_account_status($info) > 0) {
+				$redis->del($hash_key);
+				
+				$msg['tips'] = 'Account Activated';
+				$msg['link'] = '/'.$this->goto_page[$info['user_type']]['1'];
+				$msg['location'] = 'index page';
+				$this->load->view('simple_msg_page', $msg);
+			} else {
+				show_error('activation error');
+			}
+		} else {
+			show_error('Link expired or not existed!');
+		}
+	}
+	
+	public function send_activation_code($user_type = '', $userid = '') {
+		if ($user_type !== '' && $userid !== '') {
+			$this->load->helper('util');
+			$this->load->model('user_model', 'user');
+			$func_name = $user_type.'_info';
+			
+			$user = array();
+			$user = $this->user->$func_name($userid);
+			
+			if ($user && $user['status'] == 0) {
+				$ret['msg'] = 'success';
+				
+				$this->load->library('RedisDB');
+				$redis = $this->redisdb->instance(REDIS_DEFAULT);
+				
+				$hash_key = md5($user['userid'].'_'.$user['email'].'_'.$_SERVER['REQUEST_TIME']);
+				$info = array();
+				$info['userid'] = $user['userid'];
+				$info['user_type'] = $user_type;
+				$redis->setex($hash_key, 3600, json_encode($info));
+				
+				$info['hash_key'] = $hash_key;
+				$info['email'] = $user['email'];
+				push_email_queue('register_notification', json_encode($info));
+			} else {
+				$ret['msg'] = 'empty';
+			}
+		} else {
 			$ret['msg'] = 'fail';
 		}
 		

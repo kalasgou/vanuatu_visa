@@ -35,103 +35,103 @@
 		<div id="application_form">
 			<div>
 				1、Full name 姓名:
-				(English英文) <span id="answer" style="width:200px;"><?php echo $name_en;?></span>
-				(Chinese中文) <span id="answer" style="width:200px;"><?php echo $name_cn;?></span>
+				(English英文) <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $name_en;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				(Chinese中文) <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $name_cn;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div>
 				2、Mr.先生
-				<span id="option"><input type="checkbox" <?php echo ($gender == 1 ? 'checked="checked"' : '');?>/></span>
-				Mrs.女士 <span id="option"><input type="checkbox" <?php echo ($gender == 2 ? 'checked="checked"' : '');?>/></span>
-				Miss小姐 <span id="option"><input type="checkbox" <?php echo ($gender == 3 ? 'checked="checked"' : '');?>/></span>
+				<span id="option"><input type="checkbox" <?php echo ($gender == 1 ? 'checked="checked"' : '');?>/></span>&nbsp;&nbsp;
+				Mrs.女士 <span id="option"><input type="checkbox" <?php echo ($gender == 2 ? 'checked="checked"' : '');?>/></span>&nbsp;&nbsp;
+				Miss小姐 <span id="option"><input type="checkbox" <?php echo ($gender == 3 ? 'checked="checked"' : '');?>/></span>&nbsp;&nbsp;
 			</div>
 			<div>3、Nationality 国籍:
-				<span id="answer" style="width:200px;"><?php echo $nationality;?></span>
+				<span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $nationality;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div>
 				4、Date of Birth 出生日期:
-				Day 日 <span id="answer" style="width:200px;"><?php echo $birth_day;?></span>
-				Month 月 <span id="answer" style="width:200px;"><?php echo $birth_month;?></span>
-				Year 年 <span id="answer" style="width:200px;"><?php echo $birth_year;?></span>
+				Day 日 <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $birth_day;?>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				Month 月 <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $birth_month;?>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				Year 年 <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $birth_year;?>&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div>
 				5、Place of birth 出生地点:
-				<span id="answer" style="width:200px;"><?php echo $birth_place;?></span>
+				<span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $birth_place;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div>
-				6、Family Situation 婚姻状况:
-				Married 已婚 <span id="option"><input type="checkbox" <?php echo ($family == 4 ? 'checked="checked"' : '');?>/></span>
-				Single 单身 <span id="option"><input type="checkbox" <?php echo ($family == 5 ? 'checked="checked"' : '');?>/></span>
-				Widowed 丧偶 <span id="option"><input type="checkbox" <?php echo ($family == 6 ? 'checked="checked"' : '');?>/></span>
-				Divorced 离异 <span id="option"><input type="checkbox" <?php echo ($family == 7 ? 'checked="checked"' : '');?>/></span>
+				6、Family Situation 婚姻状况:<br>&nbsp;&nbsp;&nbsp;&nbsp;
+				Married 已婚 <span id="option"><input type="checkbox" <?php echo ($family == 4 ? 'checked="checked"' : '');?>/></span>&nbsp;&nbsp;
+				Single 单身 <span id="option"><input type="checkbox" <?php echo ($family == 5 ? 'checked="checked"' : '');?>/></span>&nbsp;&nbsp;
+				Widowed 丧偶 <span id="option"><input type="checkbox" <?php echo ($family == 6 ? 'checked="checked"' : '');?>/></span>&nbsp;&nbsp;
+				Divorced 离异 <span id="option"><input type="checkbox" <?php echo ($family == 7 ? 'checked="checked"' : '');?>/></span>&nbsp;&nbsp;
 			</div>
 			<?php
 				$occupation_info = json_decode($occupation_info, TRUE);
 			?>
 			<div>
 				7、Occupation 职业: 
-				<span id="answer" style="width:200px;"><?php echo $occupation_info['occupation'];?></span>
+				<span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $occupation_info['occupation'];?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div>
 				8、(a) Employer 就业单位:
-				<span id="answer" style="width:200px;"><?php echo $occupation_info['employer'];?></span>
-				Tel No.电话: <span id="answer" style="width:200px;"><?php echo $occupation_info['employer_tel'];?></span><br>
-				(b) Address 单位地址: <span id="answer" style="width:200px;"><?php echo $occupation_info['employer_addr'];?></span>
+				<span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $occupation_info['employer'];?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;
+				Tel No.电话: <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $occupation_info['employer_tel'];?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;
+				(b) Address 单位地址: <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $occupation_info['employer_addr'];?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<?php
 				$home_info = json_decode($home_info, TRUE);
 			?>
 			<div>
 				9、Home Address 家庭住址:
-				<span id="answer" style="width:200px;"><?php echo $home_info['home_addr'];?></span><br>
-				Tel No.电话: <span id="answer" style="width:200px;"><?php echo $home_info['home_tel'];?></span>
+				<span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $home_info['home_addr'];?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;
+				Tel No.电话: <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $home_info['home_tel'];?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div>
-				10、Passport 护照:<br>
-				(a) Number 护照号 <span id="answer" style="width:200px;"><?php echo $passport_number;?></span>
-				(b) Place of Issue 发照地 <span id="answer" style="width:200px;"><?php echo $passport_place;?></span><br>
-				(c) Date of Issue 发照日期 <span id="answer" style="width:200px;"><?php echo date('Y-m-d', $passport_date);?></span>
-				(d) Expiry Date 有效日期至 <span id="answer" style="width:200px;"><?php echo date('Y-m-d', $passport_expiry);?></span>
+				10、Passport 护照:<br>&nbsp;&nbsp;&nbsp;&nbsp;
+				(a) Number 护照号 <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $passport_number;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				(b) Place of Issue 发照地 <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $passport_place;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;
+				(c) Date of Issue 发照日期 <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;<?php echo date('Y-m-d', $passport_date);?>&nbsp;&nbsp;&nbsp;</span>
+				(d) Expiry Date 有效日期至 <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;<?php echo date('Y-m-d', $passport_expiry);?>&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div>
-				11、Purpose of Visit 访瓦目的:<br>
+				11、Purpose of Visit 访瓦目的:<br>&nbsp;&nbsp;&nbsp;&nbsp;
 				Tourism 旅游 <span id="option"><input type="checkbox" <?php echo ($purpose == 8 ? 'checked="checked"' : '');?>/></span>
 				Visiting Relative 探亲 <span id="option"><input type="checkbox" <?php echo ($purpose == 9 ? 'checked="checked"' : '');?>/></span>
 				Business 商务 <span id="option"><input type="checkbox" <?php echo ($purpose == 10 ? 'checked="checked"' : '');?>/></span>
 				Other 其他 <span id="option"><input type="checkbox" <?php echo ($purpose == 11 ? 'checked="checked"' : '');?>/></span>
-				<span id="answer" style="width:128px;"><?php echo $other_purpose;?></span>
+				<span id="answer" style="width:128px;">&nbsp;&nbsp;<?php echo $other_purpose;?>&nbsp;&nbsp;</span>
 			</div>
 			<div>
 				12、Address in Vanuatu 在瓦地址:
-				<span id="answer" style="width:200px;"><?php echo $destination;?></span>
+				<span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $destination;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<?php
 				$relative_info = json_decode($relative_info, TRUE);
 			?>
 			<div>
-				13、Details of Family in Vanuatu if visiting relative 如属探亲在瓦亲属概况:<br>
-				Name 姓名: <span id="answer" style="width:100px;"><?php echo $relative_info['relative_name'];?></span>
-				Add. 地址: <span id="answer" style="width:300px;"><?php echo $relative_info['relative_addr'];?></span>
+				13、Details of Family in Vanuatu if visiting relative 如属探亲在瓦亲属概况:<br>&nbsp;&nbsp;&nbsp;&nbsp;
+				Name 姓名: <span id="answer" style="width:100px;">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $relative_info['relative_name'];?>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				Add. 地址: <span id="answer" style="width:300px;">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $relative_info['relative_addr'];?>&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<?php
 				$detail_info = json_decode($detail_info, TRUE);
 			?>
 			<div>
 				14、Details of arrival in Vanuatu 抵瓦航班号:
-				<span id="answer" style="width:200px;"><?php echo $detail_info['arrival_number'];?></span>
-				日期: <span id="answer" style="width:200px;"><?php echo $detail_info['arrival_date'];?></span>
+				<span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $detail_info['arrival_number'];?>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				日期: <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $detail_info['arrival_date'];?>&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div>
 				15、Details of return ticket 回程航班号:
-				<span id="answer" style="width:200px;"><?php echo $detail_info['return_number'];?></span>
-				日期: <span id="answer" style="width:200px;"><?php echo $detail_info['return_number'];?></span>
+				<span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $detail_info['return_number'];?>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				日期: <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $detail_info['return_number'];?>&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div>
 				16、Proposed duration of stay 拟在瓦逗留时间:
-				<span id="answer" style="width:200px;"><?php echo $detail_info['duration'];?></span>
+				<span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $detail_info['duration'];?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div>
 				17、Source of financial support in Vanuatu 在瓦费用来源:
-				<span id="answer" style="width:200px;"><?php echo $detail_info['financial_source'];?></span>
+				<span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $detail_info['financial_source'];?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div>
 				18、Details of family included in passport<br>
@@ -148,10 +148,10 @@
 						foreach ($children_info as $kid) {
 					?>
 					<tr>
-						<td><?php echo $kid['child_name'];?></td>
-						<td><?php echo $kid['child_sex'];?></td>
-						<td><?php echo $kid['child_date'];?></td>
-						<td><?php echo $kid['child_place'];?></td>
+						<td style="width:140px;"><?php echo $kid['child_name'];?></td>
+						<td style="width:140px;"><?php echo $kid['child_sex'];?></td>
+						<td style="width:320px;"><?php echo $kid['child_date'];?></td>
+						<td style="width:280px;"><?php echo $kid['child_place'];?></td>
 					</tr>
 					<?php } ?>	
 				</table>
@@ -161,9 +161,9 @@
 			?>
 			<div>
 				19、(a) Been convicted of or have any charges outstanding on a criminal offence in any country<br>
-				是否在任何国家有过犯罪记录: Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['criminal'] === 'on' ? 'checked="checked"' : '');?>/></span> Where哪一国家 <span id="answer" style="width:200px;"><?php echo $behaviour_info['crime_country'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['criminal'] === 'off' ? 'checked="checked"' : '');?>/></span><br>
+				是否在任何国家有过犯罪记录: Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['criminal'] === 'on' ? 'checked="checked"' : '');?>/></span> Where哪一国家 <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $behaviour_info['crime_country'];?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['criminal'] === 'off' ? 'checked="checked"' : '');?>/></span><br>
 				(b) Been deported or excluded from any country<br>
-				是否有被任何国家驱逐出境的经历: Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['deported'] === 'on' ? 'checked="checked"' : '');?>/></span> Where哪一国家 <span id="answer" style="width:200px;"><?php echo $behaviour_info['deport_country'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['deported'] === 'off' ? 'checked="checked"' : '');?>/></span>
+				是否有被任何国家驱逐出境的经历: Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['deported'] === 'on' ? 'checked="checked"' : '');?>/></span> Where哪一国家 <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $behaviour_info['deport_country'];?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['deported'] === 'off' ? 'checked="checked"' : '');?>/></span>
 			</div>
 			<div>
 				20、Details of previous visits? 您曾经到过瓦努阿图吗？<br>
@@ -172,11 +172,11 @@
 			</div>
 			<div>
 				21、Have you ever applied for a work, residence or student permit before in Vanuatu?<br>
-				您是否曾经在瓦努阿图申请过工作、居留或学生签证？ Yes是 <span id="option"><input type="checkbox"  <?php echo ($behaviour_info['applied'] === 'on' ? 'checked="checked"' : '');?>/></span> When何时 <span id="answer" style="width:200px;"><?php echo $behaviour_info['apply_date'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['applied'] === 'off' ? 'checked="checked"' : '');?>/></span><br>
+				您是否曾经在瓦努阿图申请过工作、居留或学生签证？ <br>Yes是 <span id="option"><input type="checkbox"  <?php echo ($behaviour_info['applied'] === 'on' ? 'checked="checked"' : '');?>/></span> When何时 <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $behaviour_info['apply_date'];?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['applied'] === 'off' ? 'checked="checked"' : '');?>/></span><br>
 			</div>
 			<div>
 				22、Have you ever been refused entry to Vanuatu?<br>
-				您曾经被瓦努阿图拒签过吗？ Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'on' ? 'checked="checked"' : '');?>/></span> When何时 <span id="answer" style="width:200px;"><?php echo $behaviour_info['refuse_date'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'off' ? 'checked="checked"' : '')?>/></span><br>
+				您曾经被瓦努阿图拒签过吗？ Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'on' ? 'checked="checked"' : '');?>/></span> When何时 <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $behaviour_info['refuse_date'];?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'off' ? 'checked="checked"' : '')?>/></span><br>
 			</div>
 			<div>23、I declare that the information given in this application is true and correct to the best of my knowledge and belief.<br>
 				我声明，本人在本申请表中所做之回答就本人所知均属实无误。<br>

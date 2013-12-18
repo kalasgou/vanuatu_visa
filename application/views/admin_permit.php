@@ -134,6 +134,7 @@
 				</tbody>
 			</table>
 			<div id="pagination">
+				<p>当前共有<label style="color:green;"><?php echo $num_users;?></label>条记录</p>
 				<?php echo $pagination;?>
 			</div>
 		</div>

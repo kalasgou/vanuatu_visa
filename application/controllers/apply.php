@@ -24,7 +24,7 @@ class Apply extends ApplyLoginController {
 		$config['base_url'] = '/apply/index/';
 		$config['uri_segment'] = 3;
 		$config['num_links'] = 2;
-		$config['total_rows'] = 100;//$this->alm->sum_applications($userid);
+		$config['total_rows'] = $this->alm->sum_applications($userid);
 		$config['per_page'] = 20;
 		$config['use_page_numbers'] = TRUE;
 		
@@ -38,6 +38,7 @@ class Apply extends ApplyLoginController {
 		$data['user'] = $this->user_info;
 		$data['records'] = $this->alm->get_records($userid, $page - 1);
 		$data['pagination'] = $this->pagination->create_links();
+		$data['num_records'] = $config['total_rows'];
 		
 		foreach ($data['records'] as &$one) {
 			$one['status_str'] = status2text($one['status']);

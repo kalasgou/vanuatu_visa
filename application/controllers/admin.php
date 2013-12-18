@@ -64,6 +64,7 @@ class Admin extends AdminLoginController {
 		$data['user'] = $this->user_info;
 		$data['pagination'] = $this->pagination->create_links();
 		$data['records'] = $this->adm->get_applications($data);
+		$data['num_records'] = $config['total_rows'];
 		
 		foreach ($data['records'] as &$one) {
 			$one['status_str'] = status2text($one['status']);
@@ -118,6 +119,7 @@ class Admin extends AdminLoginController {
 		$data['user'] = $this->user_info;
 		$data['pagination'] = $this->pagination->create_links();
 		$data['records'] = $this->adm->get_applications($data);
+		$data['num_records'] = $config['total_rows'];
 		
 		foreach ($data['records'] as &$one) {
 			$one['status_str'] = status2text($one['status']);
@@ -166,6 +168,7 @@ class Admin extends AdminLoginController {
 		$data['user'] = $this->user_info;
 		$data['pagination'] = $this->pagination->create_links();
 		$data['users'] = $this->user->get_administrators($data);
+		$data['num_users'] = $config['total_rows'];
 		
 		$provinces = array('1' => '北京', '2' => '广州', '3' => '上海');
 		$permissions = array('1' => '系统管理员', '2' => '大使馆管理员', '3' => '办事处管理员');
@@ -219,6 +222,7 @@ class Admin extends AdminLoginController {
 		$data['user'] = $this->user_info;
 		$data['pagination'] = $this->pagination->create_links();
 		$data['users'] = $this->user->get_applicants($data);
+		$data['num_users'] = $config['total_rows'];
 		
 		$accounts = array('-1' => '已失效', '0' => '正常', '1' => '未激活');
 		foreach ($data['users'] as &$one) {

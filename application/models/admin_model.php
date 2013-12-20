@@ -124,5 +124,11 @@
 			return $this->admin_db->affected_rows();
 		}
 		
+		public function get_admin_userids($uuid, $start, $end) {
+			$sql = 'SELECT DISTINCT(admin_userid) FROM visa_auditing WHERE uuid = ? AND status >= ? AND status <= ?';
+			$query = $this->admin_db->query($sql, array($uuid, $start, $end));
+			
+			return $query->result_array();
+		}
 	}
 ?>

@@ -46,14 +46,36 @@
 		public function pass_noti() {
 			$this->load->model('interval_model', 'ivm');
 			
-			while (TRUE) {
-				$uuid = pop_email_queue('pass_nitification');
+			$subject = 	'Visa2Vanuatu签证申请进度';
+			$remark = 	'<p>所需证明文件包括：</p>'.
+						'<p>（1）签证申请表格打印版；</p>'.
+						'<p>（2）两张白底的签证照片；</p>'.
+						'<p>（3）护照（要求六个月以上有效期）原件，复印件一份（复印主页信息即可）；</p>'.
+						'<p>（4）个人身份证复印件（正反两面）；</p>'.
+						'<p>（5）往返机票打印件；</p>'.
+						'<p>（6）每人五万元人民币的银行存款证明原件。</p>';
+			
+			//while (TRUE) {
+				$uuid = pop_email_queue('pass_notification');
 				if ($uuid) {
+					$info = $this->ivm->combined_info($uuid);
+					$greeting = '<p>尊敬的<b>'.$info['name_cn'].'/'.$info['name_en'].'</b>'.($info['gender'] == 1 ? '先生' : ($info['gender'] == 2 ? '女士' : '小姐')).'：</p>';
+					$notification = '<p>你申请号<b>'.$uuid.'</b>的签证申请已通过初步审核，请在15天内带备相关证明及签证费用前往办事处作进一步确认。</p>';
+					
+					$data = array();
+					$data['email'] = $info['email'];
+					$data['user'] = $info['name_cn'];
+					$data['subject'] = $subject;
+					$data['content'] = $greeting.$notification.$remark;
+					
+					send_email($data);
+					
+					unset($info);
+					unset($data);
+				} else {
+					sleep(10);
 				}
-				$info = $this->ivm->combined_info($uuid);
-			}
-			
-			
+			//}
 		}
 		
 		public function fail_noti() {
@@ -63,6 +85,33 @@
 		}
 		
 		public function visa_noti() {
+			$this->load->model('interval_model', 'ivm');
+			
+			$subject = 	'Visa2Vanuatu签证申请进度';
+			$remark = 	'请下载签证文件（见附件）自行打印。';
+			
+			//while (TRUE) {
+				$uuid = pop_email_queue('visa_notification');
+				if ($uuid) {
+					$info = $this->ivm->combined_info($uuid);
+					$greeting = '<p>尊敬的<b>'.$info['name_cn'].'/'.$info['name_en'].'</b>'.($info['gender'] == 1 ? '先生' : ($info['gender'] == 2 ? '女士' : '小姐')).'：</p>';
+					$notification = '<p>你申请号<b>'.$uuid.'</b>的签证申请已成功通过全部审核并获得即日起60天有效期的Vanuatu签证（对应护照编号为<b>'.$info['passport_number'].'</b>），签证编号为<b>'.$info['visa_no'].'</b>。</p>';
+					
+					$data = array();
+					$data['email'] = $info['email'];
+					$data['user'] = $info['name_cn'];
+					$data['subject'] = $subject;
+					$data['content'] = $greeting.$notification.$remark;
+					$data['visa_file'] = VISA_PATH .$uuid .'/' .$info['visa_no'] .'.docx';
+					
+					send_email($data);
+					
+					unset($info);
+					unset($data);
+				} else {
+					sleep(10);
+				}
+			//}
 		}
 		
 		public function oops_noti() {

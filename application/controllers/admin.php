@@ -446,10 +446,17 @@ class Admin extends AdminLoginController {
 				->setCellValue('K1', '缴费时间')
 				->setCellValue('L1', '签证费用')
 				->setCellValue('M1', '签证时间')
-				->setCellValue('N1', '签证编号');
+				->setCellValue('N1', '签证编号')
+				->setCellValue('O1', '办事处经手人')
+				->setCellValue('P1', '大使馆经手人');
 		
 		$page = 0;
+		
+		$agency_admins = array();
+		$embassy_admins = array();
+		
 		$this->load->model('admin_model', 'adm');
+		$this->load->model('user_model', 'user');
 		while ($records = $this->adm->retrieve_records($data, $page)) {
 			// Set Cell Content
 			$i = 1;
@@ -470,6 +477,31 @@ class Admin extends AdminLoginController {
 						->setCellValue('L'.$cur_column, 'RMB'.$one['fee'])
 						->setCellValue('M'.$cur_column, $one['approve_time'])
 						->setCellValue('N'.$cur_column, $one['visa_no']);
+				
+				$name_agency = '';
+				$admin_userids = $this->adm->get_admin_userids($one['uuid'], 21, 41);
+				foreach ($admin_userids as $admin) {
+					if (!isset($agency_admins[$admin['admin_userid']]['realname'])) {
+						$info = $this->user->administrator_info($admin['admin_userid']);
+						$agency_admins[$info['userid']]['realname'] = $info['realname'];
+					}
+					$name_agency .= $agency_admins[$admin['admin_userid']]['realname'].'、';
+				}
+				
+				$name_embassy = '';
+				$admin_userids = $this->adm->get_admin_userids($one['uuid'], 91, 101);
+				foreach ($admin_userids as $admin) {
+					if (!isset($embassy_admins[$admin['admin_userid']]['realname'])) {
+						$info = $this->user->administrator_info($admin['admin_userid']);
+						$embassy_admins[$info['userid']]['realname'] = $info['realname'];
+					}
+					$name_embassy .= $embassy_admins[$admin['admin_userid']]['realname'].'、';
+				}
+				
+				$excel	->setActiveSheetIndex(0)
+						->setCellValue('O'.$cur_column, $name_agency)
+						->setCellValue('P'.$cur_column, $name_embassy);
+				
 				$i ++;
 			}
 			$page ++;
@@ -488,6 +520,8 @@ class Admin extends AdminLoginController {
 		$excel->getActiveSheet()->getColumnDimension('L')->setWidth(12);
 		$excel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
 		$excel->getActiveSheet()->getColumnDimension('N')->setWidth(12);
+		$excel->getActiveSheet()->getColumnDimension('O')->setWidth(32);
+		$excel->getActiveSheet()->getColumnDimension('P')->setWidth(32);
 		$excel->getActiveSheet()->setTitle('申请记录');
 		$excel->setActiveSheetIndex(0);
 		

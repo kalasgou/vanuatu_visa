@@ -78,7 +78,7 @@
 		$mail->addCC('305858854@qq.com');
 		
 		if (isset($data['visa_file'])) {
-			$mail->addAttachment($data['visa_file'], 'Visa签证.doc');
+			$mail->addAttachment($data['visa_file'], 'Visa签证.docx');
 		}
 		
 		$mail->isHTML(TRUE);

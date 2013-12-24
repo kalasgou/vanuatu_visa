@@ -46,7 +46,7 @@
 				<h5>你好，系统管理员 <?php echo $user['realname'];?>！</h5>
 			</div>
 			<div id="menu">
-				<a href="/admin/ordinary">管理员帐号</a> / 
+				<a href="/admin/permit">管理员帐号</a> / 
 				<a style="color:#1100FF;">普通用户帐号</a> / 
 				<a href="/user/account">帐户信息</a> / 
 				<a href="/user/password">密码修改</a> / 

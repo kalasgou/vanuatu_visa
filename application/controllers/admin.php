@@ -172,7 +172,7 @@ class Admin extends AdminLoginController {
 		
 		$provinces = array('1' => '北京', '2' => '广州', '3' => '上海');
 		$permissions = array('1' => '系统管理员', '2' => '大使馆管理员', '3' => '办事处管理员');
-		$accounts = array('-1' => '已失效', '0' => '正常', '1' => '未激活');
+		$accounts = array('-1' => '已失效', '0' => '未激活', '1' => '正常');
 		foreach ($data['users'] as &$one) {
 			$one['status_str'] = $accounts[$one['status']];
 			$one['province_str'] = $provinces[$one['province_id']];
@@ -224,7 +224,7 @@ class Admin extends AdminLoginController {
 		$data['users'] = $this->user->get_applicants($data);
 		$data['num_users'] = $config['total_rows'];
 		
-		$accounts = array('-1' => '已失效', '0' => '正常', '1' => '未激活');
+		$accounts = array('-1' => '已失效', '0' => '未激活', '1' => '正常');
 		foreach ($data['users'] as &$one) {
 			$one['status_str'] = $accounts[$one['status']];
 		}

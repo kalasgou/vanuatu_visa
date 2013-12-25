@@ -558,6 +558,51 @@ class Admin extends AdminLoginController {
 		
 		echo json_encode($ret);
 	}
+	
+	public function audit_trace($page = 1) {
+		if ($this->permission < 2 || $this->permission > 3) {
+			$msg['tips'] = 'account forbidden';
+			$link = '/admin_login';
+			$location = 'index page';
+			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$this->load->helper('util');
+		
+		$this->load->model('admin_model', 'adm');
+		
+		$this->load->library('pagination');
+		
+		$config['base_url'] = '/admin/audit_trace/';
+		$config['uri_segment'] = 3;
+		$config['num_links'] = 2;
+		$config['total_rows'] = $this->adm->sum_auditing_records($this->userid);
+		$config['per_page'] = 20;
+		$config['use_page_numbers'] = TRUE;
+		
+		$config['prev_link'] = '上一页';
+		$config['next_link'] = '下一页';
+		$config['first_link'] = '首 页';
+		$config['last_link'] = '尾 页';
+		
+		$this->pagination->initialize($config);
+		
+		$data['user'] = $this->user_info;
+		$data['pagination'] = $this->pagination->create_links();
+		$data['records'] = $this->adm->get_auditing_records($this->userid, $page - 1);
+		$data['num_records'] = $config['total_rows'];
+		
+		foreach ($data['records'] as &$one) {
+			$one['status_str'] = status2text($one['status']);
+		}
+		
+		if ($this->permission == 2) {
+			$this->load->view('admin_approve_records', $data);
+		} else {
+			$this->load->view('admin_audit_records', $data);
+		}
+	}
 }
 
 /* End of file */

@@ -130,5 +130,23 @@
 			
 			return $query->result_array();
 		}
+		
+		public function sum_auditing_records($userid) {
+			$this->admin_db->where('admin_userid', $userid);
+			
+			return $this->admin_db->count_all_results('visa_auditing');
+		}
+		
+		public function get_auditing_records($userid, $page) {
+			$item = 20;
+			
+			$this->admin_db->select('uuid, status, audit_time, message');
+			$this->admin_db->where('admin_userid', $userid);
+			$this->admin_db->order_by('audit_time', 'desc');
+			$this->admin_db->limit($item, $item * $page);
+			$query = $this->admin_db->get('visa_auditing');
+			
+			return $query->result_array();
+		}
 	}
 ?>

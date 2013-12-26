@@ -9,6 +9,11 @@ class User extends LoginController {
 							'administrator' => array('admin', 'admin_login', 'admin_register'),
 							);
 	
+	public function test_captcha() {
+		$this->load->helper('util');
+		get_captcha();
+	}
+	
 	public function register() {
 		$user_type = trim($this->input->post('user_type', TRUE));
 		$data['email'] = trim($this->input->post('email', TRUE));

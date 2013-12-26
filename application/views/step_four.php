@@ -44,7 +44,7 @@
 			<div id="filling_info">
 				<form id="passport_form" method="POST" action="/apply/update_complement_info">
 					<input type="hidden" name="uuid" value="<?php echo $uuid;?>"/>
-					<p>18、Details of family included in passport 护照内偕行儿童详细信息:<br>
+					<p>18、Details of family included in passport 护照内偕行儿童详细信息*:<br>
 					<table id="children_info">
 						<thead>
 							<tr>
@@ -77,6 +77,8 @@
 					<p>22、Have you ever been refused entry to Vanuatu?<br>
 					您曾经被瓦努阿图拒签过吗？
 					Yes是<input type="radio" name="refused" value="on" <?php echo ($behaviour_info['refused'] === 'on' ? 'checked="checked"' : '')?>/> When何时 <input type="text" name="refuse_date" style="width:150px" value="<?php echo $behaviour_info['refuse_date'];?>"/> No否 <input type="radio" name="refused" value="off" <?php echo ($behaviour_info['refused'] === 'off' ? 'checked="checked"' : '')?>/></p>
+					<br>
+					<p id="notice">注意：以上除带*标记为选填项，其余皆为必填项，需全部填写正确才能进入下一步。</p>
 					<button id="next_step" type="submit" class="btn btn-success btn-sm">提交</button>
 					<p></p>
 				</form>

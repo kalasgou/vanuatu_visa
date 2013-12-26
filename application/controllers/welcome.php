@@ -17,7 +17,9 @@ class Welcome extends LoginController {
 			show_error($msg);
 		}
 		
-		$this->load->view('login');
+		$this->load->helper('util');
+		$data['captcha'] = get_captcha();
+		$this->load->view('login', $data);
 	}
 	
 	public function register() {
@@ -29,7 +31,9 @@ class Welcome extends LoginController {
 			show_error($msg);
 		}
 		
-		$this->load->view('register');
+		$this->load->helper('util');
+		$data['captcha'] = get_captcha();
+		$this->load->view('register', $data);
 	}
 	
 	public function admin_login() {
@@ -41,7 +45,9 @@ class Welcome extends LoginController {
 			show_error($msg);
 		}
 		
-		$this->load->view('admin_login');
+		$this->load->helper('util');
+		$data['captcha'] = get_captcha();
+		$this->load->view('admin_login', $data);
 	}
 	
 	public function admin_register() {
@@ -53,7 +59,29 @@ class Welcome extends LoginController {
 			show_error($msg);
 		}
 		
-		$this->load->view('admin_register');
+		$this->load->helper('util');
+		$data['captcha'] = get_captcha();
+		$this->load->view('admin_register', $data);
+	}
+	
+	public function refresh_captcha() {
+		session_start();
+		if (!isset($_SESSION['timestamp'])) {
+			$_SESSION['timestamp'] = $_SERVER['REQUEST_TIME'];
+		}
+		if ($_SERVER['REQUEST_TIME'] - $_SESSION['timestamp'] >= 60) {
+			$this->load->helper('util');
+			$captcha = get_captcha();
+			
+			$_SESSION['timestamp'] = $_SERVER['REQUEST_TIME'];
+			
+			$ret['msg'] = 'success';
+			$ret['captcha'] = $captcha;
+		} else {
+			$ret['msg'] = 'fail';
+		}
+		
+		echo json_encode($ret);
 	}
 }
 

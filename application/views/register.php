@@ -84,6 +84,13 @@
 						<span id="phone_error" class="error_tips">Phone Error</span>
 					</div>
 				</div>
+				<div class="form-group">
+					<label for="inputCaptcha3" class="col-sm-2 control-label">验证码:</label>
+					<div class="col-sm-10">
+						<input type="captcha" class="form-control" name="captcha" id="inputCaptcha3" placeholder="Captcha"/><br>
+						<span id="captcha"><?php echo $captcha;?></span> <a href="javascript:void(0);" onclick="refresh_captcha();">换过另一张</a>
+					</div>
+				</div>
 				<div>
 					<input type="hidden" id="user_type" name="user_type" value="applicant"/>
 				</div>

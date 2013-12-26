@@ -269,3 +269,22 @@ function pay_for_visa(uuid, this_a) {
 function download_excel() {
 	location.href = '/admin/download_excel?start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val();
 }
+
+function refresh_captcha() {
+	$.ajax({
+		url: '/refresh_captcha',
+		date: {},
+		type: 'GET',
+		dataType: 'json',
+		success: function(json) {
+			if (json.msg === 'success') {
+				$('#captcha').html(json.captcha);
+			} else if (json.msg === 'fail') {
+				alert('请不要频繁刷新验证码！');
+			}
+		},
+		error: function() {
+			alert('Network Error');
+		}
+	});
+}

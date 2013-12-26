@@ -202,4 +202,32 @@
 		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
 		return $redis->rPop($key);
 	}
+	
+	function get_captcha() {
+		$CI = & get_instance();
+		$CI->load->helper('captcha');
+		$val = array(
+				'img_path' => CAPTCHA_PATH,
+				'img_url' => CAPTCHA_DOMAIN,
+				);
+		$cap = create_captcha($val);
+		
+		$CI->load->library('RedisDB');
+		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
+		$redis->setex(strtolower($cap['word']), 60, intval($cap['time']));
+		
+		return $cap['image'];
+	}
+	
+	function check_captcha($word) {
+		$CI->load->library('RedisDB');
+		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
+		$time = intval($redis->get(strtolower($word)));
+		
+		if ($_SERVER['REQUEST_TIME'] - $time <= 60) {
+			return TRUE;
+		}
+		
+		return FALSE;
+	}
 ?>

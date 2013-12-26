@@ -110,3 +110,8 @@ body {
 	display: none;
 	color: red;
 }
+
+#notice {
+	font-size: 12px;
+	color: #CCCCCC;
+}

@@ -22,7 +22,7 @@
 			}
 		</script>
 		<style type="text/css">
-			.form-control {width:220px;}
+			.form-control {width:224px;}
 		</style>
 	</head>
 	<body>
@@ -47,6 +47,13 @@
 						<input type="password" class="form-control" name="password" id="inputPassword3" placeholder="Password"/>
 						<span id="pswd_correct" class="correct_tips">OK</span>
 						<span id="pswd_short" class="error_tips">Password Length less than 6</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputCaptcha3" class="col-sm-2 control-label">验证码:</label>
+					<div class="col-sm-10">
+						<input type="captcha" class="form-control" name="captcha" id="inputCaptcha3" placeholder="Captcha"/><br>
+						<span id="captcha"><?php echo $captcha;?></span> <a href="javascript:void(0);" onclick="refresh_captcha();">换过另一张</a>
 					</div>
 				</div>
 				<div>

@@ -79,6 +79,8 @@
 					<input type="text" name="home_addr" style="width:400px;" value="<?php echo $home_info['home_addr'];?>"/><br>
 					Tel No.电话:
 					<input type="text" name="home_tel" style="width:150px;" value="<?php echo $home_info['home_tel'];?>"/></p>
+					<br>
+					<p id="notice">注意：以上皆为必填项，需全部填写正确才能进入下一步。</p>
 					<button id="next_step" type="submit" class="btn btn-success btn-sm">下一步</button>
 				</form>
 			</div>

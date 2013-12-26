@@ -4,16 +4,6 @@ require APPPATH .'core/ApplyLoginController.php';
 
 class Apply extends ApplyLoginController {
 	
-	/*function test_captcha() {
-		$this->load->helper('captcha');
-		$val = array(
-				'img_path' => './captcha/',
-				'img_url' => '/captcha/',
-				);
-		$cap = create_captcha($val);
-		var_dump($cap);
-	}*/
-	
 	public function index($page = 1) {
 		$userid = $this->userid;
 		$this->load->model('apply_model', 'alm');

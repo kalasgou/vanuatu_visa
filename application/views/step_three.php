@@ -52,7 +52,7 @@
 					<input type="text" name="other_purpose" style="width:128px" value="<?php echo $other_purpose;?>"/></p>
 					<p>12、Address in Vanuatu 在瓦地址:
 					<input type="text" name="destination" style="width:300px" value="<?php echo $destination;?>"/></p>
-					<p>13、Details of Family in Vanuatu if visiting relative 如属探亲在瓦亲属概况:<br>
+					<p>13、Details of Family in Vanuatu if visiting relative 如属探亲在瓦亲属概况*:<br>
 					Name 姓名:
 					<input type="text" name="relative_name" style="width:150px" value="<?php echo $relative_info['relative_name'];?>"/>
 					Add. 地址:
@@ -69,6 +69,8 @@
 					<input type="text" name="duration" value="<?php echo $detail_info['duration']?>"/></p>
 					<p>17、Source of financial support in Vanuatu 在瓦费用来源:
 					<input type="text" name="financial_source" value="<?php echo $detail_info['financial_source']?>"/></p>
+					<br>
+					<p id="notice">注意：以上除带*标记为选填项，其余皆为必填项，需全部填写正确才能进入下一步。</p>
 					<button id="next_step" type="submit" class="btn btn-success btn-sm">下一步</button>
 				</form>
 			</div>

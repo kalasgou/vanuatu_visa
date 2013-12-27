@@ -220,11 +220,13 @@
 	}
 	
 	function check_captcha($word) {
+		$CI = & get_instance();
 		$CI->load->library('RedisDB');
 		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
 		$time = intval($redis->get(strtolower($word)));
 		
 		if ($_SERVER['REQUEST_TIME'] - $time <= 60) {
+			$redis->del(strtolower($word));
 			return TRUE;
 		}
 		

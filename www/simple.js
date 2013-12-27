@@ -159,12 +159,11 @@ function change_account_status(user_type, userid, opt, this_a) {
 }
 
 function pass_or_not(uuid, opt) {
-	var message = '';
-	if (opt === 'pass') {
-		message = 'Pass OK';
-	} else if (opt === 'fail') {
-		message = 'Pass fail';
+	var message = $('#message').val();
+	if (opt === 'pass' && message === '') {
+		message = '你的申请顺利通过办事处的审核，请在15天内前往办事处办理余下签证事务。';
 	}
+	
 	$.ajax({
 		url: '/admin/auditing/' + uuid + '/' + opt,
 		data: {message: message},
@@ -201,12 +200,8 @@ function visa_or_not(uuid, opt) {
 }
 
 function pass_for_fee(uuid, opt, this_a) {
-	var message = '';
-	if (opt === 'pass') {
-		message = 'Pass OK';
-	} else if (opt === 'fail') {
-		message = 'Pass fail';
-	}
+	var message = '你的申请顺利通过办事处的审核，请在15天内前往办事处办理余下签证事务。';
+	
 	$.ajax({
 		url: '/admin/auditing/' + uuid + '/' + opt,
 		data: {message: message},
@@ -248,7 +243,7 @@ function pay_for_visa(uuid, this_a) {
 		alert('请输入正整数！');
 		return;
 	}
-	var message = '签证申请流水号 ' + uuid + ' 已缴款RMB ' + fee + '，请等待签证通过！';
+	var message = '签证申请流水号 ' + uuid + ' 已缴款RMB' + fee + '，请等待签证通过！';
 	$.ajax({
 		url: '/admin/auditing/' + uuid + '/paid',
 		data: {message: message, fee: fee},

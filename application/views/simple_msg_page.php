@@ -18,7 +18,7 @@
 	<body>
 		<div>
 			<p><?php echo $tips;?></p>
-			<p><a href="<?php echo $link;?>">go to page <?php echo $location;?></a></p>
+			<p><a href="<?php echo $link;?>">点击跳转到<?php echo $location;?></a></p>
 		</div>
 	</body>
 </html>

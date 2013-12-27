@@ -81,7 +81,11 @@ class Apply extends ApplyLoginController {
 		
 		$this->load->helper('util');
 		if (!is_editable($uuid)) {
-			show_error('not editable');
+			$msg['tips'] = '该申请不可再修改！';
+			$link = '/apply';
+			$location = '返回用户主页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		if ($data['uuid'] === '') {
@@ -89,7 +93,11 @@ class Apply extends ApplyLoginController {
 		}
 		
 		if (!check_parameters($data)) {
-			show_error('parameters not enough');
+			$msg['tips'] = '所需填写信息不全，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		$this->load->model('apply_model', 'alm');
@@ -98,14 +106,22 @@ class Apply extends ApplyLoginController {
 			update_status($data['uuid'], 1);
 			header('Location: '.base_url('/apply/basic_info/'.$data['uuid']));
 		} else {
-			echo 'fail';
+			$msg['tips'] = '信息更新失败，请返回重试！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	
 	public function basic_info($uuid = '') {
 		$this->load->helper('util');
 		if (!check_status($uuid, 1)) {
-			show_error('Do not JUMP!!!');
+			$msg['tips'] = '请先填写完上述必要信息再前往下一步！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		$data = array(
@@ -181,15 +197,23 @@ class Apply extends ApplyLoginController {
 		$this->load->helper('util');
 		
 		if ($data['uuid'] === '') {
-			show_error('uuid empty error');
+			show_error('申请流水号出错');
 		}
 		
 		if (!is_editable($data['uuid'])) {
-			show_error('not editable');
+			$msg['tips'] = '该申请不可再修改！';
+			$link = '/apply';
+			$location = '返回用户主页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		if (!check_parameters($data)) {
-			show_error('parameters not enough');
+			$msg['tips'] = '所需填写信息不全，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		$this->load->model('apply_model', 'alm');
@@ -198,14 +222,22 @@ class Apply extends ApplyLoginController {
 			update_status($data['uuid'], 2);
 			header('Location: '.base_url('/apply/passport_info/'.$data['uuid']));
 		} else {
-			echo 'fail';
+			$msg['tips'] = '信息更新失败，请返回重试！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	
 	public function passport_info($uuid = '') {
 		$this->load->helper('util');
 		if (!check_status($uuid, 2)) {
-			show_error('Do not JUMP!!!');
+			$msg['tips'] = '请先填写完必要信息再前往下一步！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		$data = array(
@@ -226,8 +258,8 @@ class Apply extends ApplyLoginController {
 			$data['uuid'] = $info['uuid'];
 			$data['passport_number'] = $info['passport_number'];
 			$data['passport_place'] = $info['passport_place'];
-			$data['passport_date'] = date('Y-m-d', $info['passport_date']);
-			$data['passport_expiry'] = date('Y-m-d', $info['passport_expiry']);
+			$data['passport_date'] = $info['passport_date'] == 0 ? '' : date('Y-m-d', $info['passport_date']);
+			$data['passport_expiry'] = $info['passport_expiry'] == 0 ? '' : date('Y-m-d', $info['passport_expiry']);
 		}
 		
 		$this->load->view('step_two', $data);
@@ -244,15 +276,23 @@ class Apply extends ApplyLoginController {
 		$this->load->helper('util');
 		
 		if ($data['uuid'] === '') {
-			show_error('uuid empty error');
+			show_error('申请流水号出错');
 		}
 		
 		if (!is_editable($data['uuid'])) {
-			show_error('not editable');
+			$msg['tips'] = '该申请不可再修改！';
+			$link = '/apply';
+			$location = '返回用户主页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		if (!check_parameters($data)) {
-			show_error('parameters not enough');
+			$msg['tips'] = '所需填写信息不全，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		$this->load->model('apply_model', 'alm');
@@ -265,14 +305,22 @@ class Apply extends ApplyLoginController {
 			update_status($data['uuid'], 3);
 			header('Location: '.base_url('/apply/travel_info/'.$data['uuid']));
 		} else {
-			echo 'fail';
+			$msg['tips'] = '信息更新失败，请返回重试！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	
 	public function travel_info($uuid = '') {
 		$this->load->helper('util');
 		if (!check_status($uuid, 3)) {
-			show_error('Do not JUMP!!!');
+			$msg['tips'] = '请先填写完必要信息再前往下一步！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		$data = array(
@@ -334,11 +382,15 @@ class Apply extends ApplyLoginController {
 		$this->load->helper('util');
 		
 		if ($data['uuid'] === '') {
-			show_error('uuid empty error');
+			show_error('申请流水号出错');
 		}
 		
 		if (!is_editable($data['uuid'])) {
-			show_error('not editable');
+			$msg['tips'] = '该申请不可再修改！';
+			$link = '/apply';
+			$location = '返回用户主页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		$this->load->model('apply_model', 'alm');
@@ -347,14 +399,22 @@ class Apply extends ApplyLoginController {
 			update_status($data['uuid'], 4);
 			header('Location: '.base_url('/apply/complement_info/'.$data['uuid']));
 		} else {
-			echo 'fail';
+			$msg['tips'] = '信息更新失败，请返回重试！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	
 	public function complement_info($uuid = '') {
 		$this->load->helper('util');
 		if (!check_status($uuid, 4)) {
-			show_error('Do not JUMP!!!');
+			$msg['tips'] = '请先填写完必要信息再前往下一步！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		$data = array(
@@ -436,11 +496,15 @@ class Apply extends ApplyLoginController {
 		$this->load->helper('util');
 		
 		if ($data['uuid'] === '') {
-			show_error('uuid empty error');
+			show_error('申请流水号出错');
 		}
 		
 		if (!is_editable($data['uuid'])) {
-			show_error('not editable');
+			$msg['tips'] = '该申请不可再修改！';
+			$link = '/apply';
+			$location = '返回用户主页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		$this->load->model('apply_model', 'alm');
@@ -449,18 +513,26 @@ class Apply extends ApplyLoginController {
 			update_status($data['uuid'], 5);
 			header('Location: '.base_url('/apply/confirm_info/'.$data['uuid']));
 		} else {
-			echo 'fail';
+			$msg['tips'] = '信息更新失败，请返回重试！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	
 	public function confirm_info($uuid = '') {
 		$this->load->helper('util');
 		if (!check_status($uuid, 5)) {
-			show_error('Do not JUMP!!!');
+			$msg['tips'] = '请先填写完必要信息再前往下一步！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		if ($uuid === '') {
-			show_error('uuid empty error');
+			show_error('申请流水号出错');
 		}
 		
 		$userid = $this->userid;
@@ -488,11 +560,15 @@ class Apply extends ApplyLoginController {
 		$this->load->helper('util');
 		
 		if ($uuid === '') {
-			show_error('uuid empty error');
+			show_error('申请流水号出错');
 		}
 		
 		if (!is_editable($data['uuid'])) {
-			show_error('not editable');
+			$msg['tips'] = '该申请不可再修改！';
+			$link = '/apply';
+			$location = '返回用户主页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		$this->load->model('apply_model', 'alm');
@@ -510,7 +586,7 @@ class Apply extends ApplyLoginController {
 	
 	public function view($uuid = '') {
 		if ($uuid === '') {
-			show_error('uuid empty error');
+			show_error('申请流水号出错');
 		}
 		
 		$userid = $this->userid;
@@ -535,7 +611,7 @@ class Apply extends ApplyLoginController {
 	
 	public function download_form($uuid = '') {
 		if ($uuid === '') {
-			show_error('uuid empty error');
+			show_error('申请流水号出错');
 		}
 		
 		$userid = $this->userid;
@@ -553,7 +629,7 @@ class Apply extends ApplyLoginController {
 	
 	public function download_visa($uuid = '') {
 		if ($uuid === '') {
-			show_error('uuid empty error');
+			show_error('申请流水号出错');
 		}
 		
 		$userid = $this->userid;

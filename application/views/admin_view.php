@@ -9,6 +9,7 @@
 		<link rel="shortcut icon" href=""/>
 		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
+		<script type="text/javascript" src="/simple.js"></script>
 		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
@@ -24,6 +25,7 @@
 			table {border-collapse:collapse; border:1px solid; text-align:center;}
 			th, td {border:1px solid; padding:8px; font-weight: normal; text-align:center;}
 			img {width:100%;}
+			#message {width:100%; height:160px; overflow-y:auto; overflow-x:hidden; word-wrap:break-word; resize:none;}
 		</style>
 	</head>
 	<body>
@@ -178,12 +180,6 @@
 				22、Have you ever been refused entry to Vanuatu?<br>
 				您曾经被瓦努阿图拒签过吗？ Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'on' ? 'checked="checked"' : 'disabled="disabled"');?>/></span> When何时 <span id="answer" style="width:150px;"><?php echo $behaviour_info['refuse_date'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'off' ? 'checked="checked"' : 'disabled="disabled"');?>/></span><br>
 			</div>
-			<?php if ($status < 41 && $user['permission'] == 3) { ?>
-			<div id="next_step">
-				<a class="btn btn-success" href="javascript:pass_or_not('<?php echo $uuid;?>', 'pass');">通过</a>
-				<a class="btn btn-warning" href="javascript:pass_or_not('<?php echo $uuid;?>', 'fail');">驳回</a>
-			</div>
-			<?php } ?>
 			<?php if ($status >= 41) { ?>
 			<div id="scan_file">
 				<div>签证相片:<img src="<?php echo $photo_pic?>" alt="签证相片"/></div>
@@ -193,6 +189,17 @@
 				<div>银行存款证明:<img src="<?php echo $deposition_pic?>" alt="银行存款证明"/></div>
 			</div>
 			<? } ?>
+			<br>
+			<?php if ($status < 31 && $user['permission'] == 3) { ?>
+			<div>
+				<b>请在此处填写审核留言（主要填写申请未能通过审核的原因，若通过可不填写）：</b><br>
+				<textarea id="message"></textarea>
+			</div>
+			<div id="next_step">
+				<a class="btn btn-success" href="javascript:pass_or_not('<?php echo $uuid;?>', 'pass');">通过</a>
+				<a class="btn btn-warning" href="javascript:pass_or_not('<?php echo $uuid;?>', 'fail');">驳回</a>
+			</div>
+			<?php } ?>
 			<?php if ($status == 41 && $user['permission'] == 2) { ?>
 			<div id="next_step">
 				<a class="btn btn-success" href="javascript:visa_or_not('<?php echo $uuid;?>', 'visa');">同意</a>

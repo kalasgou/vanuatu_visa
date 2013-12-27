@@ -9,13 +9,9 @@ class User extends LoginController {
 							'administrator' => array('admin', 'admin_login', 'admin_register'),
 							);
 	
-	public function test_captcha() {
-		$this->load->helper('util');
-		get_captcha();
-	}
-	
 	public function register() {
 		$user_type = trim($this->input->post('user_type', TRUE));
+		$captcha = trim($this->input->post('captcha', TRUE));
 		$data['email'] = trim($this->input->post('email', TRUE));
 		$data['password'] = trim($this->input->post('password', TRUE));
 		$data['realname'] = trim($this->input->post('realname', TRUE));
@@ -32,23 +28,44 @@ class User extends LoginController {
 				$data['status'] = -1;
 				break;
 			default :
-				show_error('forbidden');
+				show_error('非法操作！');
 		}
 		
 		$this->load->helper('util');
+		
+		if (!check_captcha($captcha)) {
+			$msg['tips'] = '验证码错误，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		if (!check_parameters($data)) {
-			show_error('parameters not enough');
+			$msg['tips'] = '所需填写信息不全，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		if (!email_verify($data['email'])) {
-			show_error('email incorrect');
+			$msg['tips'] = '电子邮箱格式不正确，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		$this->load->model('user_model', 'user');
 		$func_name = $user_type.'_email_available';
 		
 		if ($this->user->$func_name($data['email']) > 0) {
-			show_error('email not available');
+			$msg['tips'] = '所填邮箱已被他人使用，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		$data['reg_ip'] = ip2long($this->input->ip_address());
@@ -64,11 +81,6 @@ class User extends LoginController {
 		$func_name = $user_type.'_register';
 		
 		if (($userid = $this->user->$func_name($data)) > 0) {
-			$msg['tips'] = 'register success';
-			$msg['link'] = '/'.$this->goto_page[$user_type]['1'];
-			$msg['location'] = 'index page';
-			$this->load->view('simple_msg_page', $msg);
-			
 			// account activation
 			$this->load->library('RedisDB');
 			$redis = $this->redisdb->instance(REDIS_DEFAULT);
@@ -81,22 +93,43 @@ class User extends LoginController {
 			$info['hash_key'] = $hash_key;
 			$info['email'] = $data['email'];
 			push_email_queue('register_notification', json_encode($info));
+			
+			$msg['tips'] = '注册成功，帐户激活链接会在三分钟内发送到你的注册邮箱。';
+			$link = '/user/send_activation_code/'.$user_type.'/'.$userid;
+			$location = '重新发送邮箱验证';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		} else {
-			$msg['tips'] = 'register fail';
-			$msg['link'] = '/'.$this->goto_page[$user_type]['2'];
-			$msg['location'] = 'index page';
-			$this->load->view('simple_msg_page', $msg);
+			$msg['tips'] = '注册失败，请稍候再试！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	
 	public function login() {
 		$user_type = trim($this->input->post('user_type', TRUE));
+		$captcha = trim($this->input->post('captcha', TRUE));
 		$data['email'] = trim($this->input->post('email', TRUE));
 		$data['password'] = trim($this->input->post('password', TRUE));
 		
 		$this->load->helper('util');
+		
+		if (!check_captcha($captcha)) {
+			$msg['tips'] = '验证码错误，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		if (!check_parameters($data)) {
-			show_error('parameters not enough');
+			$msg['tips'] = '所需填写信息不全，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		$this->load->model('user_model', 'user');
@@ -112,16 +145,18 @@ class User extends LoginController {
 				$this->user->push_cookie($user);
 				header('Location: ' .base_url() .$this->goto_page[$user_type]['0']);
 			} else {
-				$msg['tips'] = 'password error';
-				$msg['link'] = '/'.$this->goto_page[$user_type]['1'];
-				$msg['location'] = 'index page';
-				$this->load->view('simple_msg_page', $msg);
+				$msg['tips'] = '密码不正确，请返回重新输入！';
+				$link = 'javascript:history.go(-1);';
+				$location = '返回上一步';
+				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+				show_error($msg);
 			}
 		} else {
-			$msg['tips'] = 'this account not existed';
-			$msg['link'] = '/'.$this->goto_page[$user_type]['1'];
-			$msg['location'] = 'index page';
-			$this->load->view('simple_msg_page', $msg);
+			$msg['tips'] = '该帐户不存在，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	
@@ -130,10 +165,11 @@ class User extends LoginController {
 		$this->load->model('user_model', 'user');
 		$this->user->pop_cookie($local_key);
 		
-		$msg['tips'] = 'signed out successful';
-		$msg['link'] = '/';
-		$msg['location'] = 'index page';
-		$this->load->view('simple_msg_page', $msg);
+		$msg['tips'] = '帐户已安全登出！';
+		$link = '/';
+		$location = '返回网站主页';
+		$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+		show_error($msg);
 	}
 	
 	public function account() {
@@ -152,7 +188,7 @@ class User extends LoginController {
 		$this->load->view('account', $user);
 	}
 	
-	public function update() {
+	/*public function update() {
 		$user_type = trim($this->input->post('user_type', TRUE));
 	}
 	
@@ -160,7 +196,7 @@ class User extends LoginController {
 		$user_type = trim($this->input->post('user_type', TRUE));
 		$data['old_pswd'] = trim($this->input->post('old_password', TRUE));
 		$data['new_pswd'] = trim($this->input->post('new_password', TRUE));
-	}
+	}*/
 	
 	public function check_email() {
 		$user_type = trim($this->input->post('user_type', TRUE));
@@ -209,15 +245,24 @@ class User extends LoginController {
 			if ($this->user->change_account_status($info) > 0) {
 				$redis->del($hash_key);
 				
-				$msg['tips'] = 'Account Activated';
-				$msg['link'] = '/'.$this->goto_page[$info['user_type']]['1'];
-				$msg['location'] = 'index page';
-				$this->load->view('simple_msg_page', $msg);
+				$msg['tips'] = '帐户成功激活！';
+				$link = '/'.$this->goto_page[$info['user_type']]['1'];
+				$location = '点击登录';
+				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+				show_error($msg);
 			} else {
-				show_error('activation error');
+				$msg['tips'] = '帐户已激活，无需重复操作！';
+				$link = '/'.$this->goto_page[$info['user_type']]['1'];
+				$location = '点击登录';
+				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+				show_error($msg);
 			}
 		} else {
-			show_error('Link expired or not existed!');
+			$msg['tips'] = '激活链接无效或已过期，请重新获取！';
+			$link = '/user/send_activation_code/'.$info['user_type'].'/'.$info['userid'];
+			$location = '重新发送邮箱验证';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	

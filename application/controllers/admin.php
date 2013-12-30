@@ -614,6 +614,20 @@ class Admin extends AdminLoginController {
 			$this->load->view('admin_audit_records', $data);
 		}
 	}
+	
+	public function audit_trace_by_uuid($uuid = '') {
+		$this->load->helper('util');
+		$this->load->model('admin_model', 'adm');
+		$records = $this->adm->get_auditing_records_by_uuid($uuid);
+		
+		foreach ($records as &$one) {
+			$one['status_str'] = status2text($one['status']);
+		}
+		
+		$ret['records'] = $records;
+		
+		echo json_encode($ret);
+	}
 }
 
 /* End of file */

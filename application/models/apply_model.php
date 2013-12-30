@@ -224,5 +224,14 @@
 			
 			return FALSE;
 		}
+		
+		public function get_auditing_records_by_uuid($uuid) {
+			$this->apply_db->select('status, audit_time, message');
+			$this->apply_db->where('uuid', $uuid);
+			$this->apply_db->order_by('audit_time', 'desc');
+			$query = $this->apply_db->get('visa_auditing');
+			
+			return $query->result_array();
+		}
 	}
 ?>

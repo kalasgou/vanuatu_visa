@@ -148,5 +148,14 @@
 			
 			return $query->result_array();
 		}
+		
+		public function get_auditing_records_by_uuid($uuid) {
+			$this->admin_db->select('status, audit_time, message');
+			$this->admin_db->where('uuid', $uuid);
+			$this->admin_db->order_by('audit_time', 'desc');
+			$query = $this->admin_db->get('visa_auditing');
+			
+			return $query->result_array();
+		}
 	}
 ?>

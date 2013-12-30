@@ -61,17 +61,17 @@
 		
 		$mail = new PHPMailer();
 		
-		$mail->SMTPDebug = FALSE;
+		$mail->SMTPDebug = TRUE;
 	
 		$mail->isSMTP();		
 		$mail->SMTPAuth = TRUE;
-		$mail->SMTPSecure = 'ssl';
-		$mail->Host = 'smtp.exmail.qq.com';
-		$mail->Port = 465;
-		$mail->Username = '305858854@qq.com';
-		$mail->Password = 'dudu98319270';
+		$mail->SMTPSecure = 'tls';
+		$mail->Host = 'smtp-mail.outlook.com';
+		$mail->Port = 587;
+		$mail->Username = 'vanuatuembassycn@hotmail.com';
+		$mail->Password = 'cnmbeva11';
 
-		$mail->From = '305858854@qq.com';
+		$mail->From = 'vanuatuembassycn@hotmail.com';
 		$mail->FromName = 'Visa2Vanuatu';
 		$mail->addAddress($data['email'], $data['user']);
 		$mail->addReplyTo('305858854@qq.com');

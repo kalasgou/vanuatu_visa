@@ -674,6 +674,20 @@ class Apply extends ApplyLoginController {
 		header('Content-Length: '.filesize($filename));
 		readfile($filename);
 	}
+	
+	public function audit_trace_by_uuid($uuid = '') {
+		$this->load->helper('util');
+		$this->load->model('apply_model', 'alm');
+		$records = $this->alm->get_auditing_records_by_uuid($uuid);
+		
+		foreach ($records as &$one) {
+			$one['status_str'] = status2text($one['status']);
+		}
+		
+		$ret['records'] = $records;
+		
+		echo json_encode($ret);
+	}
 }
 
 /* End of file */

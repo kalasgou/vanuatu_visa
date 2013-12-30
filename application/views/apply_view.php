@@ -9,11 +9,41 @@
 		<link rel="shortcut icon" href=""/>
 		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
-		<script type="text/javascript" src=""></script>
+		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="/simple.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
 			});
+			
+			function get_trace_apply(uuid) {
+				$.ajax({
+					url: '/apply/audit_trace_by_uuid/' + uuid,
+					data: {},
+					type: 'GET',
+					dataType: 'json',
+					success: function(json) {
+						var detail = '';
+						var len = json.records.length;
+						if (len > 0) {
+							for (var i = 0; i < len; i ++) {
+								detail += 	'<tr>' + 
+												'<td>' + json.records[i].status_str + '</td>' + 
+												'<td>' + json.records[i].audit_time + '</td>' + 
+												'<td>' + json.records[i].message + '</td>' + 
+											'</tr>';
+							}
+						} else {
+							detail = '<tr><td colspan="3">暂时没有任何审核记录</td></tr>';
+						}
+						$('#trace_body').empty();
+						$('#trace_body').append(detail);
+					},
+					error: function() {
+						alert('Network Error');
+					}
+				});
+			}
 		</script>
 		<style type="text/css">
 			body {padding:0px;}
@@ -187,6 +217,29 @@
 				<div>银行存款证明:<img src="<?php echo $deposition_pic?>" alt="银行存款证明"/></div>
 			</div>
 			<? } ?>
+			<br>
+			<div>
+				<b>审核记录：</b><br>
+				<table style="width:100%;">
+					<colgroup>
+						<col style="width:15%;"/>
+						<col style="width:25%;"/>
+						<col style="width:60%;"/>
+					</colgroup>
+					<thead>
+						<tr>
+							<th>审核状态</th>
+							<th>审核时间</th>
+							<th>审核留言</th>
+						</tr>
+					</thead>
+					<tbody id="trace_body">
+					</tbody>
+					<tr>
+						<td colspan="3"><a href="javascript:void(0);" onclick="get_trace_apply('<?php echo $uuid;?>')">刷新一下</a></td>
+					</tr>
+				</table>
+			</div>
 		</div>
 	</body>
 </html>

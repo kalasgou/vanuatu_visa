@@ -137,6 +137,14 @@
 			return $this->user_db->affected_rows();
 		}
 		
+		public function update_password($data) {
+			$this->user_db->set('password', $data['password']);
+			$this->user_db->where('userid', $data['userid']);
+			$this->user_db->update($data['user_type']);
+			
+			return $this->user_db->affected_rows();
+		}
+		
 		public function applicant_info($userid) {
 			$this->user_db->select('userid, email, nickname, realname, status');
 			$this->user_db->where('userid', $userid);

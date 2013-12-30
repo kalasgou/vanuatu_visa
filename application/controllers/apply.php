@@ -298,7 +298,11 @@ class Apply extends ApplyLoginController {
 		$this->load->model('apply_model', 'alm');
 		
 		if (!$this->alm->check_passport_available($data['uuid'], $data['passport_number'])) {
-			show_error('passport not available');
+			$msg['tips'] = '对于护照号'.$data['passport_number'].'，由于存在审核中的申请或未过期的签证记录，故申请无法继续进行！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		if ($this->alm->update_passport_info($data) > 0) {
@@ -545,7 +549,11 @@ class Apply extends ApplyLoginController {
 		if ($info) {
 			$this->load->view('step_five', $info);
 		} else {
-			show_error('no application available');
+			$msg['tips'] = '你所请求的申请记录不存在！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	
@@ -605,7 +613,11 @@ class Apply extends ApplyLoginController {
 			}
 			$this->load->view('apply_view', $info);
 		} else {
-			show_error('no application available');
+			$msg['tips'] = '你所请求的申请记录不存在！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	
@@ -623,7 +635,11 @@ class Apply extends ApplyLoginController {
 		if ($info) {
 			$this->load->view('form_for_download', $info);
 		} else {
-			show_error('no application available');
+			$msg['tips'] = '你所请求的申请记录不存在！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	
@@ -644,7 +660,11 @@ class Apply extends ApplyLoginController {
 		
 		$filename = VISA_PATH .$uuid.'/'.$info['visa_no'].'.docx';
 		if (!file_exists($filename)) {
-			show_error('Cannot Find Visa File');
+			$msg['tips'] = '你所请求的签证文件不存在或已过期！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		header('Content-Description: File Transfer');

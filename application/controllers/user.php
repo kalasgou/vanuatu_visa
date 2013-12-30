@@ -190,13 +190,51 @@ class User extends LoginController {
 	
 	/*public function update() {
 		$user_type = trim($this->input->post('user_type', TRUE));
-	}
+	}*/
 	
 	public function password() {
-		$user_type = trim($this->input->post('user_type', TRUE));
-		$data['old_pswd'] = trim($this->input->post('old_password', TRUE));
-		$data['new_pswd'] = trim($this->input->post('new_password', TRUE));
-	}*/
+		$captcha = trim($this->input->post('captcha', TRUE));
+		$old_pswd = trim($this->input->post('old_password', TRUE));
+		$new_pswd = trim($this->input->post('new_password', TRUE));
+		
+		$this->load->helper('util');
+		
+		if (!check_captcha($captcha)) {
+			$msg['tips'] = '验证码错误，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		if (($user = $this->user_info)) {
+			require '../application/third_party/pass/PasswordHash.php';
+			$hasher = new PasswordHash(HASH_COST_LOG2, HASH_PORTABLE);
+			$chk_lower = $hasher->CheckPassword(strtolower($old_pswd), $user['password']);
+			$chk_upper = $hasher->CheckPassword(strtoupper($old_pswd), $user['password']);
+			
+			if ($chk_lower || $chk_upper) {
+				$data['user_type'] = trim($this->input->post('user_type', TRUE));
+				$data['userid'] = $this->userid;
+				$data['password'] = $hasher->HashPassword($new_pswd);
+				
+				$this->load->model('user_model', 'user');
+				if ($this->user->update_password($data) > 0) {
+					$ret['msg'] = 'success';
+					$local_key = trim($this->input->cookie('local_key'));
+					$this->user->pop_cookie($local_key);
+				} else {
+					$ret['msg'] = 'fail';
+				}
+			} else {
+				$ret['msg'] = 'different';
+			}
+		} else {
+			$ret['msg'] = 'forbidden';
+		}
+		
+		echo json_encode($ret);
+	}
 	
 	public function check_email() {
 		$user_type = trim($this->input->post('user_type', TRUE));

@@ -10,20 +10,20 @@ class Admin extends AdminLoginController {
 			case 2: header('Location: '. base_url('/admin/approve')); break;
 			case 1: header('Location: '. base_url('/admin/permit')); break;
 			default : 
-				$msg['tips'] = 'account forbidden';
-				$link = '/admin_login';
-				$location = 'index page';
-				$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+				$msg['tips'] = '你的帐户无此操作权限！';
+				$link = 'javascript:history.go(-1);';
+				$location = '返回上一步';
+				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 				show_error($msg);
 		}
 	}
 	
 	public function audit($page = 1) {
 		if ($this->permission != 3) {
-			$msg['tips'] = 'account forbidden';
-			$link = '/admin_login';
-			$location = 'index page';
-			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
 		
@@ -75,10 +75,10 @@ class Admin extends AdminLoginController {
 	
 	public function approve($page = 1) {
 		if ($this->permission != 2) {
-			$msg['tips'] = 'account forbidden';
-			$link = '/admin_login';
-			$location = 'index page';
-			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
 		
@@ -130,10 +130,10 @@ class Admin extends AdminLoginController {
 	
 	public function permit($page = 1) {
 		if ($this->permission != 1) {
-			$msg['tips'] = 'account forbidden';
-			$link = '/admin_login';
-			$location = 'index page';
-			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
 		
@@ -184,10 +184,10 @@ class Admin extends AdminLoginController {
 	
 	public function ordinary($page = 1) {
 		if ($this->permission != 1) {
-			$msg['tips'] = 'account forbidden';
-			$link = '/admin_login';
-			$location = 'index page';
-			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
 		
@@ -234,8 +234,7 @@ class Admin extends AdminLoginController {
 	
 	public function total_preview($uuid = '') {
 		if ($uuid === '') {
-			show_error('uuid empty error');
-			die();
+			show_error('申请流水号出错');
 		}
 		
 		$attributes = '*';
@@ -255,7 +254,11 @@ class Admin extends AdminLoginController {
 			$info['user'] = $this->user_info;
 			$this->load->view('admin_view', $info);
 		} else {
-			show_error('no application available');
+			$msg['tips'] = '你所请求的申请记录不存在！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	
@@ -269,7 +272,7 @@ class Admin extends AdminLoginController {
 		$data['status'] = text2status($opt);
 		
 		if ($data['uuid'] === '') {
-			show_error('uuid empty error');
+			show_error('申请流水号出错');
 		}
 		
 		$this->load->model('admin_model', 'adm');
@@ -292,7 +295,7 @@ class Admin extends AdminLoginController {
 		$data['message'] = '';
 		
 		if ($data['uuid'] === '') {
-			show_error('uuid empty error');
+			show_error('申请流水号出错');
 		}
 		
 		$this->load->helper('util');
@@ -308,10 +311,10 @@ class Admin extends AdminLoginController {
 			$info = $this->adm->retrieve_some_info($uuid, $this->user_info['province_id'], $attributes);
 			
 			if (!$info) {
-				$msg['tips'] = 'forbidden';
-				$link = '/admin/approve';
-				$location = 'index page';
-				$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+				$msg['tips'] = '你所请求的申请记录不存在！';
+				$link = 'javascript:history.go(-1);';
+				$location = '返回上一步';
+				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 				show_error($msg);
 			}
 			
@@ -372,7 +375,7 @@ class Admin extends AdminLoginController {
 	public function scan_upload($uuid = '') {
 		$uuid = $uuid;
 		if ($uuid === '') {
-			show_error('uuid empty error');
+			show_error('申请流水号出错');
 		}
 		
 		$user = $this->user_info;
@@ -384,7 +387,11 @@ class Admin extends AdminLoginController {
 		if ($info) {
 			$this->load->view('audit_upload', $info);
 		} else {
-			show_error('no application available');
+			$msg['tips'] = '你所请求的申请记录不存在！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	
@@ -412,7 +419,11 @@ class Admin extends AdminLoginController {
 		$scan_files = array('photo', 'passport', 'identity', 'ticket', 'deposition');
 		foreach ($scan_files as $val) {
 			if (!$this->upload_pics($uuid, $val)) {
-				show_error('upload failed');
+				$msg['tips'] = '上传失败，请返回重新操作！';
+				$link = 'javascript:history.go(-1);';
+				$location = '返回上一步';
+				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+				show_error($msg);
 			}
 		}
 		
@@ -536,10 +547,10 @@ class Admin extends AdminLoginController {
 	
 	public function activate_account() {
 		if ($this->permission != 1) {
-			$msg['tips'] = 'account forbidden';
-			$link = '/admin_login';
-			$location = 'index page';
-			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
 		
@@ -561,10 +572,10 @@ class Admin extends AdminLoginController {
 	
 	public function audit_trace($page = 1) {
 		if ($this->permission < 2 || $this->permission > 3) {
-			$msg['tips'] = 'account forbidden';
-			$link = '/admin_login';
-			$location = 'index page';
-			$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
 		

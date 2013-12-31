@@ -48,9 +48,9 @@
 			<div id="menu">
 				<a href="/admin/permit">管理员帐号</a> / 
 				<a style="color:#1100FF;">普通用户帐号</a> / 
-				<a href="/user/account">帐户信息</a> / 
-				<a href="/change_password">密码修改</a> / 
-				<a href="/user/logout">安全登出</a>
+				<a href="/account">帐户信息</a> / 
+				<a href="/password">密码修改</a> / 
+				<a href="/logout">安全登出</a>
 			</div>
 		</nav>
 		<div id="list_box">

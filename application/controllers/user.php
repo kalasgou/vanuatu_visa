@@ -172,27 +172,12 @@ class User extends LoginController {
 		show_error($msg);
 	}
 	
-	public function account() {
-		$user = $this->user_info;
-		
-		$provinces = array('1' => '北京', '2' => '广州', '3' => '上海');
-		$permissions = array('1' => '系统管理员', '2' => '大使馆管理员', '3' => '办事处管理员', '10000' => '普通用户');
-		$accounts = array('-1' => '已失效', '0' => '未激活', '1' => '正常');
-		
-		if (isset($user['province_id'])) {
-			$user['province_str'] = $provinces[$user['province_id']];
-		}
-		$user['permission_str'] = $permissions[$user['permission']];
-		$user['status_str'] = $accounts[$user['status']];
-		
-		$this->load->view('account', $user);
-	}
-	
 	/*public function update() {
 		$user_type = trim($this->input->post('user_type', TRUE));
 	}*/
 	
-	public function password() {
+	public function change_password() {
+		$user_type = trim($this->input->post('user_type', TRUE));
 		$captcha = trim($this->input->post('captcha', TRUE));
 		$old_pswd = trim($this->input->post('old_password', TRUE));
 		$new_pswd = trim($this->input->post('new_password', TRUE));
@@ -200,11 +185,9 @@ class User extends LoginController {
 		$this->load->helper('util');
 		
 		if (!check_captcha($captcha)) {
-			$msg['tips'] = '验证码错误，请返回重新输入！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
+			$ret['msg'] = 'captcha';
+			echo json_encode($ret);
+			die();
 		}
 		
 		if (($user = $this->user_info)) {

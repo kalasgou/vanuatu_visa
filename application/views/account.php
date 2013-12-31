@@ -10,18 +10,19 @@
 		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="/simple.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
 			});
 		</script>
 		<style type="text/css">
-			.form-control {width:256px;}
+			.form-control {width:224px;}
 		</style>
 	</head>
 	<body>
 		<div>
-			<form class="form-horizontal" role="form" method="post" action="/user/update">
+			<form class="form-horizontal" role="form">
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<h3>帐号资料信息</h3>
@@ -91,8 +92,16 @@
 				</div>
 				<?php } ?>
 				<div class="form-group">
+					<label for="inputCaptcha3" class="col-sm-2 control-label">验证码:</label>
+					<div class="col-sm-10">
+						<input type="captcha" class="form-control" name="captcha" id="inputCaptcha3" placeholder="Captcha"/><br>
+						<span id="captcha"><?php echo $captcha;?></span> <a href="javascript:void(0);" onclick="refresh_captcha();">换过另一张</a>
+					</div>
+				</div>
+				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-default">更新资料</button>
+						<button type="button" class="btn btn-default" onclick="javascript:update_info();">更新资料</button>&nbsp;&nbsp;&nbsp;
+						<button type="button" class="btn btn-default" onclick="javascript:history.go(-1);">返回上一页</button>
 					</div>
 				</div>
 			</form>

@@ -214,7 +214,7 @@
 		
 		$CI->load->library('RedisDB');
 		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
-		$redis->setex(strtolower($cap['word']), 60, intval($cap['time']));
+		$redis->setex(strtolower($cap['word']), 120, intval($cap['time']));
 		
 		return $cap['image'];
 	}
@@ -225,7 +225,7 @@
 		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
 		$time = intval($redis->get(strtolower($word)));
 		
-		if ($_SERVER['REQUEST_TIME'] - $time <= 60) {
+		if ($_SERVER['REQUEST_TIME'] - $time <= 120) {
 			$redis->del(strtolower($word));
 			return TRUE;
 		}

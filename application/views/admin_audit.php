@@ -55,9 +55,9 @@
 			<div id="menu">
 				<a style="color:#1100FF;">审核申请</a> / 
 				<a href="/admin/audit_trace">审核记录</a> / 
-				<a href="/user/account">帐户信息</a> / 
-				<a href="/user/password">密码修改</a> / 
-				<a href="/user/logout">安全登出</a>
+				<a href="/account">帐户信息</a> / 
+				<a href="/password">密码修改</a> / 
+				<a href="/logout">安全登出</a>
 			</div>
 		</nav>
 		<div id="list_box">

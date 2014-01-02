@@ -128,6 +128,61 @@ class Admin extends AdminLoginController {
 		$this->load->view('admin_approve', $data);
 	}
 	
+	public function fast($page = 1) {
+		if ($this->permission != 1) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$this->load->helper('util');
+		
+		$data['province_id'] = $this->user_info['province_id'];
+		$data['page'] = $page - 1;
+		
+		$status = trim($this->input->get('cur_status', TRUE));
+		$data['status'] = text2status(($status === '' ? 'wait' : $status));
+		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
+		$data['passport'] = trim($this->input->get('passport_no', TRUE));
+		$data['start_time'] = trim($this->input->get('start_time', TRUE));
+		$data['end_time'] = trim($this->input->get('end_time', TRUE));
+		
+		$this->load->model('admin_model', 'adm');
+		
+		$this->load->library('pagination');
+		
+		$config['base_url'] = '/admin/fast/';
+		$config['uri_segment'] = 3;
+		$config['num_links'] = 2;
+		$config['total_rows'] = $this->adm->sum_applications($data);
+		$config['per_page'] = 20;
+		$config['use_page_numbers'] = TRUE;
+		if (count($_GET) > 0) {
+			$config['suffix'] = '?'.http_build_query($_GET, '', "&");
+			$config['first_url'] = $config['base_url'].'1?'.http_build_query($_GET, '', "&");
+		}
+		
+		$config['prev_link'] = '上一页';
+		$config['next_link'] = '下一页';
+		$config['first_link'] = '首 页';
+		$config['last_link'] = '尾 页';
+		
+		$this->pagination->initialize($config);
+		
+		$data['user'] = $this->user_info;
+		$data['pagination'] = $this->pagination->create_links();
+		$data['records'] = $this->adm->get_applications($data);
+		$data['num_records'] = $config['total_rows'];
+		
+		foreach ($data['records'] as &$one) {
+			$one['status_str'] = status2text($one['status']);
+		}
+		
+		$this->load->view('admin_quick', $data);
+	}
+	
 	public function permit($page = 1) {
 		if ($this->permission != 1) {
 			$msg['tips'] = '你的帐户无此操作权限！';
@@ -366,10 +421,6 @@ class Admin extends AdminLoginController {
 		echo json_encode($ret);
 		
 		$this->adm->auditing_application($data);
-	}
-	
-	public function batch_approving() {
-		
 	}
 	
 	public function scan_upload($uuid = '') {

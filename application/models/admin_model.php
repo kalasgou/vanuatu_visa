@@ -9,7 +9,9 @@
 		}
 		
 		public function sum_applications($data) {
-			$this->admin_db->where('province_id', $data['province_id']);
+			if ($data['province_id'] != 0) {
+				$this->admin_db->where('province_id', $data['province_id']);
+			}
 			if ($data['uuid'] !== '') {
 				$this->admin_db->where('uuid', $data['uuid']);
 			} else if ($data['passport'] !== '') {
@@ -25,7 +27,9 @@
 		
 		public function get_applications($data) {
 			$this->admin_db->select('uuid, name_en, name_cn, status, passport_number, submit_time, audit_time, pay_time, approve_time');
-			$this->admin_db->where('province_id', $data['province_id']);
+			if ($data['province_id'] != 0) {
+				$this->admin_db->where('province_id', $data['province_id']);
+			}
 			if ($data['uuid'] !== '') {
 				$this->admin_db->where('uuid', $data['uuid']);
 			} else if ($data['passport'] !== '') {
@@ -46,7 +50,9 @@
 		public function retrieve_some_info($uuid, $province_id, $attributes) {
 			$this->admin_db->select($attributes);
 			$this->admin_db->where('uuid', $uuid);
-			$this->admin_db->where('province_id', $province_id);
+			if ($province_id != 0) {
+				$this->admin_db->where('province_id', $province_id);
+			}
 			$this->admin_db->limit(1);
 			$query = $this->admin_db->get('visa_applying');
 			

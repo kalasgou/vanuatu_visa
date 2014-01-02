@@ -21,10 +21,10 @@
 			
 			function filter_them(selected) {
 				switch (selected) {
-					case '1' : location.href = '/admin/approve?orderby=' + selected + '&cur_status=' + $('#cur_status').val(); break;
-					case '2' : location.href = '/admin/approve?orderby=' + selected + '&apply_id=' + $('#apply_id').val(); break;
-					case '3' : location.href = '/admin/approve?orderby=' + selected + '&passport_no=' + $('#passport_no').val(); break;
-					case '4' : location.href = '/admin/approve?orderby=' + selected + '&start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val(); break;
+					case '1' : location.href = '/admin/fast?orderby=' + selected + '&cur_status=' + $('#cur_status').val(); break;
+					case '2' : location.href = '/admin/fast?orderby=' + selected + '&apply_id=' + $('#apply_id').val(); break;
+					case '3' : location.href = '/admin/fast?orderby=' + selected + '&passport_no=' + $('#passport_no').val(); break;
+					case '4' : location.href = '/admin/fast?orderby=' + selected + '&start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val(); break;
 					default : return;
 				}
 			}
@@ -43,15 +43,19 @@
 				}
 			}
 		</script>
+		<style type="text/css">
+			.form-control {width: 60px;}
+		</style>
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div id="hello">
-				<h5>您好，大使馆管理员 <?php echo $user['realname'];?>！</h5>
+				<h5>您好，办事处管理员 <?php echo $user['realname'];?>！</h5>
 			</div>
 			<div id="menu">
-				<a style="color:#1100FF;">审批签证</a> / 
-				<a href="/admin/audit_trace">审批记录</a> / 
+				<a href="/admin/permit">管理员帐号</a> / 
+				<a href="/admin/ordinary">普通用户帐号</a> / 
+				<a style="color:#1100FF;">快速通道</a> / 
 				<a href="/account">帐户信息</a> / 
 				<a href="/password">密码修改</a> / 
 				<a href="/logout">安全登出</a>
@@ -68,9 +72,14 @@
 					</select>
 				</div>
 				<div id="od1" style="display:inline-block;">
+					&nbsp;请选择需要查询的状态类型:&nbsp;
 					<select id="cur_status">
-						<option value="paid">未发签证</option>
+						<option value="wait">待审核</option>
+						<option value="fail">未通过</option>
+						<option value="pass">已通过</option>
+						<option value="paid">已缴费</option>
 						<option value="visa">已发签证</option>
+						<option value="lost">已失效</option>
 					</select>
 				</div>
 				<div id="od2" style="display:none">
@@ -128,7 +137,7 @@
 						<td><span title="具体时间 <?php echo $one['approve_time'];?>"><?php echo substr($one['approve_time'], 0, 10);?></span></td>
 						<td>
 							<a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank">查看详细</a>
-							<?php if ($one['status'] == 41) { ?> / 
+							<?php if ($one['status'] != 101) { ?> / 
 								<a href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'visa', this);">通过签证</a>
 							<?php } ?>
 						</td>

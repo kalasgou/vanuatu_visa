@@ -19,7 +19,7 @@
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div id="hello">
-				<h5>你好，<?php echo $user['realname'];?>！</h5>
+				<h5>您好，<?php echo $user['realname'];?>！</h5>
 			</div>
 			<div id="menu">
 				<a style="color:#1100FF;">申请记录</a> / 

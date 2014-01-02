@@ -47,7 +47,7 @@
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div id="hello">
-				<h5>你好，大使馆管理员 <?php echo $user['realname'];?>！</h5>
+				<h5>您好，大使馆管理员 <?php echo $user['realname'];?>！</h5>
 			</div>
 			<div id="menu">
 				<a href="/admin/approve">审批签证</a> / 

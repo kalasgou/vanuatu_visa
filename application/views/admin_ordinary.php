@@ -43,11 +43,12 @@
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div id="hello">
-				<h5>你好，系统管理员 <?php echo $user['realname'];?>！</h5>
+				<h5>您好，系统管理员 <?php echo $user['realname'];?>！</h5>
 			</div>
 			<div id="menu">
 				<a href="/admin/permit">管理员帐号</a> / 
 				<a style="color:#1100FF;">普通用户帐号</a> / 
+				<a href="/admin/fast">快速通道</a> / 
 				<a href="/account">帐户信息</a> / 
 				<a href="/password">密码修改</a> / 
 				<a href="/logout">安全登出</a>

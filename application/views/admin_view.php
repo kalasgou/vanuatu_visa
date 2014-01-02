@@ -252,7 +252,7 @@
 				<a class="btn btn-warning" href="javascript:pass_or_not('<?php echo $uuid;?>', 'fail');">驳回</a>
 			</div>
 			<?php } ?>
-			<?php if ($status == 41 && $user['permission'] == 2) { ?>
+			<?php if (($status == 41 && $user['permission'] == 2) || ($status < 101 && $user['permission'] == 1)) { ?>
 			<div id="next_step">
 				<a class="btn btn-success" href="javascript:visa_or_not('<?php echo $uuid;?>', 'visa');">同意</a>
 				<a class="btn btn-warning" href="javascript:visa_or_not('<?php echo $uuid;?>', 'oops');">拒签</a>

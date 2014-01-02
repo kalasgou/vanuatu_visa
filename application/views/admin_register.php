@@ -37,34 +37,30 @@
 					<label for="inputEmail3" class="col-sm-2 control-label">请输入登录邮箱:</label>
 					<div class="col-sm-10">
 						<input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email"/>
-						<span id="email_correct" class="correct_tips">OK</span>
-						<span id="email_error" class="error_tips">Email Not Correct</span>
-						<span id="email_used" class="error_tips">Email is used thus not available</span>
+						<span id="email_error" class="error_tips">电子邮箱格式不正确</span>
+						<span id="email_used" class="error_tips">该电子邮箱已被注册，请选择另一个有效的邮箱地址</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="inputPassword3" class="col-sm-2 control-label">设定密码(长度至少六位):</label>
 					<div class="col-sm-10">
 						<input type="password" class="form-control" name="password" id="inputPassword3" placeholder="Password"/>
-						<span id="pswd_correct" class="correct_tips">OK</span>
-						<span id="pswd_short" class="error_tips">Password Length less than 6</span>
+						<span id="pswd_short" class="error_tips">密码不得少于六位字符</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="inputPassword3" class="col-sm-2 control-label">确定密码:</label>
 					<div class="col-sm-10">
 						<input type="password" class="form-control" name="password_confirm" id="inputPassword3" placeholder="Confirm Password"/>
-						<span id="pswd_correct" class="correct_tips">OK</span>
-						<span id="pswd_firm_short" class="error_tips">Password Length less than 6</span>
-						<span id="pswd_different" class="error_tips">Password not the same</span>
+						<span id="pswd_firm_short" class="error_tips">密码不得少于六位字符</span>
+						<span id="pswd_different" class="error_tips">两次输入的密码不相同</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="inputRealname3" class="col-sm-2 control-label">真实姓名:</label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" name="realname" id="inputRealname3" placeholder="Real Name"/>
-						<span id="realname_correct" class="correct_tips">OK</span>
-						<span id="realname_empty" class="error_tips">Realname should not be empty</span>
+						<span id="realname_empty" class="error_tips">请填写用户真实姓名</span>
 					</div>
 				</div>
 				<div class="form-group">

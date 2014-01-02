@@ -34,11 +34,11 @@
 						success: function(json) {
 							var jump_to = user_type === 'applicant' ? '/login' : '/admin_login';
 							switch(json.msg) {
-								case 'captcha': alert('captcha error'); location.reload(); break;
-								case 'success': alert('update successfully'); location.href = jump_to; break;
-								case 'fail': alert('update fail'); location.reload(); break;
-								case 'different': alert('original password nor correct'); location.reload(); break;
-								default : alert('forbidden');
+								case 'captcha': alert('验证码错误！'); location.reload(); break;
+								case 'success': alert('密码修改成功，请重新登录！'); location.href = jump_to; break;
+								case 'fail': alert('密码修改失败，请稍后再试！'); location.reload(); break;
+								case 'different': alert('输入的旧密码不匹配！'); location.reload(); break;
+								default : alert('非法操作！');
 							}
 						}, 
 						error: function() {
@@ -70,17 +70,15 @@
 					<label for="inputPassword3" class="col-sm-2 control-label">重设密码:</label>
 					<div class="col-sm-10">
 						<input type="password" class="form-control" name="password" id="inputPassword3" placeholder="New Password"/>
-						<span id="pswd_correct" class="correct_tips">OK</span>
-						<span id="pswd_short" class="error_tips">Password Length less than 6</span>
+						<span id="pswd_short" class="error_tips">密码不得少于六位字符</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="inputPassword3" class="col-sm-2 control-label">确定密码:</label>
 					<div class="col-sm-10">
 						<input type="password" class="form-control" name="password_confirm" id="inputPasswordConfirm3" placeholder="Confirm Password"/>
-						<span id="pswd_correct" class="correct_tips">OK</span>
-						<span id="pswd_firm_short" class="error_tips">Password Length less than 6</span>
-						<span id="pswd_different" class="error_tips">Password not the same</span>
+						<span id="pswd_firm_short" class="error_tips">密码不得少于六位字符</span>
+						<span id="pswd_different" class="error_tips">两次输入的密码不相同</span>
 					</div>
 				</div>
 				<div class="form-group">

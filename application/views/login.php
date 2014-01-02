@@ -37,16 +37,14 @@
 					<label for="inputEmail3" class="col-sm-2 control-label">邮箱:</label>
 					<div class="col-sm-10">
 						<input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email"/>
-						<span id="email_correct" class="correct_tips">OK</span>
-						<span id="email_error" class="error_tips">Email Not Correct</span>
+						<span id="email_error" class="error_tips">电子邮箱格式不正确</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="inputPassword3" class="col-sm-2 control-label">密码:</label>
 					<div class="col-sm-10">
 						<input type="password" class="form-control" name="password" id="inputPassword3" placeholder="Password"/>
-						<span id="pswd_correct" class="correct_tips">OK</span>
-						<span id="pswd_short" class="error_tips">Password Length less than 6</span>
+						<span id="pswd_short" class="error_tips">密码应不少于六位字符</span>
 					</div>
 				</div>
 				<div class="form-group">

@@ -55,6 +55,7 @@
 			<div id="menu">
 				<a href="/admin/audit">审核申请</a> / 
 				<a style="color:#1100FF;">审核记录</a> / 
+				<a href="/admin/present">线下申请</a> / 
 				<a href="/account">帐户信息</a> / 
 				<a href="/password">密码修改</a> / 
 				<a href="/logout">安全登出</a>

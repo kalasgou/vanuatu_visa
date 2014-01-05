@@ -22,16 +22,16 @@ abstract class ApplyLoginController extends CI_Controller {
 			$this->status = $this->user_info['status'];
 			
 			if ($this->status != 1) {
-				$msg['tips'] = 'account not verified';
-				$link = '/login';
-				$location = 'index page';
-				$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+				$msg['tips'] = '帐户未激活。若未验证邮箱可点击下面链接重新获取验证链接。';
+				$link = '/user/send_activation_code/applicant/'.$this->userid;
+				$location = '重新发送邮箱验证';
+				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 				show_error($msg);
 			} else if ($this->permission != 10000) {
-				$msg['tips'] = 'account forbidden';
+				$msg['tips'] = '帐户无效！';
 				$link = '/login';
-				$location = 'index page';
-				$msg['target'] = '<a href="'.$link.'">go to page '.$location.'</a>';
+				$location = '返回登录页';
+				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 				show_error($msg);
 			} 
 		} else {

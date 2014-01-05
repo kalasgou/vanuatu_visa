@@ -25,6 +25,7 @@
 					case '2' : location.href = '/admin/audit?orderby=' + selected + '&apply_id=' + $('#apply_id').val(); break;
 					case '3' : location.href = '/admin/audit?orderby=' + selected + '&passport_no=' + $('#passport_no').val(); break;
 					case '4' : location.href = '/admin/audit?orderby=' + selected + '&start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val(); break;
+					case '5' : location.href = '/admin/audit?orderby=' + selected + '&user=1'; break;
 					default : return;
 				}
 			}
@@ -55,6 +56,7 @@
 			<div id="menu">
 				<a style="color:#1100FF;">审核申请</a> / 
 				<a href="/admin/audit_trace">审核记录</a> / 
+				<a href="/admin/present">线下申请</a> / 
 				<a href="/account">帐户信息</a> / 
 				<a href="/password">密码修改</a> / 
 				<a href="/logout">安全登出</a>
@@ -68,6 +70,7 @@
 						<option value="2">申请流水号</option>
 						<option value="3">护照号</option>
 						<option value="4">日期范围</option>
+						<option value="5">线下申请</option>
 					</select>
 				</div>
 				<div id="od1" style="display:inline-block;">
@@ -134,8 +137,9 @@
 						<td><span title="具体时间 <?php echo $one['pay_time'];?>"><?php echo substr($one['pay_time'], 0, 10);?></span></td>
 						<td><span title="具体时间 <?php echo $one['approve_time'];?>"><?php echo substr($one['approve_time'], 0, 10);?></span></td>
 						<td>
-							<a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank">查看详细</a> / 
+							<a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank">详细</a> / 
 							<?php if ($one['status'] < 31) { ?>
+								<a href="/admin/present/<?php echo $one['uuid'];?>" target="_blank">修改</a> / 
 								<a href="javascript:void(0);" onclick="pass_for_fee('<?php echo $one['uuid'];?>', 'pass', this);">通过审核</a> 
 							<?php } ?>
 							<?php if ($one['status'] == 31) { ?>

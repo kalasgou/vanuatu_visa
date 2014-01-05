@@ -18,6 +18,219 @@ class Admin extends AdminLoginController {
 		}
 	}
 	
+	public function present($uuid = '') {
+		if ($this->permission != 3) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data = array(
+					'uuid' => '',
+					'userid' => '1',
+					'province_id' => $this->user_info['province_id'],
+					'name_en' => '',
+					'name_cn' => '',
+					'gender' => '',
+					'family' => '',
+					'nationality' => '',
+					'birth_day' => '',
+					'birth_month' => '',
+					'birth_year' => '',
+					'birth_place' => '',
+					'occupation_info' => array(
+						'occupation' => '',
+						'employer' => '',
+						'employer_tel' => '',
+						'employer_addr' => '',
+						),
+					'home_info' => array(
+						'home_addr' => '',
+						'home_tel' => '',
+						),
+					'passport_number' => '',
+					'passport_place' => '',
+					'passport_date' => '',
+					'passport_expiry' => '',
+					'purpose' => '',
+					'other_purpose' => '',
+					'destination' => '',
+					'relative_info' => array(
+						'relative_name' => '',
+						'relative_addr' => '',
+						),
+					'detail_info' => array(
+						'arrival_number' => '',
+						'arrival_date' => '',
+						'return_number' => '',
+						'return_date' => '',
+						'duration' => '',
+						'financial_source' => '',
+						),
+					'children_info' => array(
+						array (
+							'child_name' => '',
+							'child_sex' => '',
+							'child_date' => '',
+							'child_place' => '',
+							),
+						array (
+							'child_name' => '',
+							'child_sex' => '',
+							'child_date' => '',
+							'child_place' => '',
+							),
+						array (
+							'child_name' => '',
+							'child_sex' => '',
+							'child_date' => '',
+							'child_place' => '',
+							),
+						),
+					'behaviour_info' => array(
+						'criminal' => '',
+						'crime_country' => '',
+						'deported' => '',
+						'deport_country' => '',
+						'visited' => '',
+						'applied' => '',
+						'apply_date' => '',
+						'refused' => '',
+						'refuse_date' => '',
+						),
+				);
+		
+		$attribute = '*';
+		$this->load->model('admin_model', 'adm');
+		$info = $this->adm->retrieve_some_info($uuid, $this->user_info['province_id'], $attribute);
+		
+		if ($info) {
+			$data = $info;
+			$data['occupation_info'] = json_decode($info['occupation_info'], TRUE);
+			$data['home_info'] = json_decode($info['home_info'], TRUE);
+			$data['relative_info'] = json_decode($info['relative_info'], TRUE);
+			$data['detail_info'] = json_decode($info['detail_info'], TRUE);
+			$data['children_info'] = json_decode($info['children_info'], TRUE);
+			$data['behaviour_info'] = json_decode($info['behaviour_info'], TRUE);
+		}
+		
+		$data['user'] = $this->user_info;
+		
+		$this->load->view('offline_present', $data);
+	}
+	
+	public function submit_present() {
+		if ($this->permission != 3) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data['userid'] = trim($this->input->post('userid', TRUE));
+		$data['uuid'] = trim($this->input->post('uuid', TRUE));
+		$data['province_id'] = trim($this->input->post('province_id', TRUE));
+		$data['status'] = 11;
+		
+		$this->load->helper('util');
+		
+		if ($data['uuid'] === '') {
+			$data['uuid'] = hex16to64(uuid(), 0);
+		}
+		
+		if (!is_editable($data['uuid'])) {
+			$msg['tips'] = '该申请不可再修改！';
+			$link = '/admin';
+			$location = '返回管理主页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		// Basic Info
+		$data['name_en'] = trim($this->input->post('name_en', TRUE));
+		$data['name_cn'] = trim($this->input->post('name_cn', TRUE));
+		$data['gender'] = trim($this->input->post('gender', TRUE));
+		$data['family'] = trim($this->input->post('family', TRUE));
+		$data['nationality'] = trim($this->input->post('nationality', TRUE));
+		$data['birth_day'] = trim($this->input->post('birth_day', TRUE));
+		$data['birth_month'] = trim($this->input->post('birth_month', TRUE));
+		$data['birth_year'] = trim($this->input->post('birth_year', TRUE));
+		$data['birth_place'] = trim($this->input->post('birth_place', TRUE));
+		$data['occupation'] = trim($this->input->post('occupation', TRUE));
+		$data['employer'] = trim($this->input->post('employer', TRUE));
+		$data['employer_tel'] = trim($this->input->post('employer_tel', TRUE));
+		$data['employer_addr'] = trim($this->input->post('employer_addr', TRUE));
+		$data['home_addr'] = trim($this->input->post('home_addr', TRUE));
+		$data['home_tel'] = trim($this->input->post('home_tel', TRUE));
+		
+		// Passport Info
+		$data['passport_number'] = trim($this->input->post('passport_number', TRUE));
+		$data['passport_place'] = trim($this->input->post('passport_place', TRUE));
+		$data['passport_date'] = trim($this->input->post('passport_date', TRUE));
+		$data['passport_expiry'] = trim($this->input->post('passport_expiry', TRUE));
+		
+		if (!check_parameters($data)) {
+			$msg['tips'] = '所需填写信息不全，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$this->load->model('apply_model', 'alm');
+		
+		if (!$this->alm->check_passport_available($data['uuid'], $data['passport_number'])) {
+			$msg['tips'] = '对于护照号'.$data['passport_number'].'，由于存在审核中的申请或未过期的签证记录，故申请无法继续进行！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		// Travel Info
+		$data['purpose'] = trim($this->input->post('purpose', TRUE));
+		$data['other_purpose'] = trim($this->input->post('other_purpose', TRUE));
+		$data['destination'] = trim($this->input->post('destination', TRUE));
+		$data['relative_name'] = trim($this->input->post('relative_name', TRUE));
+		$data['relative_addr'] = trim($this->input->post('relative_addr', TRUE));
+		$data['arrival_number'] = trim($this->input->post('arrival_number', TRUE));
+		$data['arrival_date'] = trim($this->input->post('arrival_date', TRUE));
+		$data['return_number'] = trim($this->input->post('return_number', TRUE));
+		$data['return_date'] = trim($this->input->post('return_date', TRUE));
+		$data['duration'] = trim($this->input->post('duration', TRUE));
+		$data['financial_source'] = trim($this->input->post('financial_source', TRUE));
+		
+		// Complement Info
+		$data['child_name'] = $this->input->post('child_name', TRUE);
+		$data['child_sex'] = $this->input->post('child_sex', TRUE);
+		$data['child_date'] = $this->input->post('child_date', TRUE);
+		$data['child_place'] = $this->input->post('child_place', TRUE);
+		$data['criminal'] = trim($this->input->post('criminal', TRUE));
+		$data['crime_country'] = trim($this->input->post('crime_country', TRUE));
+		$data['deported'] = trim($this->input->post('deported', TRUE));
+		$data['deport_country'] = trim($this->input->post('deport_country', TRUE));
+		$data['visited'] = trim($this->input->post('visited', TRUE));
+		$data['applied'] = trim($this->input->post('applied', TRUE));
+		$data['apply_date'] = trim($this->input->post('apply_date', TRUE));
+		$data['refused'] = trim($this->input->post('refused', TRUE));
+		$data['refuse_date'] = trim($this->input->post('refuse_date', TRUE));
+		
+		$this->load->model('admin_model', 'adm');
+		if ($this->adm->update_application($data) > 0) {
+			update_status($data['uuid'], 11);
+			header('Location: '.base_url('/admin/audit?orderby=2&apply_id='.$data['uuid']));
+		} else {
+			$msg['tips'] = '信息更新失败，请返回重试！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+	}
+	
 	public function audit($page = 1) {
 		if ($this->permission != 3) {
 			$msg['tips'] = '你的帐户无此操作权限！';
@@ -38,6 +251,7 @@ class Admin extends AdminLoginController {
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
+		$data['userid'] = trim($this->input->get('user', TRUE));
 		
 		$this->load->model('admin_model', 'adm');
 		
@@ -93,6 +307,7 @@ class Admin extends AdminLoginController {
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
+		$data['userid'] = trim($this->input->get('user', TRUE));
 		
 		$this->load->model('admin_model', 'adm');
 		
@@ -148,6 +363,7 @@ class Admin extends AdminLoginController {
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
+		$data['userid'] = trim($this->input->get('user', TRUE));
 		
 		$this->load->model('admin_model', 'adm');
 		

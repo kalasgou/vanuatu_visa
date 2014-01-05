@@ -11,7 +11,7 @@
 		}
 		
 		public function regt_noti() {
-			$subject = 'Visa2Vanuatu帐号激活';
+			$subject = 'Visa2Vanuatu帐户邮箱验证';
 			
 			$prefix = '<p>新注册帐号激活链接</p>';
 			
@@ -28,7 +28,7 @@
 					$data['email'] = $info['email'];
 					$data['user'] = '';
 					$data['subject'] = $subject;
-					$data['content'] = $prefix.$link.$suffix[$info['user_type']];
+					$data['content'] = $prefix.'<a href="'.$link.'">'.$link.'</a>'.$suffix[$info['user_type']];
 					
 					send_email($data);
 					

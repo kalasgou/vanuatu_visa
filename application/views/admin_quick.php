@@ -25,6 +25,7 @@
 					case '2' : location.href = '/admin/fast?orderby=' + selected + '&apply_id=' + $('#apply_id').val(); break;
 					case '3' : location.href = '/admin/fast?orderby=' + selected + '&passport_no=' + $('#passport_no').val(); break;
 					case '4' : location.href = '/admin/fast?orderby=' + selected + '&start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val(); break;
+					case '5' : location.href = '/admin/fast?orderby=' + selected + '&user=1'; break;
 					default : return;
 				}
 			}
@@ -69,6 +70,7 @@
 						<option value="2">申请流水号</option>
 						<option value="3">护照号</option>
 						<option value="4">日期范围</option>
+						<option value="5">线下申请</option>
 					</select>
 				</div>
 				<div id="od1" style="display:inline-block;">

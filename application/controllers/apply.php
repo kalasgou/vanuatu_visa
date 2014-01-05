@@ -80,16 +80,17 @@ class Apply extends ApplyLoginController {
 		$data['province_id'] = trim($this->input->post('province_id', TRUE));
 		
 		$this->load->helper('util');
-		if (!is_editable($uuid)) {
+		
+		if ($data['uuid'] === '') {
+			$data['uuid'] = hex16to64(uuid(), 0);
+		}
+		
+		if (!is_editable($data['uuid'])) {
 			$msg['tips'] = '该申请不可再修改！';
 			$link = '/apply';
 			$location = '返回用户主页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
-		}
-		
-		if ($data['uuid'] === '') {
-			$data['uuid'] = hex16to64(uuid(), 0);
 		}
 		
 		if (!check_parameters($data)) {
@@ -165,11 +166,8 @@ class Apply extends ApplyLoginController {
 			$data['birth_year'] = $info['birth_year'];
 			$data['birth_place'] = $info['birth_place'];
 			
-			$occupation_info = json_decode($info['occupation_info'], TRUE);
-			$data['occupation_info'] = $occupation_info;
-			
-			$home_info = json_decode($info['home_info'], TRUE);
-			$data['home_info'] = $home_info;
+			$data['occupation_info'] = json_decode($info['occupation_info'], TRUE);
+			$data['home_info'] = json_decode($info['home_info'], TRUE);
 		}
 		
 		$this->load->view('step_one', $data);
@@ -358,11 +356,8 @@ class Apply extends ApplyLoginController {
 			$data['other_purpose'] = $info['other_purpose'];
 			$data['destination'] = $info['destination'];
 			
-			$relative_info = json_decode($info['relative_info'], TRUE);
-			$data['relative_info'] = $relative_info;
-			
-			$detail_info = json_decode($info['detail_info'], TRUE);
-			$data['detail_info'] = $detail_info;
+			$data['relative_info'] = json_decode($info['relative_info'], TRUE);
+			$data['detail_info'] = json_decode($info['detail_info'], TRUE);
 		}
 		
 		$this->load->view('step_three', $data);
@@ -465,16 +460,8 @@ class Apply extends ApplyLoginController {
 		if ($info) {
 			$data['uuid'] = $info['uuid'];
 			
-			$children_info = json_decode($info['children_info'], TRUE);
-			if ($children_info) {
-				$i = 0;
-				foreach ($children_info as $one) {
-					$data['children_info'][$i] = $one;
-					$i++;
-				}
-			}
-			$behaviour_info = json_decode($info['behaviour_info'], TRUE);
-			$data['behaviour_info'] = $behaviour_info;
+			$data['children_info'] = json_decode($info['children_info'], TRUE);
+			$data['behaviour_info'] = json_decode($info['behaviour_info'], TRUE);
 		}
 		
 		$this->load->view('step_four', $data);

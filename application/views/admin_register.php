@@ -51,7 +51,7 @@
 				<div class="form-group">
 					<label for="inputPassword3" class="col-sm-2 control-label">确定密码:</label>
 					<div class="col-sm-10">
-						<input type="password" class="form-control" name="password_confirm" id="inputPassword3" placeholder="Confirm Password"/>
+						<input type="password" class="form-control" name="password_confirm" id="inputPasswordConfirm3" placeholder="Confirm Password"/>
 						<span id="pswd_firm_short" class="error_tips">密码不得少于六位字符</span>
 						<span id="pswd_different" class="error_tips">两次输入的密码不相同</span>
 					</div>

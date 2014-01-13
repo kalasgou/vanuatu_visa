@@ -11,8 +11,8 @@ class Welcome extends LoginController {
 	public function login() {
 		if ($this->userid > 0 && $this->status == 1) {
 			$msg['tips'] = '已经登录无需重复登录！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$link = '/apply/index;';
+			$location = '返回用户主页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -25,8 +25,8 @@ class Welcome extends LoginController {
 	public function register() {
 		if ($this->userid > 0 && $this->status == 1) {
 			$msg['tips'] = '已经登录，若需注册请先登出帐户！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$link = '/apply/index;';
+			$location = '返回用户主页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -39,8 +39,8 @@ class Welcome extends LoginController {
 	public function admin_login() {
 		if ($this->userid > 0 && $this->status == 1) {
 			$msg['tips'] = '已经登录无需重复登录！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$link = '/admin/index';
+			$location = '返回用户主页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -53,8 +53,8 @@ class Welcome extends LoginController {
 	public function admin_register() {
 		if ($this->userid > 0 && $this->status == 1) {
 			$msg['tips'] = '已经登录，若需注册请先登出帐户！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$link = '/admin/index';
+			$location = '返回用户主页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -109,7 +109,7 @@ class Welcome extends LoginController {
 	public function refresh_captcha() {
 		session_start();
 		if (!isset($_SESSION['timestamp'])) {
-			$_SESSION['timestamp'] = $_SERVER['REQUEST_TIME'];
+			$_SESSION['timestamp'] = $_SERVER['REQUEST_TIME'] - 61;
 		}
 		if ($_SERVER['REQUEST_TIME'] - $_SESSION['timestamp'] >= 60) {
 			$this->load->helper('util');

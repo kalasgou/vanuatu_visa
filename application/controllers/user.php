@@ -296,7 +296,7 @@ class User extends LoginController {
 			$user = array();
 			$user = $this->user->$func_name($userid);
 			
-			if ($user && $user['status'] == 0) {
+			if ($user && $user['status'] != 1) {
 				$ret['msg'] = 'success';
 				
 				$this->load->library('RedisDB');

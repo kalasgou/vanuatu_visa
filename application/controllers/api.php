@@ -23,12 +23,12 @@
 				imagecopyresampled($image_out, $image_in, 0, 0, 0, 0, $w, $h, $w, $h);
 				$color = imagecolorallocate($image_out, 0x00, 0x00, 0x00);
 				imagettftext($image_out, $font_size, 0, 272, 630, $color, VISA_FONT_TYPE, 'Name :'.$info['name_en'].'/'.$info['name_cn']."\n");
-				imagettftext($image_out, $font_size, 0, 272, 720, $color, VISA_FONT_TYPE, 'Visa No :'.$info['visa_no']."\n");
+				imagettftext($image_out, $font_size, 0, 272, 720, $color, VISA_FONT_TYPE, 'Visa No. :'.$info['visa_no']."\n");
 				imagettftext($image_out, $font_size, 0, 272, 810, $color, VISA_FONT_TYPE, 'Date of Issue :'.date('j M, Y', $info['start_time'])."\n");
 				imagettftext($image_out, $font_size, 0, 272, 900, $color, VISA_FONT_TYPE, 'Date of Expiry :'.date('j M, Y', $info['end_time'])."\n");
 				imagettftext($image_out, $font_size, 0, 272, 990, $color, VISA_FONT_TYPE, 'Sex :'.($info['gender'] > 1 ? 'Female' : 'Male')."\n");
 				imagettftext($image_out, $font_size, 0, 272, 1080, $color, VISA_FONT_TYPE, 'Place of Birth :'.$info['birth_place']."\n");
-				imagettftext($image_out, $font_size, 0, 272, 1170, $color, VISA_FONT_TYPE, 'Passport No :'.$info['passport_number']."\n");
+				imagettftext($image_out, $font_size, 0, 272, 1170, $color, VISA_FONT_TYPE, 'Passport No. :'.$info['passport_number']."\n");
 				imagettftext($image_out, $font_size, 0, 272, 1260, $color, VISA_FONT_TYPE, 'Date of Birth :'.date('j M, Y', strtotime($info['birth_year'].'-'.$info['birth_month'].'-'.$info['birth_day']))."\n");
 				imagettftext($image_out, $font_size, 0, 272, 1350, $color, VISA_FONT_TYPE, 'Type :P'."\n");
 				imagettftext($image_out, $font_size, 0, 272, 1440, $color, VISA_FONT_TYPE, 'Place of Issue :'.$info['passport_place']."\n");

@@ -51,5 +51,8 @@ define('SCAN_DOMAIN',		'http://file.visa2vanuatu.cn/scan_file/');
 define('VISA_DOMAIN',		'http://file.visa2vanuatu.cn/visa_file/');
 define('CAPTCHA_DOMAIN',	'http://file.visa2vanuatu.cn/captcha/');
 
+define('VISA_BACKGROUND', 	'/data/file/visa_background.jpg');
+define('VISA_FONT_TYPE', 	'/data/file/arialuni.ttf');
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

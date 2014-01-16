@@ -895,6 +895,49 @@ class Admin extends AdminLoginController {
 		
 		echo json_encode($ret);
 	}
+	
+	public function agency($page = 1) {
+		if ($this->permission != 1) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$this->load->model('admin_model', 'adm');
+		
+		$this->load->library('pagination');
+		
+		$config['base_url'] = '/admin/agency/';
+		$config['uri_segment'] = 3;
+		$config['num_links'] = 2;
+		$config['total_rows'] = $this->adm->sum_agency();
+		$config['per_page'] = 20;
+		$config['use_page_numbers'] = TRUE;
+		if (count($_GET) > 0) {
+			$config['suffix'] = '?'.http_build_query($_GET, '', "&");
+			$config['first_url'] = $config['base_url'].'1?'.http_build_query($_GET, '', "&");
+		}
+		
+		$config['prev_link'] = '上一页';
+		$config['next_link'] = '下一页';
+		$config['first_link'] = '首 页';
+		$config['last_link'] = '尾 页';
+		
+		$this->pagination->initialize($config);
+		
+		$data['user'] = $this->user_info;
+		$data['pagination'] = $this->pagination->create_links();
+		$data['agencies'] = $this->adm->get_agencies($page - 1);
+		$data['num_agencies'] = $config['total_rows'];
+		
+		foreach ($data['agencies'] as &$one) {
+			$one['status_str'] = $one['status'] == 1 ? '正常' : '失效';
+		}
+
+		$this->load->view('admin_agency', $data);
+	}
 }
 
 /* End of file */

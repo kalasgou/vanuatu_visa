@@ -273,5 +273,15 @@
 			
 			return $this->admin_db->affected_rows();
 		}
+		
+		public function get_agencies($page) {
+			$item = 20;
+			
+			$this->admin_db->order_by('id', 'desc');
+			$this->admin_db->limit($item, $item * $page);
+			$query = $this->admin_db->get('agency');
+			
+			return $query->result_array();
+		}
 	}
 ?>

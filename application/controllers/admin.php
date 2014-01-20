@@ -576,7 +576,7 @@ class Admin extends AdminLoginController {
 		
 		if ($data['status'] === '101') {
 			$data['start_time'] = strtotime('today');
-			$data['end_time'] = $data['start_time'] + 86400 * 60;
+			$data['end_time'] = $data['start_time'] + 86400 * MAX_STAY_DAYS;
 			
 			$attributes = '*';
 			$info = $this->adm->retrieve_some_info($uuid, $this->user_info['province_id'], $attributes);

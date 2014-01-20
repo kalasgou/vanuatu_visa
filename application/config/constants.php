@@ -39,6 +39,8 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('HASH_COST_LOG2', 	8);
 define('HASH_PORTABLE', 	FALSE);
 
+define('MAX_STAY_DAYS',		90);
+
 define('VISA_TEMPLATE',		'/data/file/visa_file/template/visa_template.docx');
 
 define('VISA_PATH',			'/data/file/visa_file/');
@@ -47,12 +49,12 @@ define('CAPTCHA_PATH',		'/data/file/captcha/');
 
 define('REDIS_DEFAULT', 	'/tmp/redis_6379.sock');
 
-define('SCAN_DOMAIN',		'http://file.visa2vanuatu.cn/scan_file/');
-define('VISA_DOMAIN',		'http://file.visa2vanuatu.cn/visa_file/');
-define('CAPTCHA_DOMAIN',	'http://file.visa2vanuatu.cn/captcha/');
+define('SCAN_DOMAIN',		'http://file.vanuatuvisa.cn/scan_file/');
+define('VISA_DOMAIN',		'http://file.vanuatuvisa.cn/visa_file/');
+define('CAPTCHA_DOMAIN',	'http://file.vanuatuvisa.cn/captcha/');
 
-define('VISA_BACKGROUND', 	'/data/file/visa_background.jpg');
-define('VISA_FONT_TYPE', 	'/data/file/arialuni.ttf');
+define('VISA_BACKGROUND', 	'/data/file/resource/visa_background.jpg');
+define('VISA_FONT_TYPE', 	'/data/file/resource/arialuni.ttf');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

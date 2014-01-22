@@ -155,7 +155,7 @@
 						} else {
 					?>
 					<tr>
-						<td colspan="9" style="text-align:center;">nothing got here!</td>
+						<td colspan="9" style="text-align:center;">暂无任何相关记录！</td>
 					</tr>
 					<?php
 						}

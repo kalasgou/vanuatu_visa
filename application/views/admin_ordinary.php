@@ -49,6 +49,7 @@
 				<a href="/admin/permit">管理员帐号</a> / 
 				<a style="color:#1100FF;">普通用户帐号</a> / 
 				<a href="/admin/fast">快速通道</a> / 
+				<a href="/admin/agency">办事处管理</a> / 
 				<a href="/account">帐户信息</a> / 
 				<a href="/password">密码修改</a> / 
 				<a href="/logout">安全登出</a>
@@ -126,7 +127,7 @@
 						} else {
 					?>
 					<tr>
-						<td colspan="8" style="text-align:center;">nothing got here!</td>
+						<td colspan="8" style="text-align:center;">暂无任何相关记录！</td>
 					</tr>
 					<?php
 						}

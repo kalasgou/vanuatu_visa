@@ -274,6 +274,10 @@
 			return $this->admin_db->affected_rows();
 		}
 		
+		public function sum_agency() {
+			return $this->admin_db->count_all_results('agency');
+		}
+		
 		public function get_agencies($page) {
 			$item = 20;
 			

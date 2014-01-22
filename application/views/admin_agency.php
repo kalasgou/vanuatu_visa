@@ -13,7 +13,7 @@
 		<script type="text/javascript" src="/My97DatePicker/WdatePicker.js"></script>
 		<script type="text/javascript" src="/simple.js"></script>
 		<script type="text/javascript">
-			/*function what_is_selected() {
+			function what_is_selected() {
 				$('#od' + selected).css('display', 'none');
 				selected = $('#orderby').val();
 				$('#od' + selected).css('display', 'inline-block');
@@ -21,10 +21,11 @@
 			
 			function filter_them(selected) {
 				switch (selected) {
-					case '1' : location.href = '/admin/audit?orderby=' + selected + '&cur_status=' + $('#cur_status').val(); break;
-					case '2' : location.href = '/admin/audit?orderby=' + selected + '&apply_id=' + $('#apply_id').val(); break;
-					case '3' : location.href = '/admin/audit?orderby=' + selected + '&passport_no=' + $('#passport_no').val(); break;
-					case '4' : location.href = '/admin/audit?orderby=' + selected + '&start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val(); break;
+					case '1' : location.href = '/admin/fast?orderby=' + selected + '&cur_status=' + $('#cur_status').val(); break;
+					case '2' : location.href = '/admin/fast?orderby=' + selected + '&apply_id=' + $('#apply_id').val(); break;
+					case '3' : location.href = '/admin/fast?orderby=' + selected + '&passport_no=' + $('#passport_no').val(); break;
+					case '4' : location.href = '/admin/fast?orderby=' + selected + '&start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val(); break;
+					case '5' : location.href = '/admin/fast?orderby=' + selected + '&user=1'; break;
 					default : return;
 				}
 			}
@@ -41,7 +42,7 @@
 					case '4' : $('#start_time').val(start_time); $('#end_time').val(end_time); break;
 					default : return;
 				}
-			}*/
+			}
 		</script>
 		<style type="text/css">
 			.form-control {width: 60px;}
@@ -53,22 +54,24 @@
 				<h5>您好，办事处管理员 <?php echo $user['realname'];?>！</h5>
 			</div>
 			<div id="menu">
-				<a href="/admin/audit">审核申请</a> / 
-				<a style="color:#1100FF;">审核记录</a> / 
-				<a href="/admin/present">线下申请</a> / 
+				<a href="/admin/permit">管理员帐号</a> / 
+				<a href="/admin/ordinary">普通用户帐号</a> / 
+				<a href="/admin/fast">快速通道</a> / 
+				<a style="color:#1100FF;">办事处管理</a> / 
 				<a href="/account">帐户信息</a> / 
 				<a href="/password">密码修改</a> / 
 				<a href="/logout">安全登出</a>
 			</div>
 		</nav>
 		<div id="list_box">
-			<!--<div>
+			<div>
 				<div style="display:inline-block;">
 					<select id="orderby" onchange="javascript:what_is_selected();">
 						<option value="1">申请状态</option>
 						<option value="2">申请流水号</option>
 						<option value="3">护照号</option>
 						<option value="4">日期范围</option>
+						<option value="5">线下申请</option>
 					</select>
 				</div>
 				<div id="od1" style="display:inline-block;">
@@ -78,6 +81,7 @@
 						<option value="fail">未通过</option>
 						<option value="pass">已通过</option>
 						<option value="paid">已缴费</option>
+						<option value="visa">已发签证</option>
 						<option value="lost">已失效</option>
 					</select>
 				</div>
@@ -95,38 +99,48 @@
 				<div style="display:inline-block;">
 					<button onclick="javascript:filter_them(selected);">搜索</button>
 				</div>
-			</div>-->
+			</div>
 			<table class="table table-hover">
 				<colgroup>
-					<col style="width:11%;"/>
-					<col style="width:16%"/>
-					<col style="width:11%;"/>
-					<col style="width:62%"/>
+					<col style="width:5%;"/>
+					<col style="width:10%"/>
+					<col style="width:40%;"/>
+					<col style="width:15%"/>
+					<col style="width:10%;"/>
+					<col style="width:10%;"/>
+					<col style="width:10%"/>
 				</colgroup>
 				<thead>
 					<tr>
-						<th>申请流水号</th>
-						<th>审核时间</th>
-						<th>审核状态</th>
-						<th>审核留言</th>
+						<th>编号</th>
+						<th>省/市</th>
+						<th>具体地址</th>
+						<th>联系电话</th>
+						<th>当前状态</th>
+						<th>更新日期</th>
+						<th>操作</th>
 					</tr>
 				</thead>
 				<tbody>
-					<?php if (count($records) > 0) {
-							foreach ($records as $one) { 
+					<?php if (count($agencies) > 0) {
+							foreach ($agencies as $one) { 
 					?>
 					<tr>
-						<td><a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank"><?php echo $one['uuid'];?></a></td>
-						<td><?php echo $one['audit_time'];?></td>
+						<td><?php echo $one['id'];?></td>
+						<td><?php echo $one['province_cn'];?></td>
+						<td><?php echo $one['location_cn'];?></td>
+						<td><?php echo $one['telephone'];?></td>
 						<td><?php echo $one['status_str'];?></td>
-						<td><?php echo $one['message'];?></td>
+						<td><?php echo date('Y-m-d H:i:s', $one['date']);?></td>
+						<td>修改 / 删除
+						</td>
 					</tr>
 					<?php
 							}
 						} else {
 					?>
 					<tr>
-						<td colspan="4" style="text-align:center;">暂无任何相关记录！</td>
+						<td colspan="9" style="text-align:center;">暂无任何相关记录！</td>
 					</tr>
 					<?php
 						}
@@ -134,13 +148,13 @@
 				</tbody>
 			</table>
 			<div id="pagination">
-				<p>当前共有<label style="color:green;"><?php echo $num_records;?></label>条记录</p>
+				<p>当前共有<label style="color:green;"><?php echo $num_agencies;?></label>条记录</p>
 				<?php echo $pagination;?>
 			</div>
 		</div>
 	</body>
 	<script type="text/javascript">
-		/*var selected = '1';
+		var selected = '1';
 		var selected_arg = '', cur_status = '', apply_id = '', passport_no = '', start_time = '', end_time = '';
 		
 		var argument_str = location.search;
@@ -159,6 +173,6 @@
 				}
 			}
 			set_default_filter();
-		}*/
+		}
 	</script>
 </html>

@@ -938,6 +938,17 @@ class Admin extends AdminLoginController {
 
 		$this->load->view('admin_agency', $data);
 	}
+	
+	public function update_agency() {
+		if ($this->permission != 1) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		$data['id'] = $this->input->post()
+	}
 }
 
 /* End of file */

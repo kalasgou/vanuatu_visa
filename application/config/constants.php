@@ -36,25 +36,34 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
-define('HASH_COST_LOG2', 	8);
-define('HASH_PORTABLE', 	FALSE);
+define('HASH_COST_LOG2', 		8);
+define('HASH_PORTABLE', 		FALSE);
 
-define('MAX_STAY_DAYS',		90);
+define('MAX_STAY_DAYS',			90);
 
-define('VISA_TEMPLATE',		'/data/file/visa_file/template/visa_template.docx');
+define('VISA_TEMPLATE',			'/data/file/visa_file/template/visa_template.docx');
 
-define('VISA_PATH',			'/data/file/visa_file/');
-define('SCAN_PATH',			'/data/file/scan_file/');
-define('CAPTCHA_PATH',		'/data/file/captcha/');
+define('VISA_PATH',				'/data/file/visa_file/');
+define('SCAN_PATH',				'/data/file/scan_file/');
+define('CAPTCHA_PATH',			'/data/file/captcha/');
 
-define('REDIS_DEFAULT', 	'/tmp/redis_6379.sock');
+define('REDIS_DEFAULT', 		'/tmp/redis_6379.sock');
 
-define('SCAN_DOMAIN',		'http://file.vanuatuvisa.cn/scan_file/');
-define('VISA_DOMAIN',		'http://file.vanuatuvisa.cn/visa_file/');
-define('CAPTCHA_DOMAIN',	'http://file.vanuatuvisa.cn/captcha/');
+define('SCAN_DOMAIN',			'http://file.vanuatuvisa.cn/scan_file/');
+define('VISA_DOMAIN',			'http://file.vanuatuvisa.cn/visa_file/');
+define('CAPTCHA_DOMAIN',		'http://file.vanuatuvisa.cn/captcha/');
 
-define('VISA_BACKGROUND', 	'/data/file/resource/visa_background.jpg');
-define('VISA_FONT_TYPE', 	'/data/file/resource/arialuni.ttf');
+define('VISA_BACKGROUND', 		'/data/file/resource/visa_background.jpg');
+define('VISA_FONT_TYPE', 		'/data/file/resource/arialuni.ttf');
+
+define('SYSTEM_ADMIN',			1);
+define('EMBASSY_ADMIN',			2);
+define('AGENCY_ADMIN',			3);
+define('ORDINARY_USER',			10000);
+
+define('ACCOUNT_CANCELLED',		-1);
+define('ACCOUNT_INACTIVE',		0);
+define('ACCOUNT_NORMAL',		1);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

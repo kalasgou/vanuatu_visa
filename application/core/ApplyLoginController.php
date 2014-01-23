@@ -27,7 +27,7 @@ abstract class ApplyLoginController extends CI_Controller {
 				$location = '重新发送邮箱验证';
 				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 				show_error($msg);
-			} else if ($this->permission != 10000) {
+			} else if ($this->permission != ORDINARY_USER) {
 				$msg['tips'] = '帐户无效！';
 				$link = '/login';
 				$location = '返回登录页';

@@ -27,7 +27,7 @@ abstract class AdminLoginController extends CI_Controller {
 				$location = '重新发送邮箱验证';
 				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 				show_error($msg);
-			} else if ($this->permission < 1 || $this->permission > 3) {
+			} else if ($this->permission < SYSTEM_ADMIN || $this->permission > AGENCY_ADMIN) {
 				$msg['tips'] = '帐户无效！';
 				$link = '/admin_login';
 				$location = '返回登录页';

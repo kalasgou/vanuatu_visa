@@ -13,7 +13,7 @@
 		<script type="text/javascript" src="/My97DatePicker/WdatePicker.js"></script>
 		<script type="text/javascript" src="/simple.js"></script>
 		<script type="text/javascript">
-			function what_is_selected() {
+			/*function what_is_selected() {
 				$('#od' + selected).css('display', 'none');
 				selected = $('#orderby').val();
 				$('#od' + selected).css('display', 'inline-block');
@@ -42,7 +42,7 @@
 					case '4' : $('#start_time').val(start_time); $('#end_time').val(end_time); break;
 					default : return;
 				}
-			}
+			}*/
 		</script>
 		<style type="text/css">
 			.form-control {width: 60px;}
@@ -74,40 +74,15 @@
 						<option value="5">线下申请</option>
 					</select>
 				</div>
-				<div id="od1" style="display:inline-block;">
-					&nbsp;请选择需要查询的状态类型:&nbsp;
-					<select id="cur_status">
-						<option value="wait">待审核</option>
-						<option value="fail">未通过</option>
-						<option value="pass">已通过</option>
-						<option value="paid">已缴费</option>
-						<option value="visa">已发签证</option>
-						<option value="lost">已失效</option>
-					</select>
-				</div>
-				<div id="od2" style="display:none">
-					&nbsp;请输入需要查询的申请流水号:&nbsp;<input id="apply_id" type="text" placeholder="申请流水号"/>
-				</div>
-				<div id="od3" style="display:none">
-					&nbsp;请输入需要查询的护照号:&nbsp;<input id="passport_no" type="text" placeholder="护照号"/>
-				</div>
-				<div id="od4" style="display:none">
-					&nbsp;请输入需要查询的日期范围:&nbsp;<input id="start_time" type="text" placeholder="起始日期" onclick="WdatePicker({readOnly:true, dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d'})"/> ~ 
-					<input id="end_time" type="text" placeholder="结束日期" onclick="WdatePicker({readOnly:true, dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d'})"/>
-					<a href="javascript:void(0)" onclick="download_excel();" target="_blank">导出Excel表格</a>
-				</div>
-				<div style="display:inline-block;">
-					<button onclick="javascript:filter_them(selected);">搜索</button>
-				</div>
 			</div>
 			<table class="table table-hover">
 				<colgroup>
 					<col style="width:5%;"/>
 					<col style="width:10%"/>
 					<col style="width:40%;"/>
-					<col style="width:15%"/>
-					<col style="width:10%;"/>
-					<col style="width:10%;"/>
+					<col style="width:12%"/>
+					<col style="width:8%;"/>
+					<col style="width:15%;"/>
 					<col style="width:10%"/>
 				</colgroup>
 				<thead>
@@ -129,10 +104,12 @@
 						<td><?php echo $one['id'];?></td>
 						<td><?php echo $one['province_cn'];?></td>
 						<td><?php echo $one['location_cn'];?></td>
-						<td><?php echo $one['telephone'];?></td>
+						<td><input type="text" style="width:108px;" value="<?php echo $one['telephone'];?>"/></td>
 						<td><?php echo $one['status_str'];?></td>
 						<td><?php echo date('Y-m-d H:i:s', $one['date']);?></td>
-						<td>修改 / 删除
+						<td>
+							<a href="javascript:void(0);" onclick="">修改</a> / 
+							<a href="javascript:void(0);" onclick="">删除</a>
 						</td>
 					</tr>
 					<?php
@@ -154,7 +131,7 @@
 		</div>
 	</body>
 	<script type="text/javascript">
-		var selected = '1';
+		/*var selected = '1';
 		var selected_arg = '', cur_status = '', apply_id = '', passport_no = '', start_time = '', end_time = '';
 		
 		var argument_str = location.search;
@@ -173,6 +150,6 @@
 				}
 			}
 			set_default_filter();
-		}
+		}*/
 	</script>
 </html>

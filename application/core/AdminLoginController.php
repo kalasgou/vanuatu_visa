@@ -2,9 +2,9 @@
 
 abstract class AdminLoginController extends CI_Controller {
 	
-	public $userid = 0;
-	public $permission = 0;
-	public $status = -1;
+	public $userid = ILLEGAL_USER;
+	public $permission = ILLEGAL_USER;
+	public $status = ACCOUNT_CANCELLED;
 	public $user_info = array();
 	
 	public function __construct() {
@@ -21,7 +21,7 @@ abstract class AdminLoginController extends CI_Controller {
 			$this->permission = $this->user_info['permission'];
 			$this->status = $this->user_info['status'];
 			
-			if ($this->status != 1) {
+			if ($this->status != ACCOUNT_NORMAL) {
 				$msg['tips'] = '帐户未激活。若已验证邮箱，请等待系统管理员激活帐户；未验证邮箱可点击下面链接重新获取验证链接。';
 				$link = '/user/send_activation_code/administrator/'.$this->userid;
 				$location = '重新发送邮箱验证';

@@ -56,6 +56,7 @@ define('CAPTCHA_DOMAIN',		'http://file.vanuatuvisa.cn/captcha/');
 define('VISA_BACKGROUND', 		'/data/file/resource/visa_background.jpg');
 define('VISA_FONT_TYPE', 		'/data/file/resource/arialuni.ttf');
 
+define('ILLEGAL_USER',			0);
 define('SYSTEM_ADMIN',			1);
 define('EMBASSY_ADMIN',			2);
 define('AGENCY_ADMIN',			3);

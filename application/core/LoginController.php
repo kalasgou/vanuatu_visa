@@ -2,8 +2,8 @@
 
 abstract class LoginController extends CI_Controller {
 	
-	public $userid = 0;
-	public $status = 0;
+	public $userid = ILLEGAL_USER;
+	public $status = ACCOUNT_INACTIVE;
 	public $user_info = array();
 	
 	public function __construct() {

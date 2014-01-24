@@ -6,9 +6,9 @@ class Admin extends AdminLoginController {
 
 	public function index() {
 		switch (intval($this->permission)) {
-			case 3: header('Location: '. base_url('/admin/audit')); break;
-			case 2: header('Location: '. base_url('/admin/approve')); break;
-			case 1: header('Location: '. base_url('/admin/permit')); break;
+			case AGENCY_ADMIN: header('Location: '. base_url('/admin/audit')); break;
+			case EMBASSY_ADMIN: header('Location: '. base_url('/admin/approve')); break;
+			case SYSTEM_ADMIN: header('Location: '. base_url('/admin/permit')); break;
 			default : 
 				$msg['tips'] = '你的帐户无此操作权限！';
 				$link = 'javascript:history.go(-1);';
@@ -19,7 +19,7 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function present($uuid = '') {
-		if ($this->permission != 3) {
+		if ($this->permission != AGENCY_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -122,7 +122,7 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function submit_present() {
-		if ($this->permission != 3) {
+		if ($this->permission != AGENCY_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -232,7 +232,7 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function audit($page = 1) {
-		if ($this->permission != 3) {
+		if ($this->permission != AGENCY_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -288,7 +288,7 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function approve($page = 1) {
-		if ($this->permission != 2) {
+		if ($this->permission != EMBASSY_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -344,7 +344,7 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function fast($page = 1) {
-		if ($this->permission != 1) {
+		if ($this->permission != SYSTEM_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -400,7 +400,7 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function permit($page = 1) {
-		if ($this->permission != 1) {
+		if ($this->permission != SYSTEM_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -454,7 +454,7 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function ordinary($page = 1) {
-		if ($this->permission != 1) {
+		if ($this->permission != SYSTEM_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -813,7 +813,7 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function activate_account() {
-		if ($this->permission != 1) {
+		if ($this->permission != SYSTEM_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -838,7 +838,7 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function audit_trace($page = 1) {
-		if ($this->permission < 2 || $this->permission > 3) {
+		if ($this->permission < EMBASSY_ADMIN || $this->permission > AGENCY_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -897,7 +897,7 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function agency($page = 1) {
-		if ($this->permission != 1) {
+		if ($this->permission != SYSTEM_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -940,14 +940,20 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function update_agency() {
-		if ($this->permission != 1) {
+		if ($this->permission != SYSTEM_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
-		$data['id'] = $this->input->post()
+		$data['id'] = trim($this->input->post('id', TRUE));
+		$data['province_cn'] = trim($this->input->post('province_cn', TRUE));
+		$data['location_cn'] = trim($this->input->post('location_cn', TRUE));
+		$data['province_en'] = trim($this->input->post('province_en', TRUE));
+		$data['location_en'] = trim($this->input->post('location_en', TRUE));
+		$data['telephone'] = trim($this->input->post('telephone', TRUE));
+		$data['date'] = $_SERVER['REQUEST_TIME'];
 	}
 }
 

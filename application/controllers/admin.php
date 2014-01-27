@@ -941,19 +941,28 @@ class Admin extends AdminLoginController {
 	
 	public function update_agency() {
 		if ($this->permission != SYSTEM_ADMIN) {
-			$msg['tips'] = '你的帐户无此操作权限！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
+			$ret['msg'] = 'forbidden';
+			echo json_encode($ret);
+			exit('Account Not Allowed to Perform This Task');
 		}
+		
 		$data['id'] = trim($this->input->post('id', TRUE));
-		$data['province_cn'] = trim($this->input->post('province_cn', TRUE));
-		$data['location_cn'] = trim($this->input->post('location_cn', TRUE));
-		$data['province_en'] = trim($this->input->post('province_en', TRUE));
-		$data['location_en'] = trim($this->input->post('location_en', TRUE));
-		$data['telephone'] = trim($this->input->post('telephone', TRUE));
+		$data['city_cn'] = trim($this->input->post('city_cn', TRUE));
+		$data['addr_cn'] = trim($this->input->post('addr_cn', TRUE));
+		//$data['city_en'] = trim($this->input->post('city_en', TRUE));
+		//$data['addr_en'] = trim($this->input->post('addr_en', TRUE));
+		$data['contact'] = trim($this->input->post('contact', TRUE));
 		$data['date'] = $_SERVER['REQUEST_TIME'];
+		
+		$this->load->model('admin_model', 'adm');
+		
+		if ($this->adm->upsert_agency($data) > 0) {
+			$ret['msg'] = 'success';
+		} else {
+			$ret['msg'] = 'fail';
+		}
+		
+		echo json_encode($ret);
 	}
 }
 

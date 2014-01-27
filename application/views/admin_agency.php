@@ -45,7 +45,10 @@
 			}*/
 		</script>
 		<style type="text/css">
-			.form-control {width: 60px;}
+			.city, .addr, .cont {border:1px dotted #000;border-top-width:0px; border-right-width:0px; border-left-width:0px;}
+			.city {width:100px;}
+			.addr {width:324px;}
+			.cont {width:104px;}
 		</style>
 	</head>
 	<body>
@@ -77,23 +80,23 @@
 			</div>
 			<table class="table table-hover">
 				<colgroup>
-					<col style="width:5%;"/>
 					<col style="width:10%"/>
-					<col style="width:40%;"/>
 					<col style="width:12%"/>
-					<col style="width:8%;"/>
+					<col style="width:34%;"/>
+					<col style="width:12%"/>
+					<col style="width:7%;"/>
 					<col style="width:15%;"/>
 					<col style="width:10%"/>
 				</colgroup>
 				<thead>
 					<tr>
-						<th>编号</th>
-						<th>省/市</th>
-						<th>具体地址</th>
+						<th>省</th>
+						<th>市</th>
+						<th>地 址</th>
 						<th>联系电话</th>
-						<th>当前状态</th>
+						<th>状 态</th>
 						<th>更新日期</th>
-						<th>操作</th>
+						<th>操 作</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -101,15 +104,15 @@
 							foreach ($agencies as $one) { 
 					?>
 					<tr>
-						<td><?php echo $one['id'];?></td>
 						<td><?php echo $one['province_cn'];?></td>
-						<td><?php echo $one['location_cn'];?></td>
-						<td><input type="text" style="width:108px;" value="<?php echo $one['telephone'];?>"/></td>
+						<td><input id="city_<?php echo $one['id'];?>" class="city" type="text" value="<?php echo $one['city_cn'];?>"/></td>
+						<td><input id="addr_<?php echo $one['id'];?>" class="addr" type="text" value="<?php echo $one['addr_cn'];?>"/></td>
+						<td><input id="cont_<?php echo $one['id'];?>" class="cont" type="text" value="<?php echo $one['contact'];?>"/></td>
 						<td><?php echo $one['status_str'];?></td>
 						<td><?php echo date('Y-m-d H:i:s', $one['date']);?></td>
 						<td>
-							<a href="javascript:void(0);" onclick="">修改</a> / 
-							<a href="javascript:void(0);" onclick="">删除</a>
+							<a href="javascript:void(0);" onclick="update_agency(<?php echo $one['id'];?>);">修改</a> / 
+							<a href="javascript:void(0);" onclick="delete_agency(<?php echo $one['id'];?>);">删除</a>
 						</td>
 					</tr>
 					<?php

@@ -281,11 +281,28 @@
 		public function get_agencies($page) {
 			$item = 20;
 			
-			$this->admin_db->order_by('id', 'desc');
+			$this->admin_db->select('*');
+			$this->admin_db->from('agency');
+			$this->admin_db->join('province', 'province.id = agency.province_id', 'left');
+			$this->admin_db->order_by('date', 'desc');
 			$this->admin_db->limit($item, $item * $page);
-			$query = $this->admin_db->get('agency');
+			$query = $this->admin_db->get();
 			
 			return $query->result_array();
+		}
+		
+		public function upsert_agency($data) {
+			$this->admin_db->set('city_cn', $data['city_cn']);
+			$this->admin_db->set('addr_cn', $data['addr_cn']);
+			//$this->admin_db->set('city_en', $data['city_en']);
+			//$this->admin_db->set('addr_en', $data['addr_en']);
+			$this->admin_db->set('contact', $data['contact']);
+			$this->admin_db->set('date', $data['date']);
+			$this->admin_db->where('id', $data['id']);
+			
+			$this->admin_db->update('agency');
+			
+			return $this->admin_db->affected_rows();
 		}
 	}
 ?>

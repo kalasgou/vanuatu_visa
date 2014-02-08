@@ -88,13 +88,13 @@
 				<div>
 					<input type="hidden" id="user_type" name="user_type" value="applicant"/>
 				</div>
-				<div class="form-group">
+				<!--<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<input id="agreement" type="checkbox"/>
 						<span>我已阅读并同意</span>
 						<a id="agreement-link" href="/agreement">XXXXXXXX协议</a>
 					</div>
-				</div>
+				</div>-->
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<button type="submit" class="btn btn-default">注册</button>

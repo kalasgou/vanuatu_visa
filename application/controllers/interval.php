@@ -4,14 +4,14 @@
 		
 		public function __construct() {
 			parent::__construct();
-			/*if (!$this->input->is_cli_request()) {
+			if (!$this->input->is_cli_request()) {
 				die('forbidden');
-			}*/
+			}
 			$this->load->helper('util');
 		}
 		
 		public function regt_noti() {
-			$subject = 'Visa2Vanuatu帐户邮箱验证';
+			$subject = 'VanuatuVisa帐户邮箱验证';
 			
 			$prefix = '<p>新注册帐号激活链接</p>';
 			
@@ -20,7 +20,7 @@
 			$suffix['applicant'] = $tips;
 			$suffix['administrator'] = $tips.'<p>管理员帐户邮箱激活后还需待系统管理员开启管理操作权限方可正式使用。</p>';
 			
-			//while (TRUE) {
+			while (TRUE) {
 				$info = json_decode(pop_email_queue('register_notification'), TRUE);
 				if ($info !== NULL) {
 					$link = base_url('user/activate/'.$info['hash_key']);
@@ -37,7 +37,7 @@
 				} else {
 					sleep(6);
 				}
-			//}
+			}
 		}
 		
 		public function pswd_noti() {
@@ -46,7 +46,7 @@
 		public function pass_noti() {
 			$this->load->model('interval_model', 'ivm');
 			
-			$subject = 	'Visa2Vanuatu签证申请进度';
+			$subject = 	'VanuatuVisa签证申请进度';
 			$remark = 	'<p>所需证明文件包括：</p>'.
 						'<p>（1）签证申请表格打印版；</p>'.
 						'<p>（2）两张白底的签证照片；</p>'.
@@ -55,7 +55,7 @@
 						'<p>（5）往返机票打印件；</p>'.
 						'<p>（6）每人五万元人民币的银行存款证明原件。</p>';
 			
-			//while (TRUE) {
+			while (TRUE) {
 				$uuid = pop_email_queue('pass_notification');
 				if ($uuid) {
 					$info = $this->ivm->combined_info($uuid);
@@ -73,9 +73,9 @@
 					unset($info);
 					unset($data);
 				} else {
-					sleep(10);
+					sleep(20);
 				}
-			//}
+			}
 		}
 		
 		public function fail_noti() {
@@ -87,10 +87,10 @@
 		public function visa_noti() {
 			$this->load->model('interval_model', 'ivm');
 			
-			$subject = 	'Visa2Vanuatu签证申请进度';
+			$subject = 	'VanuatuVisa签证申请进度';
 			$remark = 	'请下载签证文件（见附件）自行打印。';
 			
-			//while (TRUE) {
+			while (TRUE) {
 				$uuid = pop_email_queue('visa_notification');
 				if ($uuid) {
 					$info = $this->ivm->combined_info($uuid);
@@ -109,9 +109,9 @@
 					unset($info);
 					unset($data);
 				} else {
-					sleep(10);
+					sleep(60);
 				}
-			//}
+			}
 		}
 		
 		public function oops_noti() {

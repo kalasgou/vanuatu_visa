@@ -19,7 +19,7 @@
 			}
 			
 			$redis = new Redis();
-			if (!$redis->connect('127.0.0.1', $socket)) {
+			if (!$redis->connect($socket)) {
 				unset($redis);
 				die('Redis not Ready');
 			}

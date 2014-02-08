@@ -72,7 +72,7 @@
 		$mail->Password = 'cnmbeva11';
 
 		$mail->From = 'vanuatuembassycn@hotmail.com';
-		$mail->FromName = 'Visa2Vanuatu';
+		$mail->FromName = 'VanuatuVisa';
 		$mail->addAddress($data['email'], $data['user']);
 		$mail->addReplyTo('305858854@qq.com');
 		$mail->addCC('305858854@qq.com');
@@ -203,12 +203,29 @@
 		return $redis->rPop($key);
 	}
 	
+	function gen_random_word($length = 5) {
+		$letters = 'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$word = '';
+		$pos = -1;
+		
+		for ($i = 0; $i < $length; $i ++) {
+			$pos = mt_rand(0, 61);
+			$word .= $letters[$pos];
+		}
+		
+		return $word;
+	}
+	
 	function get_captcha() {
 		$CI = & get_instance();
 		$CI->load->helper('captcha');
 		$val = array(
+				'img_width' => 100,
+				'img_height' => 30,
 				'img_path' => CAPTCHA_PATH,
 				'img_url' => CAPTCHA_DOMAIN,
+				'font_path' => '/data/file/resource/arial.ttf',
+				'word' => gen_random_word(5),
 				);
 		$cap = create_captcha($val);
 		

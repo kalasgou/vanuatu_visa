@@ -20,12 +20,12 @@ class User extends LoginController {
 			case 'applicant':
 				$data['nickname'] = trim($this->input->post('nickname', TRUE));
 				$data['phone'] = trim($this->input->post('phone', TRUE));
-				$data['status'] = 0;
+				$data['status'] = ACCOUNT_INACTIVE;
 				break;
 			case 'administrator':
 				$data['permission'] = trim($this->input->post('permission', TRUE));
 				$data['province_id'] = trim($this->input->post('province_id', TRUE));
-				$data['status'] = -1;
+				$data['status'] = ACCOUNT_CANCELLED;
 				break;
 			default :
 				show_error('非法操作！');
@@ -257,9 +257,9 @@ class User extends LoginController {
 		
 		if (($info = json_decode($redis->get($hash_key), TRUE)) !== NULL) {
 			switch ($info['user_type']) {
-				case 'applicant': $info['status'] = 1; break;
-				case 'administrator': $info['status'] = 0; break;
-				default : $info['status'] = 0;
+				case 'applicant': $info['status'] = ACCOUNT_NORMAL; break;
+				case 'administrator': $info['status'] = ACCOUNT_INACTIVE; break;
+				default : $info['status'] = ACCOUNT_INACTIVE;
 			}
 			
 			$this->load->model('user_model', 'user');
@@ -296,7 +296,7 @@ class User extends LoginController {
 			$user = array();
 			$user = $this->user->$func_name($userid);
 			
-			if ($user && $user['status'] != 1) {
+			if ($user && $user['status'] != ACCOUNT_NORMAL) {
 				$ret['msg'] = 'success';
 				
 				$this->load->library('RedisDB');

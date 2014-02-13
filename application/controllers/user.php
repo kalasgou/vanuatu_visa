@@ -88,10 +88,10 @@ class User extends LoginController {
 			$hash_key = md5($userid.'_'.$data['email'].'_'.$data['reg_time']);
 			$info['userid'] = $userid;
 			$info['user_type'] = $user_type;
-			$redis->setex($hash_key, 3600, json_encode($info));
-			
 			$info['hash_key'] = $hash_key;
 			$info['email'] = $data['email'];
+			
+			$redis->setex($hash_key, 3600, json_encode($info));
 			push_email_queue('register_notification', json_encode($info));
 			
 			$msg['tips'] = '注册成功，帐户激活链接会在三分钟内发送到你的注册邮箱。';
@@ -279,9 +279,9 @@ class User extends LoginController {
 				show_error($msg);
 			}
 		} else {
-			$msg['tips'] = '激活链接无效或已过期，请重新获取！';
-			$link = '/user/send_activation_code/'.$info['user_type'].'/'.$info['userid'];
-			$location = '重新发送邮箱验证';
+			$msg['tips'] = '激活链接无效或已过期，请先登录帐户后根据提示重新获取！';
+			$link = '/index.php';
+			$location = '返回网站主页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -306,10 +306,10 @@ class User extends LoginController {
 				$info = array();
 				$info['userid'] = $user['userid'];
 				$info['user_type'] = $user_type;
-				$redis->setex($hash_key, 3600, json_encode($info));
-				
 				$info['hash_key'] = $hash_key;
 				$info['email'] = $user['email'];
+				
+				$redis->setex($hash_key, 3600, json_encode($info));
 				push_email_queue('register_notification', json_encode($info));
 			} else {
 				$ret['msg'] = 'empty';

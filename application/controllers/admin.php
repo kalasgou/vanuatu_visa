@@ -3,7 +3,7 @@
 require APPPATH .'core/AdminLoginController.php';
 
 class Admin extends AdminLoginController {
-
+	
 	public function index() {
 		switch (intval($this->permission)) {
 			case AGENCY_ADMIN: header('Location: '. base_url('/admin/audit')); break;
@@ -441,13 +441,13 @@ class Admin extends AdminLoginController {
 		$data['users'] = $this->user->get_administrators($data);
 		$data['num_users'] = $config['total_rows'];
 		
-		$provinces = array('1' => '北京', '2' => '广州', '3' => '上海');
-		$permissions = array('1' => '系统管理员', '2' => '大使馆管理员', '3' => '办事处管理员');
-		$accounts = array('-1' => '已失效', '0' => '未激活', '1' => '正常');
+		$provinces = array('0' => '任何', '1' => '北京', '2' => '广东', '3' => '上海');
+		
 		foreach ($data['users'] as &$one) {
-			$one['status_str'] = $accounts[$one['status']];
 			$one['province_str'] = $provinces[$one['province_id']];
-			$one['permission_str'] = $permissions[$one['permission']];
+			
+			$one['permission_str'] = $this->config->item($one['permission'], 'account_type');
+			$one['status_str'] = $this->config->config['account_status'][$one['status']];
 		}
 		
 		$this->load->view('admin_permit', $data);
@@ -495,9 +495,8 @@ class Admin extends AdminLoginController {
 		$data['users'] = $this->user->get_applicants($data);
 		$data['num_users'] = $config['total_rows'];
 		
-		$accounts = array('-1' => '已失效', '0' => '未激活', '1' => '正常');
 		foreach ($data['users'] as &$one) {
-			$one['status_str'] = $accounts[$one['status']];
+			$one['status_str'] = $this->config->config['account_status'][$one['status']];
 		}
 		
 		$this->load->view('admin_ordinary', $data);
@@ -835,6 +834,8 @@ class Admin extends AdminLoginController {
 		}
 		
 		echo json_encode($ret);
+		
+		// agency or embassy account activation notification email
 	}
 	
 	public function audit_trace($page = 1) {

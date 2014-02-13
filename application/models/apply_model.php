@@ -237,8 +237,11 @@
 		public function get_agency_info() {
 			$this->apply_db->select('*');
 			$this->apply_db->from('agency');
-			$this->apply_db->join('province', 'province.id = agency.province.id', 'left');
+			$this->apply_db->join('province', 'province.id = agency.province_id', 'left');
+			$this->apply_db->order_by('province_id', 'asc');
+			$query = $this->apply_db->get();
 			
+			return $query->result_array();
 		}
 	}
 ?>

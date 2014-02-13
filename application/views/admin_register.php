@@ -75,7 +75,7 @@
 				<div class="form-group">
 					<label for="inputAgency3" class="col-sm-2 control-label">所属办事处:</label>
 					<div class="col-sm-10">
-						<select class="form-control" name="province_id">
+						<select class="form-control" name="province_id" onchange="">
 							<option value="1">北京</option>
 							<option value="2">广东</option>
 							<option value="3">上海</option>

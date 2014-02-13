@@ -220,7 +220,7 @@
 		$CI = & get_instance();
 		$CI->load->helper('captcha');
 		$val = array(
-				'img_width' => 100,
+				'img_width' => 120,
 				'img_height' => 30,
 				'img_path' => CAPTCHA_PATH,
 				'img_url' => CAPTCHA_DOMAIN,

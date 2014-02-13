@@ -47,7 +47,7 @@
 					<p>请选择办事处:<br>
 					<select name="province_id" onchange="">
 						<?php foreach ($agencies as $one) { ?>
-						<option value="<?php echo $one['id'];?>" <?php echo ($province_id == $one['id'] ? 'selected="selected"' : '')?>><?php echo $one['province_cn'].'--'.$one['location_cn']?></option>
+						<option value="<?php echo $one['province_id'];?>" <?php echo ($province_id == $one['province_id'] ? 'selected="selected"' : '')?>><?php echo $one['province_cn'].'--'.$one['city_cn'].'--'.$one['addr_cn'];?></option>
 						<?php } ?>
 					</select>
 					</P>

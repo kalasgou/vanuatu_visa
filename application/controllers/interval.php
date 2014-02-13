@@ -11,19 +11,19 @@
 		}
 		
 		public function regt_noti() {
-			$subject = 'VanuatuVisa帐户邮箱验证';
+			$subject = 'VanuatuVisa帐户邮箱验证邮件';
 			
-			$prefix = '<p>新注册帐号激活链接</p>';
+			$prefix = '<p>新注册帐号激活（验证）链接</p>';
 			
 			$tips = '<p>链接有效期为注册后一小时内，若链接失效可前往系统登录帐户后根据提示重新发送激活链接。</p>';
 			
 			$suffix['applicant'] = $tips;
-			$suffix['administrator'] = $tips.'<p>管理员帐户邮箱激活后还需待系统管理员开启管理操作权限方可正式使用。</p>';
+			$suffix['administrator'] = $tips.'<p>管理员帐户邮箱验证后还需待系统管理员开启管理操作权限方可正式使用。</p>';
 			
 			while (TRUE) {
 				$info = json_decode(pop_email_queue('register_notification'), TRUE);
 				if ($info !== NULL) {
-					$link = base_url('user/activate/'.$info['hash_key']);
+					$link = base_url('/activation_confirm/'.$info['hash_key']);
 					$data = array();
 					$data['email'] = $info['email'];
 					$data['user'] = '';

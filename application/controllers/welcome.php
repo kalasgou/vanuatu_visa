@@ -9,9 +9,9 @@ class Welcome extends LoginController {
 	}
 	
 	public function login() {
-		if ($this->userid > 0 && $this->status == 1) {
+		if ($this->userid > ILLEGAL_USER && $this->status == ACCOUNT_NORMAL) {
 			$msg['tips'] = '已经登录无需重复登录！';
-			$link = '/apply/index;';
+			$link = '/apply/index';
 			$location = '返回用户主页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
@@ -23,9 +23,9 @@ class Welcome extends LoginController {
 	}
 	
 	public function register() {
-		if ($this->userid > 0 && $this->status == 1) {
+		if ($this->userid > ILLEGAL_USER && $this->status == ACCOUNT_NORMAL) {
 			$msg['tips'] = '已经登录，若需注册请先登出帐户！';
-			$link = '/apply/index;';
+			$link = '/apply/index';
 			$location = '返回用户主页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
@@ -37,7 +37,7 @@ class Welcome extends LoginController {
 	}
 	
 	public function admin_login() {
-		if ($this->userid > 0 && $this->status == 1) {
+		if ($this->userid > ILLEGAL_USER && $this->status == ACCOUNT_NORMAL) {
 			$msg['tips'] = '已经登录无需重复登录！';
 			$link = '/admin/index';
 			$location = '返回用户主页';
@@ -51,7 +51,7 @@ class Welcome extends LoginController {
 	}
 	
 	public function admin_register() {
-		if ($this->userid > 0 && $this->status == 1) {
+		if ($this->userid > ILLEGAL_USER && $this->status == ACCOUNT_NORMAL) {
 			$msg['tips'] = '已经登录，若需注册请先登出帐户！';
 			$link = '/admin/index';
 			$location = '返回用户主页';
@@ -64,8 +64,30 @@ class Welcome extends LoginController {
 		$this->load->view('admin_register', $data);
 	}
 	
+	public function activation_confirm($hash_key = '') {
+		$this->load->library('RedisDB');
+		$redis = $this->redisdb->instance(REDIS_DEFAULT);
+		
+		if (($info = json_decode($redis->get($hash_key), TRUE)) !== NULL) {
+			switch ($info['user_type']) {
+				case 'applicant': 
+					$info['tips'] = '请核对帐户信息无误后再激活帐户。'; break;
+				case 'administrator': 
+					$info['tips'] = '管理员帐号通过邮箱验证后须待系统管理员激活后才可正常使用，激活情况将会以电子邮件形式通知。'; break;
+			}
+			
+			$this->load->view('activation_confirm', $info);
+		} else {
+			$msg['tips'] = '激活链接无效或已过期，请先登录帐户后根据提示重新获取！';
+			$link = '/index.php';
+			$location = '返回网站主页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+	}
+	
 	public function account() {
-		if ($this->userid === 0 || $this->status != 1) {
+		if ($this->userid === ILLEGAL_USER || $this->status != ACCOUNT_NORMAL) {
 			$msg['tips'] = '请登录后再进行此操作！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -75,15 +97,14 @@ class Welcome extends LoginController {
 		
 		$user = $this->user_info;
 		
-		$provinces = array('1' => '北京', '2' => '广州', '3' => '上海');
-		$permissions = array('1' => '系统管理员', '2' => '大使馆管理员', '3' => '办事处管理员', '10000' => '普通用户');
-		$accounts = array('-1' => '已失效', '0' => '未激活', '1' => '正常');
+		$provinces = array('0' => '任何', '1' => '北京', '2' => '广东', '3' => '上海');
 		
 		if (isset($user['province_id'])) {
 			$user['province_str'] = $provinces[$user['province_id']];
 		}
-		$user['permission_str'] = $permissions[$user['permission']];
-		$user['status_str'] = $accounts[$user['status']];
+		
+		$user['permission_str'] = $this->config->item($user['permission'], 'account_type');
+		$user['status_str'] = $this->config->config['account_status'][$user['status']];
 		
 		$this->load->helper('util');
 		$user['captcha'] = get_captcha();
@@ -92,7 +113,7 @@ class Welcome extends LoginController {
 	}
 	
 	public function password() {
-		if ($this->userid === 0 || $this->status != 1) {
+		if ($this->userid === ILLEGAL_USER || $this->status != ACCOUNT_NORMAL) {
 			$msg['tips'] = '请登录后再进行此操作！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';

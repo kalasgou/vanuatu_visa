@@ -30,7 +30,7 @@
 			<form class="form-horizontal" role="form" method="post" action="/user/register" onsubmit="return submit_form();">
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<h3>普通帐号注册</h3>
+						<h3>预约用户帐号注册</h3>
 					</div>
 				</div>
 				<div class="form-group">

@@ -38,31 +38,18 @@ class Apply extends ApplyLoginController {
 	}
 	
 	public function agencies($uuid = '') {
+		$agency_info = array();
+		$this->load->model('apply_model', 'alm');
+		$agency_info = $this->alm->get_agency_info();
+		
 		$data = array(
 					'uuid' => '',
 					'province_id' => '1',
-					'agencies' => array(
-						array(
-							'id' => '1',
-							'province_cn' => '北京办事处',
-							'location_cn' => '北京XXXXXXXXXX',
-							),
-						array(
-							'id' => '2',
-							'province_cn' => '广州办事处',
-							'location_cn' => '广州XXXXXXXXXX',
-							),
-						array(
-							'id' => '3',
-							'province_cn' => '上海办事处',
-							'location_cn' => '上海XXXXXXXXXX',
-							),
-						),
+					'agencies' => $agency_info,
 				);
 		$userid = $this->userid;
 		$attributes = 'uuid, province_id';
 		
-		$this->load->model('apply_model', 'alm');
 		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
 		
 		$data['user'] = $this->user_info;

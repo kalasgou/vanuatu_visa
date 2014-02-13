@@ -66,5 +66,18 @@ define('ACCOUNT_CANCELLED',		-1);
 define('ACCOUNT_INACTIVE',		0);
 define('ACCOUNT_NORMAL',		1);
 
+define('NEGATIVE_OVERFLOW',		-128);
+define('APPLY_TRASHED',			-1);
+define('APPLY_NOTFINISHED',		0);
+define('APPLY_WAITING',			11);
+define('APPLY_NOTPASSED',		21);
+define('APPLY_PASSED',			31);
+define('APPLY_PAID',			41);
+define('APPLY_REJECTED',		91);
+define('APPLY_ACCEPTED',		101);
+define('APPLY_EXPIRED',			125);
+define('VISA_EXPIRED',			126);
+define('POSITIVE_OVERFLOW',		127);
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

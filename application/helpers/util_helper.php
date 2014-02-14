@@ -113,7 +113,8 @@
 	}
 	
 	function gen_visa_number($id) {
-		$range = '+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$id -= 1;
+		$range = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$number = '0000CH13';
 		for ($i = 3; $i >= 0; $i --) {
 			$left = $id % 36;

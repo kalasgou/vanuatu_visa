@@ -94,7 +94,8 @@ class User extends LoginController {
 			$redis->setex($hash_key, 3600, json_encode($info));
 			push_email_queue('register_notification', json_encode($info));
 			
-			$msg['tips'] = '注册成功，帐户激活链接会在三分钟内发送到你的注册邮箱。';
+			$msg['tips_1'] = '注册成功，帐户激活链接会在三分钟内发送到你的注册邮箱。';
+			$msg['tips_2'] = '如无法正常收取验证邮件，可点击以下链接重新获取。';
 			$link = '/user/send_activation_code/'.$user_type.'/'.$userid;
 			$location = '重新发送邮箱验证';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';

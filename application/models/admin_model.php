@@ -69,8 +69,8 @@
 				$this->admin_db->where('province_id', $data['province_id']);
 			}
 			$this->admin_db->where('status >= ', 11);
-			$this->admin_db->where('submit_time >= ', $data['start_time']);
-			$this->admin_db->where('submit_time <= ', $data['end_time']);
+			$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
+			$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
 			$this->admin_db->order_by('submit_time', 'desc');
 			$this->admin_db->limit(1000, 1000 * $page);
 			$query = $this->admin_db->get('visa_applying');

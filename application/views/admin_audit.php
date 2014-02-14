@@ -80,6 +80,8 @@
 						<option value="fail">未通过</option>
 						<option value="pass">已通过</option>
 						<option value="paid">已缴费</option>
+						<option value="visa">已发签证</option>
+						<option value="oops">被拒签</option>
 						<option value="lost">已失效</option>
 					</select>
 				</div>
@@ -147,6 +149,9 @@
 							<?php } ?>
 							<?php if ($one['status'] == 41) { ?>
 							<a href="/admin/scan_upload/<?php echo $one['uuid'];?>" target="_blank">上传证明</a>
+							<?php } ?>
+							<?php if ($one['status'] == 101) { ?>
+							<a href="/admin/download_visa/<?php echo $one['uuid'];?>" target="_blank">下载签证文件</a>
 							<?php } ?>
 						</td>
 					</tr>

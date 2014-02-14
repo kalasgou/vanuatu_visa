@@ -82,6 +82,7 @@
 						<option value="pass">已通过</option>
 						<option value="paid">已缴费</option>
 						<option value="visa">已发签证</option>
+						<option value="oops">被拒证</option>
 						<option value="lost">已失效</option>
 					</select>
 				</div>

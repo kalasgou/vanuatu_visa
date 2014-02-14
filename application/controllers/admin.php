@@ -697,6 +697,14 @@ class Admin extends AdminLoginController {
 	}
 	
 	public function download_excel() {
+		if ($this->permission != AGENCY_ADMIN || $this->permission != SYSTEM_ADMIN) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
@@ -895,6 +903,37 @@ class Admin extends AdminLoginController {
 		$ret['records'] = $records;
 		
 		echo json_encode($ret);
+	}
+	
+	public function download_visa($uuid = '') {
+		if ($uuid === '') {
+			show_error('申请流水号出错');
+		}
+		
+		$attributes = 'visa_no';
+		
+		$this->load->model('admin_model', 'adm');
+		$info = $this->adm->retrieve_some_info($uuid, $this->user_info['province_id'], $attributes);
+		
+		if (!$info || $info['visa_no'] === '') {
+			show_error('Bad Request');
+		}
+		
+		$filename = VISA_PATH .$uuid.'/'.$info['visa_no'].'.docx';
+		if (!file_exists($filename)) {
+			$msg['tips'] = '你所请求的签证文件不存在或已过期！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		header('Content-Description: File Transfer');
+		header('Content-Type: application/force-download');
+		header('Content-Disposition: attachment; filename='.basename($filename));
+		header('Content-Transfer-Encoding: binary');
+		header('Content-Length: '.filesize($filename));
+		readfile($filename);
 	}
 	
 	public function agency($page = 1) {

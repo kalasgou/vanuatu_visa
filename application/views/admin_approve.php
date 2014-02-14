@@ -71,8 +71,9 @@
 				</div>
 				<div id="od1" style="display:inline-block;">
 					<select id="cur_status">
-						<option value="paid">未发签证</option>
+						<option value="paid">待发签证</option>
 						<option value="visa">已发签证</option>
+						<option value="oops">被拒签</option>
 					</select>
 				</div>
 				<div id="od2" style="display:none">
@@ -84,7 +85,6 @@
 				<div id="od4" style="display:none">
 					&nbsp;请输入需要查询的日期范围:&nbsp;<input id="start_time" type="text" placeholder="起始日期" onclick="WdatePicker({readOnly:true, dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d'})"/> ~ 
 					<input id="end_time" type="text" placeholder="结束日期" onclick="WdatePicker({readOnly:true, dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d'})"/>
-					<a href="javascript:void(0)" onclick="download_excel();" target="_blank">导出Excel表格</a>
 				</div>
 				<div style="display:inline-block;">
 					<button onclick="javascript:filter_them(selected);">搜索</button>

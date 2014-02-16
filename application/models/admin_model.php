@@ -96,7 +96,9 @@
 					$this->admin_db->set('fee', $data['fee']);
 				} else if ($data['status'] === '91' || $data['status'] === '101') {
 					$this->admin_db->set('approve_time', $update_time);
-					$this->admin_db->set('visa_no', $data['visa_no']);
+					if ($data['visa_no'] !== '') {
+						$this->admin_db->set('visa_no', $data['visa_no']);
+					}
 				} else {
 					return FALSE;
 				}

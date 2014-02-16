@@ -88,10 +88,10 @@ function check_nickname() {
 	if (nickname.length == 0) {
 		tips_appear('#nickname_empty');
 		return false;
-	} else if (nickname_available(nickname) === false) {
+	}/* else if (nickname_available(nickname) === false) {
 		tips_appear('#nickname_used');
 		return false;
-	}
+	}*/
 	
 	return true;
 }
@@ -228,6 +228,7 @@ function visa_it(uuid, opt, this_a) {
 		success: function(json) {
 			switch (json.msg) {
 				case 'success': alert('对申请号 ' + uuid + ' 审批操作成功！'); this_a.innerHTML = '签证成功'; this_a.style.color = '#DDDDDD'; break;
+				case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！');
 				case 'fail': alert('出错了'); break;
 			}
 		},
@@ -238,7 +239,7 @@ function visa_it(uuid, opt, this_a) {
 }
 
 function pay_for_visa(uuid, this_a) {
-	var fee = parseInt(prompt('请输入签证费用，单位：人名币'));
+	var fee = parseInt(prompt('请输入签证费用，单位：人民币'));
 	if (isNaN(fee)) {
 		alert('请输入正整数！');
 		return;

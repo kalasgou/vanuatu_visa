@@ -30,7 +30,7 @@
 			<form id="login_form" class="form-horizontal" role="form" method="post" action="/user/login" onsubmit="return submit_form();">
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<h3>预约用户帐号登录</h3>
+						<h3>Vanuatu签证系统帐号登录</h3>
 					</div>
 				</div>
 				<div class="form-group">

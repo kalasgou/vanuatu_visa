@@ -18,7 +18,7 @@
 			});
 			
 			function submit_form() {
-				return check_register_email() && check_password() && check_realname() && reshape_password();
+				return check_register_email() && check_password() && check_nickname() && check_realname() && reshape_password();
 			}
 		</script>
 		<style type="text/css">
@@ -57,25 +57,43 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputRealname3" class="col-sm-2 control-label">真实姓名:</label>
+					<label for="inputNickname3" class="col-sm-2 control-label">用户姓名:</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" name="realname" id="inputRealname3" placeholder="Real Name"/>
-						<span id="realname_empty" class="error_tips">请填写用户真实姓名</span>
+						<input type="text" class="form-control" name="nickname" id="inputNickname3" placeholder="Name"/>
+						<span id="nickname_empty" class="error_tips">请填写用户姓名</span>
+						<span id="nickname_used" class="error_tips">该用户姓名已被使用，请选择另一个</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputRealname3" class="col-sm-2 control-label">所属机构:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" name="realname" id="inputRealname3" placeholder="Agency"/>
+						<span id="realname_empty" class="error_tips">请填写帐户所属机构全称</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="inputAdmin3" class="col-sm-2 control-label">管理员类型:</label>
 					<div class="col-sm-10">
 						<select class="form-control" name="permission">
-							<option value="2">领事馆</option>
+							<option value="<?php echo EMBASSY_ADMIN;?>">领事馆</option>
 							<option value="3">办事处</option>
 						</select>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputAgency3" class="col-sm-2 control-label">所属办事处:</label>
+					<label for="inputProvince3" class="col-sm-2 control-label">所属省份:</label>
 					<div class="col-sm-10">
 						<select class="form-control" name="province_id" onchange="">
+							<option value="1">北京</option>
+							<option value="2">广东</option>
+							<option value="3">上海</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputCity3" class="col-sm-2 control-label">所属城市:</label>
+					<div class="col-sm-10">
+						<select class="form-control" name="city_id" onchange="">
 							<option value="1">北京</option>
 							<option value="2">广东</option>
 							<option value="3">上海</option>

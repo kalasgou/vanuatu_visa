@@ -106,8 +106,8 @@ class Welcome extends LoginController {
 		$user['permission_str'] = $this->config->item($user['permission'], 'account_type');
 		$user['status_str'] = $this->config->config['account_status'][$user['status']];
 		
-		$this->load->helper('util');
-		$user['captcha'] = get_captcha();
+		//$this->load->helper('util');
+		//$user['captcha'] = get_captcha();
 		
 		$this->load->view('account', $user);
 	}
@@ -145,6 +145,10 @@ class Welcome extends LoginController {
 		}
 		
 		echo json_encode($ret);
+	}
+	
+	public function visa_verify() {
+		$this->load->view('visa_verify');
 	}
 }
 

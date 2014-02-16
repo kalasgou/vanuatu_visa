@@ -575,23 +575,21 @@ class Admin extends AdminLoginController {
 		
 		if ($data['status'] === '101') {
 			$data['start_time'] = strtotime('today');
-			$data['end_time'] = $data['start_time'] + 86400 * MAX_STAY_DAYS;
+			$data['end_time'] = $data['start_time'] + 86400 * VISA_VALIDITY;
 			
 			$attributes = '*';
 			$info = $this->adm->retrieve_some_info($uuid, $this->user_info['province_id'], $attributes);
 			
 			if (!$info) {
-				$msg['tips'] = '你所请求的申请记录不存在！';
-				$link = 'javascript:history.go(-1);';
-				$location = '返回上一步';
-				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-				show_error($msg);
+				$ret['msg'] = 'invalid';
+				echo json_encode($ret);
+				exit('No This Application');
 			}
 			
-			if (($id = $this->adm->final_audit($data))) {
+			if ($id = $this->adm->final_audit($data)) {
 				$data['visa_no'] = gen_visa_number($id);
 				$this->adm->update_visa_number($id, $data['visa_no']);
-				$data['message'] = 'Application '.$data['uuid'].' Got Visa '.$data['visa_no'];
+				$data['message'] = '该申请通过最终审核并成功获取签证（编号 '.$data['visa_no'].'）。';
 				
 				require '../application/third_party/PHPWord/PHPWord.php';
 				$PHPWord = new PHPWord();
@@ -621,15 +619,20 @@ class Admin extends AdminLoginController {
 				
 				update_status($data['uuid'], $data['status']);
 				push_email_queue($opt.'_notification', $data['uuid']);
+			} else {
+				$data['visa_no'] = '';
+				$data['message'] = '该申请已作最终审核，无须重复操作！';
 			}
 		} else if ($data['status'] === '91') {
 			$data['visa_no'] = 'Refused';
-			$data['message'] = 'Application Refused for Visa';
+			$data['message'] = '该申请未能正常获得签证，如还需签证请另作申请！';
 			
 			update_status($data['uuid'], $data['status']);
 			push_email_queue($opt.'_notification', $data['uuid']);
 		} else {
 			$ret['msg'] = 'fail';
+			echo json_encode($ret);
+			exit('Forbidden');
 		}
 		
 		$ret['msg'] = 'success';

@@ -61,6 +61,7 @@
 		<div id="list_box">
 			<div>
 				<div style="display:inline-block;">
+					请选择查询条件:&nbsp;
 					<select id="orderby" onchange="javascript:what_is_selected();">
 						<option value="1">申请状态</option>
 						<option value="2">申请流水号</option>
@@ -70,10 +71,12 @@
 					</select>
 				</div>
 				<div id="od1" style="display:inline-block;">
+					&nbsp;请选择需要查询的状态类型:&nbsp;
 					<select id="cur_status">
 						<option value="paid">待发签证</option>
 						<option value="visa">已发签证</option>
 						<option value="oops">被拒签</option>
+						<option value="best">已过期</option>
 					</select>
 				</div>
 				<div id="od2" style="display:none">

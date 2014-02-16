@@ -99,8 +99,8 @@
 				<?php } ?>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="button" class="btn btn-default" onclick="javascript:change_password();">确定修改</button>&nbsp;&nbsp;&nbsp;
-						<button type="button" class="btn btn-default" onclick="javascript:history.go(-1);">返回上一页</button>
+						<button type="button" class="btn btn-success" onclick="javascript:change_password();">确定修改</button>&nbsp;&nbsp;&nbsp;
+						<button type="button" class="btn btn-info" onclick="javascript:history.go(-1);">返回上一页</button>
 					</div>
 				</div>
 			</form>

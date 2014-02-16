@@ -39,6 +39,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('HASH_COST_LOG2', 		8);
 define('HASH_PORTABLE', 		FALSE);
 
+define('VISA_VALIDITY',			30);
 define('MAX_STAY_DAYS',			90);
 
 define('VISA_TEMPLATE',			'/data/file/visa_file/template/visa_template.docx');

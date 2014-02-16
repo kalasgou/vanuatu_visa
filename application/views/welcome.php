@@ -17,7 +17,7 @@
 	</head>
 	<body>
 		<div style="position:relative; margin:auto; width:300px; height:400px; text-align:center; vertical-align:middle;">
-			<a href="/login">普通帐户登录</a> / 
+			<a href="/login">预约帐户登录</a> / 
 			<a href="/admin_login">管理帐户登录</a>
 		</div>
 	</body>

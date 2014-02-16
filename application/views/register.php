@@ -30,7 +30,7 @@
 			<form class="form-horizontal" role="form" method="post" action="/user/register" onsubmit="return submit_form();">
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<h3>预约用户帐号注册</h3>
+						<h3>Vanuatu签证系统帐号注册</h3>
 					</div>
 				</div>
 				<div class="form-group">
@@ -57,18 +57,18 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputNickname3" class="col-sm-2 control-label">帐户昵称:</label>
+					<label for="inputNickname3" class="col-sm-2 control-label">用户姓名:</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" name="nickname" id="inputNickname3" placeholder="Nickname"/>
-						<span id="nickname_empty" class="error_tips">请填写用户呢称</span>
-						<span id="nickname_used" class="error_tips">该用户呢称已被使用，请选择另一个</span>
+						<input type="text" class="form-control" name="nickname" id="inputNickname3" placeholder="Name"/>
+						<span id="nickname_empty" class="error_tips">请填写用户姓名</span>
+						<span id="nickname_used" class="error_tips">该用户姓名已被使用，请选择另一个</span>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputRealname3" class="col-sm-2 control-label">真实姓名:</label>
+					<label for="inputRealname3" class="col-sm-2 control-label">所属机构:</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" name="realname" id="inputRealname3" placeholder="Real Name"/>
-						<span id="realname_empty" class="error_tips">请填写用户真实姓名</span>
+						<input type="text" class="form-control" name="realname" id="inputRealname3" placeholder="Agency"/>
+						<span id="realname_empty" class="error_tips">请填写帐户所属机构全称</span>
 					</div>
 				</div>
 				<div class="form-group">

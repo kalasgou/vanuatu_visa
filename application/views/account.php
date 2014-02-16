@@ -36,23 +36,26 @@
 				</div>
 				<?php if (isset($nickname)) { ?>
 				<div class="form-group">
-					<label for="inputNickname3" class="col-sm-2 control-label">帐户昵称:</label>
+					<label for="inputNickname3" class="col-sm-2 control-label">帐户姓名:</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" name="nickname" id="inputNickname3" value="<?php echo $nickname;?>" placeholder="Nickname">
+						<!--<input type="text" class="form-control" name="nickname" id="inputNickname3" value="" placeholder="Nickname">-->
+						<p class="form-control-static"><?php echo $nickname;?></p>
 					</div>
 				</div>
 				<?php } ?>
 				<div class="form-group">
-					<label for="inputRealname3" class="col-sm-2 control-label">真实姓名:</label>
+					<label for="inputRealname3" class="col-sm-2 control-label">所属机构:</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" name="realname" id="inputRealname3" value="<?php echo $realname;?>" placeholder="Real Name">
+						<!--<input type="text" class="form-control" name="realname" id="inputRealname3" value="" placeholder="Real Name">-->
+						<p class="form-control-static"><?php echo $realname;?></p>
 					</div>
 				</div>
 				<?php if (isset($phone)) { ?>
 				<div class="form-group">
 					<label for="inputPhone3" class="col-sm-2 control-label">联系电话:</label>
 					<div class="col-sm-10">
-						<input type="tel" class="form-control" name="phone" id="inputPhone3" value="<?php echo $phone;?>" placeholder="Telephone">
+						<!--<input type="tel" class="form-control" name="phone" id="inputPhone3" value="" placeholder="Telephone">-->
+						<p class="form-control-static"><?php echo $phone;?></p>
 					</div>
 				</div>
 				<?php } ?>
@@ -82,7 +85,7 @@
 						<p class="form-control-static"><?php echo $reg_time;?></p>
 					</div>
 				</div>
-				<?php if ($permission == 10000) { ?>
+				<!--<?php if ($permission == 10000) { ?>
 				<div>
 					<input type="hidden" name="user_type" value="applicant"/>
 				</div>
@@ -97,11 +100,11 @@
 						<input type="captcha" class="form-control" name="captcha" id="inputCaptcha3" placeholder="Captcha"/><br>
 						<span id="captcha"><?php echo $captcha;?></span> <a href="javascript:void(0);" onclick="refresh_captcha();">换过另一张</a>
 					</div>
-				</div>
+				</div>-->
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="button" class="btn btn-default" onclick="javascript:update_info();">更新资料</button>&nbsp;&nbsp;&nbsp;
-						<button type="button" class="btn btn-default" onclick="javascript:history.go(-1);">返回上一页</button>
+						<!--<button type="button" class="btn btn-default" onclick="javascript:update_info();">更新资料</button>&nbsp;&nbsp;&nbsp;-->
+						<button type="button" class="btn btn-info" onclick="javascript:history.go(-1);">返回上一页</button>
 					</div>
 				</div>
 			</form>

@@ -11,7 +11,6 @@
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
 		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="/My97DatePicker/WdatePicker.js"></script>
-		<script type="text/javascript" src=""></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				
@@ -38,6 +37,8 @@
 				<a class="list-group-item" href="/apply/passport_info/<?php echo $uuid;?>">护照信息</a>
 				<a class="list-group-item" href="/apply/travel_info/<?php echo $uuid;?>">行程信息</a>
 				<a class="list-group-item active">其他补充信息</a>
+				<a class="list-group-item" href="/apply/scan_file/<?php echo $uuid;?>">证明文件上传</a>
+				<a class="list-group-item" href="/apply/fee_payment/<?php echo $uuid;?>">费用交纳</a>
 				<a class="list-group-item" href="/apply/confirm_info/<?php echo $uuid;?>">所填信息确认</a>
 			</div>
 			<p></p>

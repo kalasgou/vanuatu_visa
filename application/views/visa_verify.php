@@ -36,7 +36,11 @@
 				<form action="/api/visa_verify_table" method="get" style="padding:24px;">
 					<table>
 						<tr>
-							<td colspan="2" align="center">请输入需要查询的签证的相关信息</td>
+							<td colspan="2" style="font-size:16px; font-weight:bold;"  align="center">请输入需要查询的签证的相关信息<br>&nbsp;</td>
+						</tr>
+						<tr>
+							<td>申请号：</td>
+							<td><input class="text" type="text" name="uuid" placeholder="Serial Numnber"/></td>
 						</tr>
 						<tr>
 							<td>护照号：</td>
@@ -48,6 +52,9 @@
 						</tr>
 						<tr>
 							<td colspan="2" align="right"><button class="btn btn-success" type="submit">查 询</button></td>
+						</tr>
+						<tr>
+							<td colspan="2" style="font-size:12px; color:#ACACAC;" align="center"><br>注：以上条件任选其二作为查询条件，也可全选。</td>
 						</tr>
 					</table>
 				</form>

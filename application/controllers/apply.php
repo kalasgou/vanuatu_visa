@@ -1,11 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require APPPATH .'core/ApplyLoginController.php';
+require APPPATH .'core/UserController.php';
 
-class Apply extends ApplyLoginController {
+class Apply extends UserController {
 	
 	public function index($page = 1) {
-		$userid = $this->userid;
+		$data['userid'] = $this->userid;
+		$data['status'] = intval($this->input->get('cur_status', TRUE));
+		$data['page'] = $page - 1;
+		
 		$this->load->model('apply_model', 'alm');
 		
 		$this->load->helper('util');
@@ -14,9 +17,13 @@ class Apply extends ApplyLoginController {
 		$config['base_url'] = '/apply/index/';
 		$config['uri_segment'] = 3;
 		$config['num_links'] = 2;
-		$config['total_rows'] = $this->alm->sum_applications($userid);
+		$config['total_rows'] = $this->alm->sum_applications($data);
 		$config['per_page'] = 20;
 		$config['use_page_numbers'] = TRUE;
+		if (count($_GET) > 0) {
+			$config['suffix'] = '?'.http_build_query($_GET, '', "&");
+			$config['first_url'] = $config['base_url'].'1?'.http_build_query($_GET, '', "&");
+		}
 		
 		$config['prev_link'] = '上一页';
 		$config['next_link'] = '下一页';
@@ -26,18 +33,18 @@ class Apply extends ApplyLoginController {
 		$this->pagination->initialize($config); 
 		
 		$data['user'] = $this->user_info;
-		$data['records'] = $this->alm->get_records($userid, $page - 1);
+		$data['records'] = $this->alm->get_records($data);
 		$data['pagination'] = $this->pagination->create_links();
 		$data['num_records'] = $config['total_rows'];
 		
 		foreach ($data['records'] as &$one) {
-			$one['status_str'] = status2text($one['status']);
+			$one['status_str'] = $this->config->config['apply_status_str'][$one['status']];
 		}
 		
 		$this->load->view('apply_records', $data);
 	}
 	
-	public function agencies($uuid = '') {
+	/*public function agencies($uuid = '') {
 		$agency_info = array();
 		$this->load->model('apply_model', 'alm');
 		$agency_info = $this->alm->get_agency_info();
@@ -100,17 +107,17 @@ class Apply extends ApplyLoginController {
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
-	}
+	}*/
 	
 	public function basic_info($uuid = '') {
-		$this->load->helper('util');
+		/*$this->load->helper('util');
 		if (!check_status($uuid, 1)) {
 			$msg['tips'] = '请先填写完上述必要信息再前往下一步！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
-		}
+		}*/
 		
 		$data = array(
 					'uuid' => '',
@@ -162,6 +169,8 @@ class Apply extends ApplyLoginController {
 	
 	public function update_basic_info() {
 		$data['userid'] = $this->userid;
+		$data['province_id'] = $this->user_info['province_id'];
+		$data['city_id'] = $this->user_info['city_id'];
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
 		$data['name_en'] = trim($this->input->post('name_en', TRUE));
 		$data['name_cn'] = trim($this->input->post('name_cn', TRUE));
@@ -489,7 +498,7 @@ class Apply extends ApplyLoginController {
 		
 		if ($this->alm->update_complement_info($data) > 0) {
 			update_status($data['uuid'], 5);
-			header('Location: '.base_url('/apply/confirm_info/'.$data['uuid']));
+			header('Location: '.base_url('/apply/sacn_file/'.$data['uuid']));
 		} else {
 			$msg['tips'] = '信息更新失败，请返回重试！';
 			$link = 'javascript:history.go(-1);';
@@ -497,6 +506,73 @@ class Apply extends ApplyLoginController {
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
+	}
+	
+	public function scan_file($uuid = '') {
+		$this->load->helper('util');
+		if (!check_status($uuid, 5)) {
+			$msg['tips'] = '请先填写完必要信息再前往下一步！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$uuid = $uuid;
+		if ($uuid === '') {
+			show_error('申请流水号出错');
+		}
+		
+		$user = $this->user_info;
+		$attributes = '*';
+		
+		$this->load->model('admin_model', 'adm');
+		$info = $this->adm->retrieve_some_info($uuid, $user['province_id'], $attributes);
+		
+		if ($info) {
+			$this->load->view('audit_upload', $info);
+		} else {
+			$msg['tips'] = '你所请求的申请记录不存在！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+	}
+	
+	private function upload_pics($uuid, $filename) {
+		if (($_FILES[$filename]['type'] == 'image/png') || ($_FILES[$filename]['type'] == 'image/jpeg') ||
+			($_FILES[$filename]['type'] == 'image/pjpeg') || ($_FILES[$filename]['type'] == 'image/gif')) {
+			if ($_FILES[$filename]['error'] > 0) {
+				return FALSE;
+			} else {
+				$path = SCAN_PATH .$uuid .'/';
+				if (file_exists($path) === FALSE) {
+					mkdir($path, 0777);
+				}
+				$destination = $path.$filename;
+				if (move_uploaded_file($_FILES[$filename]['tmp_name'], $destination)) {
+					return TRUE;
+				}
+			}
+		} else {
+			return FALSE;
+		}
+	}
+	
+	public function upload_scan_file() {
+		$scan_files = array('passport');
+		foreach ($scan_files as $val) {
+			if (!$this->upload_pics($uuid, $val)) {
+				$msg['tips'] = '上传失败，请返回重新操作！';
+				$link = 'javascript:history.go(-1);';
+				$location = '返回上一步';
+				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+				show_error($msg);
+			}
+		}
+		
+		header('Location: /admin/total_preview/'.$uuid);
 	}
 	
 	public function confirm_info($uuid = '') {

@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require APPPATH .'core/AdminLoginController.php';
+require APPPATH .'core/UserController.php';
 
-class Admin extends AdminLoginController {
+class Admin extends UserController {
 	
 	public function index() {
 		switch (intval($this->permission)) {
@@ -15,6 +15,77 @@ class Admin extends AdminLoginController {
 				$location = '返回上一步';
 				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 				show_error($msg);
+		}
+	}
+	
+	public function register() {
+		if ($this->permission != SYSTEM_ADMIN) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data['email'] = trim($this->input->post('email', TRUE));
+		$data['password'] = trim($this->input->post('password', TRUE));
+		$data['nickname'] = trim($this->input->post('nickname', TRUE));
+		$data['agency'] = trim($this->input->post('agency', TRUE));
+		$data['telephone'] = trim($this->input->post('telephone', TRUE));
+		$data['permission'] = trim($this->input->post('permission', TRUE));
+		$data['province_id'] = trim($this->input->post('province_id', TRUE));
+		$data['city_id'] = trim($this->input->post('city_id', TRUE));
+		$data['status'] = ACCOUNT_NORMAL;
+		$data['reg_ip'] = ip2long($this->input->ip_address());
+		$data['reg_time'] = date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);
+		
+		$this->load->helper('util');
+		
+		if (!check_parameters($data)) {
+			$msg['tips'] = '所需填写信息不全，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		if (!email_verify($data['email'])) {
+			$msg['tips'] = '电子邮箱格式不正确，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$this->load->model('user_model', 'user');
+		
+		if ($this->user->user_email_available($data['email']) > 0) {
+			$msg['tips'] = '所填邮箱已被他人使用，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		require '../application/third_party/pass/PasswordHash.php';
+		$hasher = new PasswordHash(HASH_COST_LOG2, HASH_PORTABLE);
+		$data['password'] = $hasher->HashPassword($data['password']);
+		if (strlen($data['password']) < 20) {
+			show_error('password hash too short');
+		}
+		
+		if (($userid = $this->user->user_register($data)) > 0) {
+			$msg['tips'] = '注册成功！可点击以下链接继续注册。';
+			$link = '/admin/register';
+			$location = '点击注册';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		} else {
+			$msg['tips'] = '注册失败，请稍候再试！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	
@@ -31,6 +102,7 @@ class Admin extends AdminLoginController {
 					'uuid' => '',
 					'userid' => '1',
 					'province_id' => $this->user_info['province_id'],
+					'city_id' => $this->user_info['city_id'],
 					'name_en' => '',
 					'name_cn' => '',
 					'gender' => '',
@@ -133,7 +205,8 @@ class Admin extends AdminLoginController {
 		$data['userid'] = trim($this->input->post('userid', TRUE));
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
 		$data['province_id'] = trim($this->input->post('province_id', TRUE));
-		$data['status'] = 11;
+		$data['city_id'] = trim($this->input->post('city_id', TRUE));
+		$data['status'] = APPLY_WAITING;
 		
 		$this->load->helper('util');
 		
@@ -281,7 +354,7 @@ class Admin extends AdminLoginController {
 		$data['num_records'] = $config['total_rows'];
 		
 		foreach ($data['records'] as &$one) {
-			$one['status_str'] = status2text($one['status']);
+			$one['status_str'] = $this->config->config['apply_status_str'][$one['status']];
 		}
 		
 		$this->load->view('admin_audit', $data);
@@ -399,7 +472,63 @@ class Admin extends AdminLoginController {
 		$this->load->view('admin_quick', $data);
 	}
 	
-	public function permit($page = 1) {
+	public function account($page = 1) {
+		if ($this->permission != SYSTEM_ADMIN) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$this->load->helper('util');
+		
+		$data['page'] = $page - 1;
+		$data['status'] = intval($this->input->get('account_status', TRUE));
+		$data['province_id'] = intval($this->input->get('province_id', TRUE));
+		$data['city_id'] = intval($this->input->get('city_id', TRUE));
+		$data['email'] = intval($this->input->get('email', TRUE));
+		
+		$this->load->model('user_model', 'user');
+		
+		$this->load->library('pagination');
+		
+		$config['base_url'] = '/admin/account/';
+		$config['uri_segment'] = 3;
+		$config['num_links'] = 2;
+		$config['total_rows'] = $this->user->sum_users($data);
+		$config['per_page'] = 20;
+		$config['use_page_numbers'] = TRUE;
+		if (count($_GET) > 0) {
+			$config['suffix'] = '?'.http_build_query($_GET, '', "&");
+			$config['first_url'] = $config['base_url'].'1?'.http_build_query($_GET, '', "&");
+		}
+		
+		$config['prev_link'] = '上一页';
+		$config['next_link'] = '下一页';
+		$config['first_link'] = '首 页';
+		$config['last_link'] = '尾 页';
+		
+		$this->pagination->initialize($config);
+		
+		$data['user'] = $this->user_info;
+		$data['pagination'] = $this->pagination->create_links();
+		$data['users'] = $this->user->user_list($data);
+		$data['num_users'] = $config['total_rows'];
+		
+		$provinces = array('0' => '任何', '1' => '北京', '2' => '广东', '3' => '上海');
+		
+		foreach ($data['users'] as &$one) {
+			$one['province_str'] = $provinces[$one['province_id']];
+			
+			$one['permission_str'] = $this->config->item($one['permission'], 'account_type');
+			$one['status_str'] = $this->config->config['account_status'][$one['status']];
+		}
+		
+		$this->load->view('admin_permit', $data);
+	}
+	
+	/*public function permit($page = 1) {
 		if ($this->permission != SYSTEM_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
@@ -500,7 +629,7 @@ class Admin extends AdminLoginController {
 		}
 		
 		$this->load->view('admin_ordinary', $data);
-	}
+	}*/
 	
 	public function total_preview($uuid = '') {
 		if ($uuid === '') {
@@ -641,8 +770,7 @@ class Admin extends AdminLoginController {
 		$this->adm->auditing_application($data);
 	}
 	
-	public function scan_upload($uuid = '') {
-		$uuid = $uuid;
+	/*public function scan_upload($uuid = '') {
 		if ($uuid === '') {
 			show_error('申请流水号出错');
 		}
@@ -697,7 +825,7 @@ class Admin extends AdminLoginController {
 		}
 		
 		header('Location: /admin/total_preview/'.$uuid);
-	}
+	}*/
 	
 	public function download_excel() {
 		if ($this->permission != AGENCY_ADMIN || $this->permission != SYSTEM_ADMIN) {

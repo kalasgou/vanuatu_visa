@@ -39,6 +39,8 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('HASH_COST_LOG2', 		8);
 define('HASH_PORTABLE', 		FALSE);
 
+define('COOKIE_TTL_HOUR',		24);
+
 define('VISA_VALIDITY',			30);
 define('MAX_STAY_DAYS',			90);
 
@@ -59,9 +61,9 @@ define('VISA_FONT_TYPE', 		'/data/file/resource/arialuni.ttf');
 
 define('ILLEGAL_USER',			0);
 define('SYSTEM_ADMIN',			1);
-define('EMBASSY_ADMIN',			2);
-define('AGENCY_ADMIN',			3);
-define('ORDINARY_USER',			10000);
+define('EMBASSY_ADMIN',			128);
+define('AGENCY_ADMIN',			256);
+define('ORDINARY_USER',			1024);
 
 define('ACCOUNT_CANCELLED',		-1);
 define('ACCOUNT_INACTIVE',		0);
@@ -70,6 +72,13 @@ define('ACCOUNT_NORMAL',		1);
 define('NEGATIVE_OVERFLOW',		-128);
 define('APPLY_TRASHED',			-1);
 define('APPLY_NOTFINISHED',		0);
+define('AGENCY_SELECTED',		1);
+define('BASIC_UPDATED',			2);
+define('PASSPORT_UPDATED',		3);
+define('TRAVEL_UPDATED',		4);
+define('COMPLEMENT_UPDATED',	5);
+define('PICTURE_UPLOADED',		6);
+define('PAYMENT_UPDATED',		7);
 define('APPLY_WAITING',			11);
 define('APPLY_NOTPASSED',		21);
 define('APPLY_PASSED',			31);

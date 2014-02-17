@@ -4,12 +4,26 @@ require APPPATH .'core/LoginController.php';
 
 class User extends LoginController {
 	
-	protected $goto_page = array(
+	/*protected $goto_page = array(
 							'applicant' => array('apply', 'login', 'register'),
 							'administrator' => array('admin', 'admin_login', 'admin_register'),
-							);
+							);*/
 	
-	public function register() {
+	public function index() {
+		switch (intval($this->user_info['permission'])) {
+			case ORDINARY_USER : 
+								header('Location: '. base_url('/apply/index'));
+								break;
+			case SYSTEM_ADMIN : 
+			case EMBASSY_ADMIN : 
+			case AGENCY_ADMIN : 
+								header('Location: '. base_url('/admin/index'));
+								break;
+			default : header('Location: '. base_url('/login')); break;
+		}
+	}
+	
+	/*public function register() {
 		$user_type = trim($this->input->post('user_type', TRUE));
 		$captcha = trim($this->input->post('captcha', TRUE));
 		$data['email'] = trim($this->input->post('email', TRUE));
@@ -107,9 +121,9 @@ class User extends LoginController {
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
-	}
+	}*/
 	
-	public function login() {
+	/*public function login() {
 		$user_type = trim($this->input->post('user_type', TRUE));
 		$captcha = trim($this->input->post('captcha', TRUE));
 		$data['email'] = trim($this->input->post('email', TRUE));
@@ -159,6 +173,56 @@ class User extends LoginController {
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
+	}*/
+	
+	public function login() {
+		$captcha = trim($this->input->post('captcha', TRUE));
+		$data['email'] = trim($this->input->post('email', TRUE));
+		$data['password'] = trim($this->input->post('password', TRUE));
+		
+		$this->load->helper('util');
+		
+		if (!check_captcha($captcha)) {
+			$msg['tips'] = '验证码错误，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		if (!check_parameters($data)) {
+			$msg['tips'] = '所需填写信息不全，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$this->load->model('user_model', 'user');
+		
+		if (($user = $this->user->user_login($data['email']))) {
+			require '../application/third_party/pass/PasswordHash.php';
+			$hasher = new PasswordHash(HASH_COST_LOG2, HASH_PORTABLE);
+			$chk_lower = $hasher->CheckPassword(strtolower($data['password']), $user['password']);
+			$chk_upper = $hasher->CheckPassword(strtoupper($data['password']), $user['password']);
+			
+			if ($chk_lower || $chk_upper) {
+				$this->user->push_cookie($user);
+				header('Location: ' .base_url('/user/index'));
+			} else {
+				$msg['tips'] = '密码不正确，请返回重新输入！';
+				$link = 'javascript:history.go(-1);';
+				$location = '返回上一步';
+				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+				show_error($msg);
+			}
+		} else {
+			$msg['tips'] = '该帐户不存在，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
 	}
 	
 	public function logout() {
@@ -167,18 +231,14 @@ class User extends LoginController {
 		$this->user->pop_cookie($local_key);
 		
 		$msg['tips'] = '帐户已安全登出！';
-		$link = '/';
-		$location = '返回网站主页';
+		$link = '/login';
+		$location = '返回系统登录页';
 		$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 		show_error($msg);
 	}
 	
-	/*public function update() {
-		$user_type = trim($this->input->post('user_type', TRUE));
-	}*/
-	
 	public function change_password() {
-		$user_type = trim($this->input->post('user_type', TRUE));
+		//$user_type = trim($this->input->post('user_type', TRUE));
 		$captcha = trim($this->input->post('captcha', TRUE));
 		$old_pswd = trim($this->input->post('old_password', TRUE));
 		$new_pswd = trim($this->input->post('new_password', TRUE));
@@ -191,14 +251,14 @@ class User extends LoginController {
 			die();
 		}
 		
-		if (($user = $this->user_info)) {
+		if ($user = $this->user_info) {
 			require '../application/third_party/pass/PasswordHash.php';
 			$hasher = new PasswordHash(HASH_COST_LOG2, HASH_PORTABLE);
 			$chk_lower = $hasher->CheckPassword(strtolower($old_pswd), $user['password']);
 			$chk_upper = $hasher->CheckPassword(strtoupper($old_pswd), $user['password']);
 			
 			if ($chk_lower || $chk_upper) {
-				$data['user_type'] = trim($this->input->post('user_type', TRUE));
+				//$data['user_type'] = trim($this->input->post('user_type', TRUE));
 				$data['userid'] = $this->userid;
 				$data['password'] = $hasher->HashPassword($new_pswd);
 				
@@ -221,22 +281,22 @@ class User extends LoginController {
 	}
 	
 	public function check_email() {
-		$user_type = trim($this->input->post('user_type', TRUE));
+		//$user_type = trim($this->input->post('user_type', TRUE));
 		$email = trim($this->input->post('email', TRUE));
 		
 		$this->load->model('user_model', 'user');
-		$func_name = $user_type.'_email_available';
+		//$func_name = $user_type.'_email_available';
 		
 		$ret['msg'] = 'success';
 		
-		if ($this->user->$func_name($email) > 0) {
+		if ($this->user->email_availble($email) > 0) {
 			$ret['msg'] = 'fail';
 		}
 		
 		echo json_encode($ret);
 	}
 	
-	public function check_nickname() {
+	/*public function check_nickname() {
 		$user_type = trim($this->input->post('user_type', TRUE));
 		$nickname = trim($this->input->post('nickname', TRUE));
 		
@@ -250,9 +310,9 @@ class User extends LoginController {
 		}
 		
 		echo json_encode($ret);
-	}
+	}*/
 	
-	public function activate($hash_key = '') {
+	/*public function activate($hash_key = '') {
 		$this->load->library('RedisDB');
 		$redis = $this->redisdb->instance(REDIS_DEFAULT);
 		
@@ -320,7 +380,7 @@ class User extends LoginController {
 		}
 		
 		echo json_encode($ret);
-	}
+	}*/
 }
 
 /* End of file */

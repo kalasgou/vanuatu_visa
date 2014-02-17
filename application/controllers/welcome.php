@@ -5,13 +5,13 @@ require APPPATH .'core/LoginController.php';
 class Welcome extends LoginController {
 	
 	public function index() {
-		$this->load->view('welcome');
+		$this->load->view('visa_verify');
 	}
 	
 	public function login() {
 		if ($this->userid > ILLEGAL_USER && $this->status == ACCOUNT_NORMAL) {
 			$msg['tips'] = '已经登录无需重复登录！';
-			$link = '/apply/index';
+			$link = '/user/index';
 			$location = '返回用户主页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
@@ -22,7 +22,7 @@ class Welcome extends LoginController {
 		$this->load->view('login', $data);
 	}
 	
-	public function register() {
+	/*public function register() {
 		if ($this->userid > ILLEGAL_USER && $this->status == ACCOUNT_NORMAL) {
 			$msg['tips'] = '已经登录，若需注册请先登出帐户！';
 			$link = '/apply/index';
@@ -84,25 +84,24 @@ class Welcome extends LoginController {
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
-	}
+	}*/
 	
 	public function account() {
 		if ($this->userid === ILLEGAL_USER || $this->status != ACCOUNT_NORMAL) {
 			$msg['tips'] = '请登录后再进行此操作！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$link = '/login';
+			$location = '点击登录';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
 		
 		$user = $this->user_info;
 		
-		$provinces = array('0' => '任何', '1' => '北京', '2' => '广东', '3' => '上海');
+		$this->load->model('user_model', 'user');
+		$extra_info = $this->user->extra_info($user['city_id']);
 		
-		if (isset($user['province_id'])) {
-			$user['province_str'] = $provinces[$user['province_id']];
-		}
-		
+		$user['city_str'] = $extra_info['city_cn'];
+		$user['province_str'] = $extra_info['province_cn'];
 		$user['permission_str'] = $this->config->item($user['permission'], 'account_type');
 		$user['status_str'] = $this->config->config['account_status'][$user['status']];
 		
@@ -115,8 +114,8 @@ class Welcome extends LoginController {
 	public function password() {
 		if ($this->userid === ILLEGAL_USER || $this->status != ACCOUNT_NORMAL) {
 			$msg['tips'] = '请登录后再进行此操作！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$link = '/login';
+			$location = '点击登录';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}

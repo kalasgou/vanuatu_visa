@@ -8,9 +8,11 @@
 			$this->apply_db = $this->load->database('default', TRUE);
 		}
 		
-		public function sum_applications($userid) {
-			$this->apply_db->where('userid', $userid);
-			$this->apply_db->where('status > ', 0);
+		public function sum_applications($data) {
+			$this->apply_db->where('userid', $data['userid']);
+			if ($data['status'] !== 0) {
+				$this->apply_db->where('status', $data['status']);
+			}
 			return $this->apply_db->count_all_results('visa_applying');
 		}
 		

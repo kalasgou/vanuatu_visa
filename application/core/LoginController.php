@@ -4,6 +4,7 @@ abstract class LoginController extends CI_Controller {
 	
 	public $userid = ILLEGAL_USER;
 	public $status = ACCOUNT_INACTIVE;
+	public $permission = ILLEGAL_USER;
 	public $user_info = array();
 	
 	public function __construct() {
@@ -17,6 +18,7 @@ abstract class LoginController extends CI_Controller {
 		if ($this->user_info) {
 			$this->userid = $this->user_info['userid'];
 			$this->status = $this->user_info['status'];
+			$this->permission = $this->user_info['permission'];
 		}
 	}
 }

@@ -40,7 +40,7 @@
 						</tr>
 						<tr>
 							<td>申请号：</td>
-							<td><input class="text" type="text" name="uuid" placeholder="Serial Numnber"/></td>
+							<td><input class="text" type="text" name="apply_id" placeholder="Serial Numnber"/></td>
 						</tr>
 						<tr>
 							<td>护照号：</td>

@@ -11,12 +11,12 @@ class User extends LoginController {
 	
 	public function index() {
 		switch (intval($this->user_info['permission'])) {
-			case ORDINARY_USER : 
+			case RESERVATION_USER : 
 								header('Location: '. base_url('/apply/index'));
 								break;
 			case SYSTEM_ADMIN : 
 			case EMBASSY_ADMIN : 
-			case AGENCY_ADMIN : 
+			case OFFICE_ADMIN : 
 								header('Location: '. base_url('/admin/index'));
 								break;
 			default : header('Location: '. base_url('/login')); break;
@@ -341,8 +341,8 @@ class User extends LoginController {
 			}
 		} else {
 			$msg['tips'] = '激活链接无效或已过期，请先登录帐户后根据提示重新获取！';
-			$link = '/index.php';
-			$location = '返回网站主页';
+			$link = '/login';
+			$location = '点击登录';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}

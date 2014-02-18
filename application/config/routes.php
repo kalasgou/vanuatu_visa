@@ -40,15 +40,16 @@
 
 $route['default_controller'] = 'welcome';
 $route['login'] = 'welcome/login';
-$route['register'] = 'welcome/register';
-$route['admin_login'] = 'welcome/admin_login';
-$route['admin_register'] = 'welcome/admin_register';
+//$route['register'] = 'welcome/register';
+//$route['admin_login'] = 'welcome/admin_login';
+//$route['admin_register'] = 'welcome/admin_register';
 $route['logout'] = 'user/logout';
-$route['activation_confirm/(:any)'] = 'welcome/activation_confirm/$1';
+//$route['activation_confirm/(:any)'] = 'welcome/activation_confirm/$1';
 $route['account'] = 'welcome/account';
 $route['password'] = 'welcome/password';
 $route['refresh_captcha'] = 'welcome/refresh_captcha';
-$route['space/(:num)/(:any)'] = 'space/$2/$1';
+$route['visa_verify'] = 'welcome/visa_verify';
+//$route['space/(:num)/(:any)'] = 'space/$2/$1';
 $route['404_override'] = '';
 
 

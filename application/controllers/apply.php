@@ -5,6 +5,14 @@ require APPPATH .'core/UserController.php';
 class Apply extends UserController {
 	
 	public function index($page = 1) {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$data['userid'] = $this->userid;
 		$data['status'] = intval($this->input->get('cur_status', TRUE));
 		$data['page'] = $page - 1;
@@ -52,26 +60,29 @@ class Apply extends UserController {
 		$data = array(
 					'uuid' => '',
 					'province_id' => '1',
+					'city_id' => '1',
 					'agencies' => $agency_info,
 				);
-		$userid = $this->userid;
-		$attributes = 'uuid, province_id';
 		
-		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		$attributes = 'uuid, province_id, city_id';
+		
+		$info = $this->alm->retrieve_some_info($this->userid, $uuid, $attributes);
 		
 		$data['user'] = $this->user_info;
 		if ($info) {
 			$data['uuid'] = $info['uuid'];
 			$data['province_id'] = $info['province_id'];
+			$data['city_id'] = $info['city_id'];
 		}
 		
-		$this->load->view('step_zero', $data);
+		$this->load->view('step_agency', $data);
 	}
 	
 	public function select_agency() {
 		$data['userid'] = $this->userid;
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
-		$data['province_id'] = trim($this->input->post('province_id', TRUE));
+		$data['province_id'] = intval($this->input->post('province_id', TRUE));
+		$data['city_id'] = intval($this->input->post('city_id', TRUE));
 		
 		$this->load->helper('util');
 		
@@ -98,7 +109,7 @@ class Apply extends UserController {
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->select_agency($data) > 0) {
-			update_status($data['uuid'], 1);
+			update_status($data['uuid'], AGENCY_SELECTED);
 			header('Location: '.base_url('/apply/basic_info/'.$data['uuid']));
 		} else {
 			$msg['tips'] = '信息更新失败，请返回重试！';
@@ -110,8 +121,16 @@ class Apply extends UserController {
 	}*/
 	
 	public function basic_info($uuid = '') {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		/*$this->load->helper('util');
-		if (!check_status($uuid, 1)) {
+		if (!check_status($uuid, AGENCY_SELECTED)) {
 			$msg['tips'] = '请先填写完上述必要信息再前往下一步！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -141,11 +160,11 @@ class Apply extends UserController {
 						'home_tel' => '',
 						),
 				);
-		$userid = $this->userid;
+		
 		$attributes = 'uuid, name_en, name_cn, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info';
 		
 		$this->load->model('apply_model', 'alm');
-		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		$info = $this->alm->retrieve_some_info($this->userid, $uuid, $attributes);
 		
 		$data['user'] = $this->user_info;
 		if ($info) {
@@ -164,10 +183,18 @@ class Apply extends UserController {
 			$data['home_info'] = json_decode($info['home_info'], TRUE);
 		}
 		
-		$this->load->view('step_one', $data);
+		$this->load->view('step_basic', $data);
 	}
 	
 	public function update_basic_info() {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$data['userid'] = $this->userid;
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['city_id'] = $this->user_info['city_id'];
@@ -191,7 +218,7 @@ class Apply extends UserController {
 		$this->load->helper('util');
 		
 		if ($data['uuid'] === '') {
-			show_error('申请流水号出错');
+			$data['uuid'] = hex16to64(uuid(), 0);
 		}
 		
 		if (!is_editable($data['uuid'])) {
@@ -213,7 +240,7 @@ class Apply extends UserController {
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->update_basic_info($data) > 0) {
-			update_status($data['uuid'], 2);
+			update_status($data['uuid'], BASIC_UPDATED);
 			header('Location: '.base_url('/apply/passport_info/'.$data['uuid']));
 		} else {
 			$msg['tips'] = '信息更新失败，请返回重试！';
@@ -225,8 +252,16 @@ class Apply extends UserController {
 	}
 	
 	public function passport_info($uuid = '') {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$this->load->helper('util');
-		if (!check_status($uuid, 2)) {
+		if (!check_status($uuid, BASIC_UPDATED)) {
 			$msg['tips'] = '请先填写完必要信息再前往下一步！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -241,11 +276,11 @@ class Apply extends UserController {
 					'passport_date' => '',
 					'passport_expiry' => '',
 				);
-		$userid = $this->userid;
+		
 		$attributes = 'uuid, passport_number, passport_place, passport_date, passport_expiry';
 		
 		$this->load->model('apply_model', 'alm');
-		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		$info = $this->alm->retrieve_some_info($this->userid, $uuid, $attributes);
 		
 		$data['user'] = $this->user_info;
 		if ($info) {
@@ -256,10 +291,18 @@ class Apply extends UserController {
 			$data['passport_expiry'] = $info['passport_expiry'] == 0 ? '' : date('Y-m-d', $info['passport_expiry']);
 		}
 		
-		$this->load->view('step_two', $data);
+		$this->load->view('step_passport', $data);
 	}
 	
 	public function update_passport_info() {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$data['userid'] = $this->userid;
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
 		$data['passport_number'] = trim($this->input->post('passport_number', TRUE));
@@ -300,7 +343,7 @@ class Apply extends UserController {
 		}
 		
 		if ($this->alm->update_passport_info($data) > 0) {
-			update_status($data['uuid'], 3);
+			update_status($data['uuid'], PASSPORT_UPDATED);
 			header('Location: '.base_url('/apply/travel_info/'.$data['uuid']));
 		} else {
 			$msg['tips'] = '信息更新失败，请返回重试！';
@@ -312,8 +355,16 @@ class Apply extends UserController {
 	}
 	
 	public function travel_info($uuid = '') {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$this->load->helper('util');
-		if (!check_status($uuid, 3)) {
+		if (!check_status($uuid, PASSPORT_UPDATED)) {
 			$msg['tips'] = '请先填写完必要信息再前往下一步！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -339,11 +390,11 @@ class Apply extends UserController {
 						'financial_source' => '',
 						),
 				);
-		$userid = $this->userid;
+		
 		$attributes = 'uuid, purpose, other_purpose, destination, relative_info, detail_info';
 		
 		$this->load->model('apply_model', 'alm');
-		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		$info = $this->alm->retrieve_some_info($this->userid, $uuid, $attributes);
 		
 		$data['user'] = $this->user_info;
 		if ($info) {
@@ -356,11 +407,19 @@ class Apply extends UserController {
 			$data['detail_info'] = json_decode($info['detail_info'], TRUE);
 		}
 		
-		$this->load->view('step_three', $data);
+		$this->load->view('step_travel', $data);
 	}
 	
 	public function update_travel_info() {
-		$data['userid'] = trim($this->input->post('userid', TRUE));
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data['userid'] = $this->userid;
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
 		$data['purpose'] = trim($this->input->post('purpose', TRUE));
 		$data['other_purpose'] = trim($this->input->post('other_purpose', TRUE));
@@ -391,7 +450,7 @@ class Apply extends UserController {
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->update_travel_info($data) > 0) {
-			update_status($data['uuid'], 4);
+			update_status($data['uuid'], TRAVEL_UPDATED);
 			header('Location: '.base_url('/apply/complement_info/'.$data['uuid']));
 		} else {
 			$msg['tips'] = '信息更新失败，请返回重试！';
@@ -403,8 +462,16 @@ class Apply extends UserController {
 	}
 	
 	public function complement_info($uuid = '') {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$this->load->helper('util');
-		if (!check_status($uuid, 4)) {
+		if (!check_status($uuid, TRAVEL_UPDATED)) {
 			$msg['tips'] = '请先填写完必要信息再前往下一步！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -446,11 +513,11 @@ class Apply extends UserController {
 						'refuse_date' => '',
 						),
 				);
-		$userid = $this->userid;
+		
 		$attributes = 'uuid, children_info, behaviour_info';
 		
 		$this->load->model('apply_model', 'alm');
-		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		$info = $this->alm->retrieve_some_info($this->userid, $uuid, $attributes);
 		
 		$data['user'] = $this->user_info;
 		if ($info) {
@@ -460,11 +527,19 @@ class Apply extends UserController {
 			$data['behaviour_info'] = json_decode($info['behaviour_info'], TRUE);
 		}
 		
-		$this->load->view('step_four', $data);
+		$this->load->view('step_complement', $data);
 	}
 	
 	public function update_complement_info() {
-		$data['userid'] = trim($this->input->post('userid', TRUE));
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data['userid'] = $this->userid;
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
 		$data['child_name'] = $this->input->post('child_name', TRUE);
 		$data['child_sex'] = $this->input->post('child_sex', TRUE);
@@ -497,7 +572,7 @@ class Apply extends UserController {
 		$this->load->model('apply_model', 'alm');
 		
 		if ($this->alm->update_complement_info($data) > 0) {
-			update_status($data['uuid'], 5);
+			update_status($data['uuid'], COMPLEMENT_UPDATED);
 			header('Location: '.base_url('/apply/sacn_file/'.$data['uuid']));
 		} else {
 			$msg['tips'] = '信息更新失败，请返回重试！';
@@ -509,8 +584,16 @@ class Apply extends UserController {
 	}
 	
 	public function scan_file($uuid = '') {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$this->load->helper('util');
-		if (!check_status($uuid, 5)) {
+		if (!check_status($uuid, COMPLEMENT_UPDATED)) {
 			$msg['tips'] = '请先填写完必要信息再前往下一步！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -518,26 +601,12 @@ class Apply extends UserController {
 			show_error($msg);
 		}
 		
-		$uuid = $uuid;
-		if ($uuid === '') {
-			show_error('申请流水号出错');
-		}
+		$data = array(
+					'uuid' => $uuid,
+					'passport_pic' => SCAN_DOMAIN .$uuid .'/passport',
+				);
 		
-		$user = $this->user_info;
-		$attributes = '*';
-		
-		$this->load->model('admin_model', 'adm');
-		$info = $this->adm->retrieve_some_info($uuid, $user['province_id'], $attributes);
-		
-		if ($info) {
-			$this->load->view('audit_upload', $info);
-		} else {
-			$msg['tips'] = '你所请求的申请记录不存在！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
-		}
+		$this->load->view('audit_upload', $data);
 	}
 	
 	private function upload_pics($uuid, $filename) {
@@ -561,9 +630,33 @@ class Apply extends UserController {
 	}
 	
 	public function upload_scan_file() {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data['uuid'] = trim($this->input->post('uuid', TRUE));
+		
+		$this->load->helper('util');
+		
+		if ($data['uuid'] === '') {
+			show_error('申请流水号出错');
+		}
+		
+		if (!is_editable($data['uuid'])) {
+			$msg['tips'] = '该申请不可再修改！';
+			$link = '/apply';
+			$location = '返回用户主页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$scan_files = array('passport');
 		foreach ($scan_files as $val) {
-			if (!$this->upload_pics($uuid, $val)) {
+			if (!$this->upload_pics($data['uuid'], $val)) {
 				$msg['tips'] = '上传失败，请返回重新操作！';
 				$link = 'javascript:history.go(-1);';
 				$location = '返回上一步';
@@ -572,12 +665,99 @@ class Apply extends UserController {
 			}
 		}
 		
-		header('Location: /admin/total_preview/'.$uuid);
+		update_status($data['uuid'], PICTURE_UPLOADED);
+		header('Location: '.base_url('/apply/fee_payment/'.$data['uuid']));
+	}
+	
+	public function fee_payment($uuid = '') {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$this->load->helper('util');
+		if (!check_status($uuid, PICTURE_UPLOADED)) {
+			$msg['tips'] = '请先填写完必要信息再前往下一步！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data = array(
+					'uuid' => '',
+					'fee' => '',
+				);
+		
+		$attributes = 'uuid, fee';
+		
+		$this->load->model('apply_model', 'alm');
+		$info = $this->alm->retrieve_some_info($this->userid, $uuid, $attributes);
+		
+		$data['user'] = $this->user_info;
+		if ($info) {
+			$data['uuid'] = $info['uuid'];
+			$data['fee'] = $info['fee'];
+		}
+		
+		$this->load->view('step_payment', $data);
+	}
+	
+	public function update_fee_payment() {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data['userid'] = $this->userid;
+		$data['uuid'] = trim($this->input->post('uuid', TRUE));
+		$data['fee'] = trim($this->input->post('fee', TRUE));
+		
+		$this->load->helper('util');
+		
+		if ($data['uuid'] === '') {
+			show_error('申请流水号出错');
+		}
+		
+		if (!is_editable($data['uuid'])) {
+			$msg['tips'] = '该申请不可再修改！';
+			$link = '/apply';
+			$location = '返回用户主页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$this->load->model('apply_model', 'alm');
+		
+		if ($this->alm->update_fee_payment($data) > 0) {
+			update_status($data['uuid'], PAYMENT_UPDATED);
+			header('Location: '.base_url('/apply/confirm_info/'.$data['uuid']));
+		} else {
+			$msg['tips'] = '信息更新失败，请返回重试！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
 	}
 	
 	public function confirm_info($uuid = '') {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$this->load->helper('util');
-		if (!check_status($uuid, 5)) {
+		if (!check_status($uuid, PAYMENT_UPDATED)) {
 			$msg['tips'] = '请先填写完必要信息再前往下一步！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -608,16 +788,25 @@ class Apply extends UserController {
 	}
 	
 	public function submit_all_info($uuid = '', $opt = '') {
-		$userid = $this->userid;
-		$status = 0;
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data['userid'] = $this->userid;
+		$data['uuid'] = $uuid;
+		$data['status'] = APPLY_NOTFINISHED;
 		switch ($opt) {
-			case 'submit': $status = 11; break;
-			case 'cancel': $status = -1; break;
+			case 'submit': $data['status'] = APPLY_WAITING; break;
+			case 'cancel': $data['status'] = APPLY_TRASHED; break;
 		}
 		
 		$this->load->helper('util');
 		
-		if ($uuid === '') {
+		if ($data['uuid'] === '') {
 			show_error('申请流水号出错');
 		}
 		
@@ -631,18 +820,27 @@ class Apply extends UserController {
 		
 		$this->load->model('apply_model', 'alm');
 		
-		if ($this->alm->submit_all_info($userid, $uuid, $status) > 0) {
-			update_status($uuid, $status);
+		if ($this->alm->submit_all_info($data) > 0) {
+			update_status($data['uuid'], $data['status']);
 			header('Location: '.base_url('/apply'));
 		} else {
-			$msg['tips'] = 'do not repeat it';
-			$msg['link'] = '/apply/records';
-			$msg['location'] = 'index page';
-			$this->load->view('simple_msg_page', $msg);
+			$msg['tips'] = '申请已成功提交，请不要重复提交申请！';
+			$link = '/apply';
+			$location = '返回用户主页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 	}
 	
 	public function view($uuid = '') {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		if ($uuid === '') {
 			show_error('申请流水号出错');
 		}
@@ -654,12 +852,12 @@ class Apply extends UserController {
 		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
 		
 		if ($info) {
-			if ($info['status'] >= 41) {
-				$info['photo_pic'] = SCAN_DOMAIN .$uuid .'/photo';
+			if ($info['status'] >= APPLY_WAITING) {
+				//$info['photo_pic'] = SCAN_DOMAIN .$uuid .'/photo';
 				$info['passport_pic'] = SCAN_DOMAIN .$uuid .'/passport';
-				$info['identity_pic'] = SCAN_DOMAIN .$uuid .'/identity';
-				$info['ticket_pic'] = SCAN_DOMAIN .$uuid .'/ticket';
-				$info['deposition_pic'] = SCAN_DOMAIN .$uuid .'/deposition';
+				//$info['identity_pic'] = SCAN_DOMAIN .$uuid .'/identity';
+				//$info['ticket_pic'] = SCAN_DOMAIN .$uuid .'/ticket';
+				//$info['deposition_pic'] = SCAN_DOMAIN .$uuid .'/deposition';
 			}
 			$this->load->view('apply_view', $info);
 		} else {
@@ -672,6 +870,14 @@ class Apply extends UserController {
 	}
 	
 	public function download_form($uuid = '') {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		if ($uuid === '') {
 			show_error('申请流水号出错');
 		}
@@ -694,18 +900,25 @@ class Apply extends UserController {
 	}
 	
 	public function download_visa($uuid = '') {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		if ($uuid === '') {
 			show_error('申请流水号出错');
 		}
 		
-		$userid = $this->userid;
 		$attributes = 'visa_no';
 		
 		$this->load->model('apply_model', 'alm');
-		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		$info = $this->alm->retrieve_some_info($this->userid, $uuid, $attributes);
 		
 		if (!$info || $info['visa_no'] === '') {
-			show_error('Bad Request');
+			show_error('申请记录或签证文件不存在！');
 		}
 		
 		$filename = VISA_PATH .$uuid.'/'.$info['visa_no'].'.docx';
@@ -731,7 +944,7 @@ class Apply extends UserController {
 		$records = $this->alm->get_auditing_records_by_uuid($uuid);
 		
 		foreach ($records as &$one) {
-			$one['status_str'] = status2text($one['status']);
+			$one['status_str'] = $this->config->config['apply_status_str'][$one['status']];
 		}
 		
 		$ret['records'] = $records;

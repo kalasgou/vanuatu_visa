@@ -3,9 +3,9 @@
 class Api extends CI_Controller {
 	
 	public function visa_verify_pic() {
-		$data['name'] = trim($this->input->get('name', TRUE));
 		$data['passport'] = trim($this->input->get('passport', TRUE));
 		$data['visa'] = trim($this->input->get('visa', TRUE));
+		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
 		
 		$this->load->helper('util');
 		if (!check_parameters($data)) exit('Parameters Not Enough');
@@ -57,9 +57,7 @@ class Api extends CI_Controller {
 	public function visa_verify_table() {
 		$data['passport'] = trim($this->input->get('passport', TRUE));
 		$data['visa'] = trim($this->input->get('visa', TRUE));
-		
-		$this->load->helper('util');
-		if (!check_parameters($data)) exit('Parameters Not Enough');
+		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
 		
 		$info = array();
 		$output = array();

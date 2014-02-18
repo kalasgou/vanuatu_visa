@@ -34,7 +34,6 @@
 						<p class="form-control-static"><?php echo $email;?></p>
 					</div>
 				</div>
-				<?php if (isset($nickname)) { ?>
 				<div class="form-group">
 					<label for="inputNickname3" class="col-sm-2 control-label">帐户姓名:</label>
 					<div class="col-sm-10">
@@ -42,27 +41,28 @@
 						<p class="form-control-static"><?php echo $nickname;?></p>
 					</div>
 				</div>
-				<?php } ?>
 				<div class="form-group">
-					<label for="inputRealname3" class="col-sm-2 control-label">所属机构:</label>
+					<label for="inputProvince3" class="col-sm-2 control-label">所属省份:</label>
 					<div class="col-sm-10">
-						<!--<input type="text" class="form-control" name="realname" id="inputRealname3" value="" placeholder="Real Name">-->
-						<p class="form-control-static"><?php echo $realname;?></p>
+						<p class="form-control-static"><?php echo $province_str;?></p>
 					</div>
 				</div>
-				<?php if (isset($phone)) { ?>
+				<div class="form-group">
+					<label for="inputCity3" class="col-sm-2 control-label">所属城市:</label>
+					<div class="col-sm-10">
+						<p class="form-control-static"><?php echo $city_str;?></p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputAgency3" class="col-sm-2 control-label">所属机构:</label>
+					<div class="col-sm-10">
+						<p class="form-control-static"><?php echo $agency;?></p>
+					</div>
+				</div>
 				<div class="form-group">
 					<label for="inputPhone3" class="col-sm-2 control-label">联系电话:</label>
 					<div class="col-sm-10">
-						<!--<input type="tel" class="form-control" name="phone" id="inputPhone3" value="" placeholder="Telephone">-->
-						<p class="form-control-static"><?php echo $phone;?></p>
-					</div>
-				</div>
-				<?php } ?>
-				<div class="form-group">
-					<label for="inputStatus3" class="col-sm-2 control-label">帐户状态:</label>
-					<div class="col-sm-10">
-						<p class="form-control-static"><?php echo $status_str;?></p>
+						<p class="form-control-static"><?php echo $telephone;?></p>
 					</div>
 				</div>
 				<div class="form-group">
@@ -71,18 +71,16 @@
 						<p class="form-control-static"><?php echo $permission_str;?></p>
 					</div>
 				</div>
-				<?php if (isset($province_id)) { ?>
-				<div class="form-group">
-					<label for="inputProvince3" class="col-sm-2 control-label">所属省份:</label>
-					<div class="col-sm-10">
-						<p class="form-control-static"><?php echo $province_str;?></p>
-					</div>
-				</div>
-				<?php } ?>
 				<div class="form-group">
 					<label for="inputRegtime3" class="col-sm-2 control-label">注册时间:</label>
 					<div class="col-sm-10">
 						<p class="form-control-static"><?php echo $reg_time;?></p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputStatus3" class="col-sm-2 control-label">帐户状态:</label>
+					<div class="col-sm-10">
+						<p class="form-control-static"><?php echo $status_str;?></p>
 					</div>
 				</div>
 				<!--<?php if ($permission == 10000) { ?>

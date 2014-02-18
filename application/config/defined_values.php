@@ -9,8 +9,8 @@
 									ILLEGAL_USER => '非法用户', 
 									SYSTEM_ADMIN => '系统管理员', 
 									EMBASSY_ADMIN => '大使馆管理员', 
-									AGENCY_ADMIN => '办事处管理员', 
-									ORDINARY_USER => '网上预约用户'
+									OFFICE_ADMIN => '办事处管理员', 
+									RESERVATION_USER => '网上预约用户'
 								);
 	
 	

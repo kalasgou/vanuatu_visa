@@ -6,7 +6,7 @@ class Admin extends UserController {
 	
 	public function index() {
 		switch (intval($this->permission)) {
-			case AGENCY_ADMIN: header('Location: '. base_url('/admin/audit')); break;
+			case OFFICE_ADMIN: header('Location: '. base_url('/admin/audit')); break;
 			case EMBASSY_ADMIN: header('Location: '. base_url('/admin/approve')); break;
 			case SYSTEM_ADMIN: header('Location: '. base_url('/admin/permit')); break;
 			default : 
@@ -90,7 +90,7 @@ class Admin extends UserController {
 	}
 	
 	public function present($uuid = '') {
-		if ($this->permission != AGENCY_ADMIN) {
+		if ($this->permission != OFFICE_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -172,11 +172,12 @@ class Admin extends UserController {
 						'refused' => '',
 						'refuse_date' => '',
 						),
+					'fee' => '',
 				);
 		
-		$attribute = '*';
+		$attributes = '*';
 		$this->load->model('admin_model', 'adm');
-		$info = $this->adm->retrieve_some_info($uuid, $this->user_info['province_id'], $attribute);
+		$info = $this->adm->retrieve_some_info($uuid, $attributes);
 		
 		if ($info) {
 			$data = $info;
@@ -194,7 +195,7 @@ class Admin extends UserController {
 	}
 	
 	public function submit_present() {
-		if ($this->permission != AGENCY_ADMIN) {
+		if ($this->permission != OFFICE_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -291,6 +292,9 @@ class Admin extends UserController {
 		$data['refused'] = trim($this->input->post('refused', TRUE));
 		$data['refuse_date'] = trim($this->input->post('refuse_date', TRUE));
 		
+		// Fee Payment
+		$data['fee'] = trim($this->input->post('fee', TRUE));
+		
 		$this->load->model('admin_model', 'adm');
 		if ($this->adm->update_application($data) > 0) {
 			update_status($data['uuid'], 11);
@@ -305,7 +309,7 @@ class Admin extends UserController {
 	}
 	
 	public function audit($page = 1) {
-		if ($this->permission != AGENCY_ADMIN) {
+		if ($this->permission != OFFICE_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -316,10 +320,11 @@ class Admin extends UserController {
 		$this->load->helper('util');
 		
 		$data['province_id'] = $this->user_info['province_id'];
+		$data['city_id'] = $this->user_info['city_id'];
 		$data['page'] = $page - 1;
 		
 		$status = trim($this->input->get('cur_status', TRUE));
-		$data['status'] = text2status(($status === '' ? 'wait' : $status));
+		$data['status'] = intval($this->confg->item($status, 'apply_status_code'));
 		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
@@ -372,10 +377,11 @@ class Admin extends UserController {
 		$this->load->helper('util');
 		
 		$data['province_id'] = $this->user_info['province_id'];
+		$data['city_id'] = $this->user_info['city_id'];
 		$data['page'] = $page - 1;
 		
 		$status = trim($this->input->get('cur_status', TRUE));
-		$data['status'] = text2status(($status === '' ? 'paid' : $status));
+		$data['status'] = intval($this->confg->item($status, 'apply_status_code'));
 		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
@@ -428,10 +434,11 @@ class Admin extends UserController {
 		$this->load->helper('util');
 		
 		$data['province_id'] = $this->user_info['province_id'];
+		$data['city_id'] = $this->user_info['city_id'];
 		$data['page'] = $page - 1;
 		
 		$status = trim($this->input->get('cur_status', TRUE));
-		$data['status'] = text2status(($status === '' ? 'wait' : $status));
+		$data['status'] = intval($this->confg->item($status, 'apply_status_code'));
 		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
@@ -639,7 +646,7 @@ class Admin extends UserController {
 		$attributes = '*';
 		
 		$this->load->model('admin_model', 'adm');
-		$info = $this->adm->retrieve_some_info($uuid, $this->user_info['province_id'], $attributes);
+		$info = $this->adm->retrieve_some_info($uuid, $attributes);
 		
 		if ($info) {
 			if ($info['status'] >= 41) {
@@ -665,10 +672,10 @@ class Admin extends UserController {
 		$data['userid'] = $this->userid;
 		$data['uuid'] = $uuid;
 		$data['message'] = trim($this->input->post('message', TRUE));
-		$data['fee'] = trim($this->input->post('fee', TRUE));
+		//$data['fee'] = trim($this->input->post('fee', TRUE));
+		$data['status'] = intval($this->confg->item($opt, 'apply_status_code'));
 		
 		$this->load->helper('util');
-		$data['status'] = text2status($opt);
 		
 		if ($data['uuid'] === '') {
 			show_error('申请流水号出错');
@@ -679,7 +686,7 @@ class Admin extends UserController {
 			$ret['msg'] = 'success';
 			
 			update_status($data['uuid'], $data['status']);
-			push_email_queue($opt.'_notification', $data['uuid']);
+			//push_email_queue($opt.'_notification', $data['uuid']);
 		} else {
 			$ret['msg'] = 'fail';
 		}
@@ -698,16 +705,16 @@ class Admin extends UserController {
 		}
 		
 		$this->load->helper('util');
-		$data['status'] = text2status($opt);
+		$data['status'] = intval($this->confg->item($opt, 'apply_status_code'));
 		
 		$this->load->model('admin_model', 'adm');
 		
-		if ($data['status'] === '101') {
+		if ($data['status'] === APPLY_ACCEPTED) {
 			$data['start_time'] = strtotime('today');
-			$data['end_time'] = $data['start_time'] + 86400 * VISA_VALIDITY;
+			$data['end_time'] = $data['start_time'] + 86400 * VISA_VALID_DAYS;
 			
 			$attributes = '*';
-			$info = $this->adm->retrieve_some_info($uuid, $this->user_info['province_id'], $attributes);
+			$info = $this->adm->retrieve_some_info($uuid, $attributes);
 			
 			if (!$info) {
 				$ret['msg'] = 'invalid';
@@ -737,7 +744,7 @@ class Admin extends UserController {
 				$document->setValue('place_of_issue_p', $info['passport_place']);
 				$document->setValue('date_of_issue_p', date('j M, Y', $info['passport_date']));
 				$document->setValue('date_of_expiry_p', date('j M, Y', $info['passport_expiry']));
-				$document->setValue('visa_fee', 'RMB'.$info['fee']);
+				//$document->setValue('visa_fee', 'RMB'.$info['fee']);
 				
 				$path = VISA_PATH .$uuid.'/';
 				if (file_exists($path) === FALSE) {
@@ -752,7 +759,7 @@ class Admin extends UserController {
 				$data['visa_no'] = '';
 				$data['message'] = '该申请已作最终审核，无须重复操作！';
 			}
-		} else if ($data['status'] === '91') {
+		} else if ($data['status'] === APPLY_REJECTED) {
 			$data['visa_no'] = 'Refused';
 			$data['message'] = '该申请未能正常获得签证，如还需签证请另作申请！';
 			
@@ -779,7 +786,7 @@ class Admin extends UserController {
 		$attributes = '*';
 		
 		$this->load->model('admin_model', 'adm');
-		$info = $this->adm->retrieve_some_info($uuid, $user['province_id'], $attributes);
+		$info = $this->adm->retrieve_some_info($uuid, $attributes);
 		
 		if ($info) {
 			$this->load->view('audit_upload', $info);
@@ -828,7 +835,7 @@ class Admin extends UserController {
 	}*/
 	
 	public function download_excel() {
-		if ($this->permission != AGENCY_ADMIN || $this->permission != SYSTEM_ADMIN) {
+		if ($this->permission != OFFICE_ADMIN || $this->permission != SYSTEM_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -837,11 +844,12 @@ class Admin extends UserController {
 		}
 		
 		$data['province_id'] = $this->user_info['province_id'];
+		$data['city_id'] = $this->user_info['city_id'];
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
 		
 		$this->load->helper('util');
-		if (!check_parameters($data)) die();
+		if (!check_parameters($data)) exit('Parameters Not Enough');
 		
 		require '../application/third_party/PHPExcel/PHPExcel.php';
 		
@@ -868,7 +876,7 @@ class Admin extends UserController {
 		
 		$page = 0;
 		
-		$agency_admins = array();
+		$office_admins = array();
 		$embassy_admins = array();
 		
 		$this->load->model('admin_model', 'adm');
@@ -894,14 +902,14 @@ class Admin extends UserController {
 						->setCellValue('M'.$cur_column, $one['approve_time'])
 						->setCellValue('N'.$cur_column, $one['visa_no']);
 				
-				$name_agency = '';
+				$name_office = '';
 				$admin_userids = $this->adm->get_admin_userids($one['uuid'], 21, 41);
 				foreach ($admin_userids as $admin) {
-					if (!isset($agency_admins[$admin['admin_userid']]['realname'])) {
+					if (!isset($office_admins[$admin['admin_userid']]['realname'])) {
 						$info = $this->user->administrator_info($admin['admin_userid']);
-						$agency_admins[$info['userid']]['realname'] = $info['realname'];
+						$office_admins[$info['userid']]['realname'] = $info['realname'];
 					}
-					$name_agency .= $agency_admins[$admin['admin_userid']]['realname'].'、';
+					$name_office .= $office_admins[$admin['admin_userid']]['realname'].'、';
 				}
 				
 				$name_embassy = '';
@@ -915,7 +923,7 @@ class Admin extends UserController {
 				}
 				
 				$excel	->setActiveSheetIndex(0)
-						->setCellValue('O'.$cur_column, $name_agency)
+						->setCellValue('O'.$cur_column, $name_office)
 						->setCellValue('P'.$cur_column, $name_embassy);
 				
 				$i ++;
@@ -973,12 +981,10 @@ class Admin extends UserController {
 		}
 		
 		echo json_encode($ret);
-		
-		// agency or embassy account activation notification email
 	}
 	
 	public function audit_trace($page = 1) {
-		if ($this->permission < EMBASSY_ADMIN || $this->permission > AGENCY_ADMIN) {
+		if ($this->permission < EMBASSY_ADMIN || $this->permission > OFFICE_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -1012,7 +1018,7 @@ class Admin extends UserController {
 		$data['num_records'] = $config['total_rows'];
 		
 		foreach ($data['records'] as &$one) {
-			$one['status_str'] = status2text($one['status']);
+			$one['status_str'] = $this->config->item($one['status'], 'apply_status_str');
 		}
 		
 		if ($this->permission == 2) {
@@ -1028,7 +1034,7 @@ class Admin extends UserController {
 		$records = $this->adm->get_auditing_records_by_uuid($uuid);
 		
 		foreach ($records as &$one) {
-			$one['status_str'] = status2text($one['status']);
+			$one['status_str'] = $this->config->item($one['status'], 'apply_status_str');
 		}
 		
 		$ret['records'] = $records;
@@ -1044,10 +1050,10 @@ class Admin extends UserController {
 		$attributes = 'visa_no';
 		
 		$this->load->model('admin_model', 'adm');
-		$info = $this->adm->retrieve_some_info($uuid, $this->user_info['province_id'], $attributes);
+		$info = $this->adm->retrieve_some_info($uuid, $attributes);
 		
 		if (!$info || $info['visa_no'] === '') {
-			show_error('Bad Request');
+			show_error('申请记录或签证文件不存在！');
 		}
 		
 		$filename = VISA_PATH .$uuid.'/'.$info['visa_no'].'.docx';

@@ -45,7 +45,7 @@
 			</div>
 			<p></p>
 			<div id="filling_info">
-				<form id="passport_form" method="POST" action="/apply/fee_payment">
+				<form id="passport_form" method="POST" action="/apply/update_fee_payment">
 					<input type="hidden" name="uuid" value="<?php echo $uuid;?>"/>
 					<p>请输入所缴纳签证费用：</p>
 					<input type="text" name="fee" placeholder=""/>

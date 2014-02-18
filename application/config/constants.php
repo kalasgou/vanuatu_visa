@@ -41,7 +41,7 @@ define('HASH_PORTABLE', 		FALSE);
 
 define('COOKIE_TTL_HOUR',		24);
 
-define('VISA_VALIDITY',			30);
+define('VISA_VALID_DAYS',		30);
 define('MAX_STAY_DAYS',			90);
 
 define('VISA_TEMPLATE',			'/data/file/visa_file/template/visa_template.docx');
@@ -62,8 +62,8 @@ define('VISA_FONT_TYPE', 		'/data/file/resource/arialuni.ttf');
 define('ILLEGAL_USER',			0);
 define('SYSTEM_ADMIN',			1);
 define('EMBASSY_ADMIN',			128);
-define('AGENCY_ADMIN',			256);
-define('ORDINARY_USER',			1024);
+define('OFFICE_ADMIN',			256);
+define('RESERVATION_USER',		1024);
 
 define('ACCOUNT_CANCELLED',		-1);
 define('ACCOUNT_INACTIVE',		0);

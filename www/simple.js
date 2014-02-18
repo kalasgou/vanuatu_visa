@@ -96,11 +96,11 @@ function check_nickname() {
 	return true;
 }
 
-function check_realname() {
-	var realname = $('#inputRealname3').val();
+function check_agency() {
+	var agency = $('#inputAgency3').val();
 	
-	if (realname.length == 0) {
-		tips_appear('#realname_empty');
+	if (agency.length == 0) {
+		tips_appear('#agency_empty');
 		return false;
 	}
 	

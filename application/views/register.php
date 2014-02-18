@@ -18,7 +18,7 @@
 			});
 			
 			function submit_form() {
-				return check_register_email() && check_password() && check_nickname() && check_realname() && check_phone() && reshape_password();
+				return check_register_email() && check_password() && check_nickname() && check_agency() && check_phone() && reshape_password();
 			}
 		</script>
 		<style type="text/css">
@@ -65,16 +65,46 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputRealname3" class="col-sm-2 control-label">所属机构:</label>
+					<label for="inputPermission3" class="col-sm-2 control-label">帐号类型:</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" name="realname" id="inputRealname3" placeholder="Agency"/>
-						<span id="realname_empty" class="error_tips">请填写帐户所属机构全称</span>
+						<select class="form-control" name="permission">
+							<option value="<?php echo RESERVATION_USER;?>">预约用户</option>
+							<option value="<?php echo OFFICE_ADMIN;?>">办事处</option>
+							<option value="<?php echo EMBASSY_ADMIN;?>">领事馆</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputProvince3" class="col-sm-2 control-label">所属省份:</label>
+					<div class="col-sm-10">
+						<select class="form-control" name="province_id" onchange="">
+							<option value="1">北京</option>
+							<option value="2">广东</option>
+							<option value="3">上海</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputCity3" class="col-sm-2 control-label">所属城市:</label>
+					<div class="col-sm-10">
+						<select class="form-control" name="city_id" onchange="">
+							<option value="1">北京</option>
+							<option value="2">广东</option>
+							<option value="3">上海</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputAgency3" class="col-sm-2 control-label">所属机构:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" name="agency" id="inputAgency3" placeholder="Agency"/>
+						<span id="agency_empty" class="error_tips">请填写帐户所属机构全称</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="inputPhone3" class="col-sm-2 control-label">联系电话(区号-固话或手机):</label>
 					<div class="col-sm-10">
-						<input type="tel" class="form-control" name="phone" id="inputPhone3" placeholder="Code-Number / Mobile"/>
+						<input type="tel" class="form-control" name="telephone" id="inputPhone3" placeholder="Code-Number / Mobile"/>
 						<span id="phone_error" class="error_tips">请填写有效的联系电话号码（固话需加区号-）</span>
 					</div>
 				</div>
@@ -97,8 +127,8 @@
 				</div>-->
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-default">注册</button>
-						<a class="login" href="/login" style="margin-left:12px;">已有帐号？点此登录</a>
+						<button type="submit" class="btn btn-default">注 册</button>
+						<!--<a class="login" href="/login" style="margin-left:12px;">已有帐号？点此登录</a>-->
 					</div>
 				</div>
 			</form>

@@ -26,26 +26,28 @@
 			return $query->row_array();
 		}
 		
-		public function select_agency($data) {
-			$sql = 	'INSERT INTO visa_applying (userid, uuid, province_id, modify_time) '.
+		/*public function select_agency($data) {
+			$sql = 	'INSERT INTO visa_applying (userid, uuid, province_id, city_id, modify_time) '.
 					'VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE '.
 					'province_id = VALUES(province_id), '.
+					'city_id = VALUES(city_id), '.
 					'modify_time = VALUES(modify_time)';
 			$args = array(
 						'userid' => $data['userid'],
 						'uuid' => $data['uuid'],
 						'province_id' => $data['province_id'],
+						'city_id' => $data['city_id'],
 						'modify_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
 					);
 					
 			$this->apply_db->query($sql, $args);
 			
 			return $this->apply_db->affected_rows();
-		}
+		}*/
 		
 		public function update_basic_info($data) {
-			$sql = 	'INSERT INTO visa_applying (uuid, name_en, name_cn, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, modify_time) '.
-					'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE '.
+			$sql = 	'INSERT INTO visa_applying (userid, uuid, province_id, city_id, name_en, name_cn, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, modify_time) '.
+					'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE '.
 					'name_en = VALUES(name_en), '.
 					'name_cn = VALUES(name_cn), '.
 					'gender = VALUES(gender), '.
@@ -59,7 +61,10 @@
 					'home_info = VALUES(home_info), '.
 					'modify_time = VALUES(modify_time)';
 			$args = array(
+						'userid' => $data['userid'],
 						'uuid' => $data['uuid'],
+						'province_id' => $data['province_id'],
+						'city_id' => $data['city_id'],
 						'name_en' => $data['name_en'],
 						'name_cn' => $data['name_cn'],
 						'gender' => $data['gender'],
@@ -183,11 +188,21 @@
 			return $this->apply_db->affected_rows();
 		}
 		
-		public function submit_all_info($userid, $uuid, $status) {
-			$this->apply_db->set('status', $status);
+		public function update_fee-payment($data) {
+			$this->apply_db->set('fee', $data['fee']);
+			$this->apply_db->set('pay_time', date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']));
+			$this->apply_db->where('userid', $data['userid']);
+			$this->apply_db->where('uuid', $data['uuid']);
+			$this->apply_db->update('visa_applying');
+			
+			return $this->apply_db->affected_rows();
+		}
+		
+		public function submit_all_info($data) {
+			$this->apply_db->set('status', $data['status']);
 			$this->apply_db->set('submit_time', date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']));
-			$this->apply_db->where('userid', $userid);
-			$this->apply_db->where('uuid', $uuid);
+			$this->apply_db->where('userid', $data['userid']);
+			$this->apply_db->where('uuid', $data['uuid']);
 			$this->apply_db->update('visa_applying');
 			
 			return $this->apply_db->affected_rows();
@@ -214,8 +229,8 @@
 			if (strcmp($passport_number, $row['passport_number']) === 0) {
 				return TRUE;
 			} else {
-				$sql_a = 'SELECT uuid FROM visa_applying WHERE passport_number = "'.$passport_number.'" AND status >= 11 AND status <= 41';
-				$sql_b = 'SELECT uuid FROM visa_applying WHERE passport_number = "'.$passport_number.'" AND status = 101 AND approve_time >= "'.date('Y-m-d H:i:s', strtotime('-60 days')).'"';
+				$sql_a = 'SELECT uuid FROM visa_applying WHERE passport_number = "'.$passport_number.'" AND status >= 11 AND status <= 31';
+				$sql_b = 'SELECT uuid FROM visa_applying WHERE passport_number = "'.$passport_number.'" AND status = 101 AND approve_time >= "'.date('Y-m-d H:i:s', strtotime('-30 days')).'"';
 				$sql = $sql_a.' UNION ALL '.$sql_b;
 				$query = $this->apply_db->query($sql);
 				

@@ -45,7 +45,7 @@
 			</div>
 			<p></p>
 			<div id="filling_info">
-				<form id="passport_form" method="POST" action="/apply/select_agency">
+				<form id="scan_file" action="/apply/upload_scan_file" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="uuid" value="<?php echo $uuid;?>"/>
 					<p>请选择办事处:<br>
 					<select name="province_id" onchange="">

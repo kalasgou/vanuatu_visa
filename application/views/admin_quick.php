@@ -51,7 +51,7 @@
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div id="hello">
-				<h5>您好，办事处管理员 <?php echo $user['realname'];?>！</h5>
+				<h5>您好，办事处管理员 <?php echo $user['nickname'];?>！</h5>
 			</div>
 			<div id="menu">
 				<a href="/admin/permit">管理员帐号</a> / 
@@ -108,8 +108,8 @@
 					<col style="width:11%;"/>
 					<col style="width:18%"/>
 					<col style="width:9%;"/>
-					<col style="width:9%"/>
-					<col style="width:8%;"/>
+					<col style="width:8%"/>
+					<col style="width:9%;"/>
 					<col style="width:9%"/>
 					<col style="width:9%;"/>
 					<col style="width:9%;"/>
@@ -120,10 +120,10 @@
 						<th>申请流水号</th>
 						<th>申请人英文/中文姓名</th>
 						<th>护照号</th>
+						<th>签证费用</th>
 						<th>提交日期</th>
 						<th>当前状态</th>
 						<th>审核日期</th>
-						<th>缴费日期</th>
 						<th>签发日期</th>
 						<th>操作</th>
 					</tr>
@@ -136,14 +136,14 @@
 						<td><?php echo $one['uuid'];?></td>
 						<td><?php echo $one['name_en'];?> / <?php echo $one['name_cn'];?></td>
 						<td><?php echo $one['passport_number'];?></td>
+						<td><?php echo $one['fee'];?></td>
 						<td><span title="具体时间 <?php echo $one['submit_time'];?>"><?php echo substr($one['submit_time'], 0, 10);?></span></td>
 						<td><?php echo $one['status_str'];?></td>
 						<td><span title="具体时间 <?php echo $one['audit_time'];?>"><?php echo substr($one['audit_time'], 0, 10);?></span></td>
-						<td><span title="具体时间 <?php echo $one['pay_time'];?>"><?php echo substr($one['pay_time'], 0, 10);?></span></td>
 						<td><span title="具体时间 <?php echo $one['approve_time'];?>"><?php echo substr($one['approve_time'], 0, 10);?></span></td>
 						<td>
 							<a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank">查看详细</a>
-							<?php if ($one['status'] != 101) { ?> / 
+							<?php if ($one['status'] != APPLY_ACCEPTED) { ?> / 
 								<a href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'visa', this);">通过签证</a>
 							<?php } ?>
 						</td>
@@ -151,12 +151,6 @@
 					<?php
 							}
 						} else {
-					?>
-					<tr>
-						<td colspan="9" style="text-align:center;">暂无任何相关记录！</td>
-					</tr>
-					<?php
-						}
 					?>
 				</tbody>
 			</table>

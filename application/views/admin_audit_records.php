@@ -50,7 +50,7 @@
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div id="hello">
-				<h5>您好，办事处管理员 <?php echo $user['realname'];?>！</h5>
+				<h5>您好，办事处管理员 <?php echo $user['nickname'];?>！</h5>
 			</div>
 			<div id="menu">
 				<a href="/admin/audit">审核申请</a> / 
@@ -123,12 +123,6 @@
 					</tr>
 					<?php
 							}
-						} else {
-					?>
-					<tr>
-						<td colspan="4" style="text-align:center;">暂无任何相关记录！</td>
-					</tr>
-					<?php
 						}
 					?>
 				</tbody>

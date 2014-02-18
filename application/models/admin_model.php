@@ -29,7 +29,7 @@
 		}
 		
 		public function get_applications($data) {
-			$this->admin_db->select('uuid, name_en, name_cn, status, passport_number, submit_time, audit_time, pay_time, approve_time');
+			$this->admin_db->select('uuid, name_en, name_cn, status, passport_number, submit_time, audit_time, pay_time, approve_time, fee');
 			if ($data['province_id'] != 0 || $data['city_id'] != 0) {
 				$this->admin_db->where('province_id', $data['province_id']);
 				$this->admin_db->where('city_id', $data['city_id']);

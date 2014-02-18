@@ -188,7 +188,7 @@
 			return $this->apply_db->affected_rows();
 		}
 		
-		public function update_fee-payment($data) {
+		public function update_fee_payment($data) {
 			$this->apply_db->set('fee', $data['fee']);
 			$this->apply_db->set('pay_time', date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']));
 			$this->apply_db->where('userid', $data['userid']);
@@ -208,12 +208,12 @@
 			return $this->apply_db->affected_rows();
 		}
 		
-		public function get_records($userid, $page) {
-			$this->apply_db->select('uuid, name_en, name_cn, status, passport_number, submit_time, audit_time, pay_time, approve_time');
-			$this->apply_db->where('userid', $userid);
-			$this->apply_db->where('status > ', 0);
+		public function get_records($data) {
+			$this->apply_db->select('uuid, name_en, name_cn, status, passport_number, submit_time, audit_time, pay_time, approve_time, fee');
+			$this->apply_db->where('userid', $data['userid']);
+			$this->apply_db->where('status', $data['status']);
 			$this->apply_db->order_by('submit_time', 'desc');
-			$this->apply_db->limit(20, 20 * $page);
+			$this->apply_db->limit(20, 20 * $data['page']);
 			$query = $this->apply_db->get('visa_applying');
 			
 			return $query->result_array();

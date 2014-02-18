@@ -20,7 +20,7 @@
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div id="hello">
-				<h5>您好，<?php echo $user['realname'];?>！</h5>
+				<h5>您好，<?php echo $user['nickname'];?>！</h5>
 			</div>
 			<div id="menu">
 				<a href="/apply">申请记录</a> / 
@@ -32,13 +32,11 @@
 		</nav>
 		<div id="step_box">
 			<div id="procedure" class="list_group">
-				<a class="list-group-item" href="/apply/agencies/<?php echo $uuid;?>">选择办事处</a>
 				<a class="list-group-item" href="/apply/basic_info/<?php echo $uuid;?>">基本个人信息</a>
 				<a class="list-group-item" href="/apply/passport_info/<?php echo $uuid;?>">护照信息</a>
 				<a class="list-group-item active">行程信息</a>
 				<a class="list-group-item" href="/apply/complement_info/<?php echo $uuid;?>">其他补充信息</a>
 				<a class="list-group-item" href="/apply/scan_file/<?php echo $uuid;?>">证明文件上传</a>
-				<a class="list-group-item" href="/apply/fee_payment/<?php echo $uuid;?>">费用交纳</a>
 				<a class="list-group-item" href="/apply/confirm_info/<?php echo $uuid;?>">所填信息确认</a>
 			</div>
 			<p></p>

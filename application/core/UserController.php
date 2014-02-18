@@ -1,17 +1,13 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+require APPPATH .'core/LoginController.php';
+
 abstract class UserController extends LoginController {
 	
 	public function __construct() {
 		parent::__construct();
 		
-		if ($this->status != ACCOUNT_NORMAL) {
-			$msg['tips'] = '帐户未激活。';
-			$link = '/user/activation/'.$this->userid;
-			$location = '请求开通此帐户操作权限';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
-		} else {
+		if ($this->userid == ILLEGAL_USER || $this->status != ACCOUNT_NORMAL) {
 			header('Location: '.base_url('/login'));
 			exit('Not Logined Yet');
 		}

@@ -223,7 +223,7 @@
 			$this->user_db->select('province_cn, province_en, city_cn, city_en');
 			$this->user_db->from('city');
 			$this->user_db->join('province', 'province.id = city.province_id', 'left');
-			$this->user_db->where('city_id', $city_id);
+			$this->user_db->where('city.id', $city_id);
 			$this->user_db->limit(1);
 			$query = $this->user_db->get();
 			

@@ -87,7 +87,7 @@ class Welcome extends LoginController {
 	}*/
 	
 	public function account() {
-		if ($this->userid === ILLEGAL_USER || $this->status != ACCOUNT_NORMAL) {
+		if ($this->userid == ILLEGAL_USER || $this->status != ACCOUNT_NORMAL) {
 			$msg['tips'] = '请登录后再进行此操作！';
 			$link = '/login';
 			$location = '点击登录';
@@ -112,7 +112,7 @@ class Welcome extends LoginController {
 	}
 	
 	public function password() {
-		if ($this->userid === ILLEGAL_USER || $this->status != ACCOUNT_NORMAL) {
+		if ($this->userid == ILLEGAL_USER || $this->status != ACCOUNT_NORMAL) {
 			$msg['tips'] = '请登录后再进行此操作！';
 			$link = '/login';
 			$location = '点击登录';

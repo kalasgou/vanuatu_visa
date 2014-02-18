@@ -43,7 +43,7 @@
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div id="hello">
-				<h5>您好，系统管理员 <?php echo $user['realname'];?>！</h5>
+				<h5>您好，系统管理员 <?php echo $user['nickname'];?>！</h5>
 			</div>
 			<div id="menu">
 				<a style="color:#1100FF;">管理员帐号</a> / 
@@ -125,12 +125,6 @@
 					</tr>
 					<?php
 							}
-						} else {
-					?>
-					<tr>
-						<td colspan="7" style="text-align:center;">暂无任何相关记录！</td>
-					</tr>
-					<?php
 						}
 					?>
 				</tbody>

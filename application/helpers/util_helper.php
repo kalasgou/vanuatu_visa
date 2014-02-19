@@ -74,8 +74,8 @@
 		$mail->From = 'vanuatuembassycn@hotmail.com';
 		$mail->FromName = 'VanuatuVisa';
 		$mail->addAddress($data['email'], $data['user']);
-		$mail->addReplyTo('305858854@qq.com');
-		$mail->addCC('305858854@qq.com');
+		//$mail->addReplyTo();
+		//$mail->addCC();
 		
 		if (isset($data['visa_file'])) {
 			$mail->addAttachment($data['visa_file'], 'Visa签证.docx');
@@ -123,44 +123,6 @@
 			if ($id === 0) break;
 		}
 		return $number;
-	}
-	
-	function status2text($status_code) {
-		$description = array(
-							'-128' => '负溢出异常',
-							'-1' => '已删除',
-							'0' => '未完成',
-							'11' => '等待审核',
-							'21' => '未通过',
-							'31' => '通过审核',
-							'41' => '已缴款',
-							'91' => '被拒签',
-							'101' => '已出签证',
-							'125' => '申请过期无效',
-							'126' => '签证过期无效',
-							'127' => '正溢出异常',
-						);
-		
-		return $description[strval($status_code)];
-	}
-	
-	function text2status($text_string) {
-		$status = '11';
-		
-		switch ($text_string) {
-			case 'drop': $status = '-1'; break;
-			case 'half': $status = '0'; break;
-			case 'wait': $status = '11'; break;
-			case 'fail': $status = '21'; break;
-			case 'pass': $status = '31'; break;
-			case 'paid': $status = '41'; break;
-			case 'oops': $status = '91'; break;
-			case 'visa': $status = '101'; break;
-			case 'lost': $status = '125'; break;
-			case 'best': $status = '126'; break;
-		}
-		
-		return $status;
 	}
 	
 	function check_status($uuid, $cur_status) {

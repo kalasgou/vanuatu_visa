@@ -39,11 +39,14 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('HASH_COST_LOG2', 		8);
 define('HASH_PORTABLE', 		FALSE);
 
+// Login Control
 define('COOKIE_TTL_HOUR',		24);
 
+// Visa
 define('VISA_VALID_DAYS',		30);
 define('MAX_STAY_DAYS',			90);
 
+// Location
 define('VISA_TEMPLATE',			'/data/file/visa_file/template/visa_template.docx');
 
 define('VISA_PATH',				'/data/file/visa_file/');
@@ -59,16 +62,22 @@ define('CAPTCHA_DOMAIN',		'http://file.vanuatuvisa.cn/captcha/');
 define('VISA_BACKGROUND', 		'/data/file/resource/visa_background.jpg');
 define('VISA_FONT_TYPE', 		'/data/file/resource/arialuni.ttf');
 
+// Special Userid
+define('PRESENT_USERID',		2);
+
+// Account Permission
 define('ILLEGAL_USER',			0);
 define('SYSTEM_ADMIN',			1);
 define('EMBASSY_ADMIN',			128);
 define('OFFICE_ADMIN',			256);
 define('RESERVATION_USER',		1024);
 
+// Account Status
 define('ACCOUNT_CANCELLED',		-1);
 define('ACCOUNT_INACTIVE',		0);
 define('ACCOUNT_NORMAL',		1);
 
+// Application Status
 define('NEGATIVE_OVERFLOW',		-128);
 define('APPLY_TRASHED',			-1);
 define('APPLY_NOTFINISHED',		0);

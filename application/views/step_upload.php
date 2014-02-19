@@ -25,7 +25,7 @@
 				<h5>您好，<?php echo $user['nickname'];?>！</h5>
 			</div>
 			<div id="menu">
-				<a href="/apply">申请记录</a> / 
+				<a href="/apply/records">申请记录</a> / 
 				<a style="color:#1100FF;">签证申请</a> / 
 				<a href="/account">帐户信息</a> / 
 				<a href="/password">密码修改</a> / 
@@ -45,14 +45,13 @@
 			<div id="filling_info">
 				<form id="scan_file" action="/apply/upload_scan_file" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="uuid" value="<?php echo $uuid;?>"/>
-					<p>请选择办事处:<br>
-					<select name="province_id" onchange="">
-						<?php foreach ($agencies as $one) { ?>
-						<option value="<?php echo $one['province_id'];?>" <?php echo ($province_id == $one['province_id'] ? 'selected="selected"' : '')?>><?php echo $one['province_cn'].'--'.$one['city_cn'].'--'.$one['addr_cn'];?></option>
-						<?php } ?>
-					</select>
-					</P>
-					<button id="next_step" type="submit" class="btn btn-success btn-sm">下一步</button>
+					<p>上传护照扫描件:</p>
+					<p>
+						<input type="file" name="passport"/>
+					</p>
+					<p><img src="<?php echo $passport_pic;?>" alt="护照" style="width:822px;"/></P>
+					<p id="notice">注意：请限制文件大小在3MB以内避免上传时间过长或无法上传；分辨率不小于800×600像素。</p>
+					<button id="next_step" class="btn btn-success btn-sm">上传</button>
 				</form>
 			</div>
 		</div>

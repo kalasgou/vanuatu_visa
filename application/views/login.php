@@ -59,7 +59,7 @@
 				</div>-->
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-default">登 录</button>
+						<button type="submit" class="btn btn-success">登录</button>
 						<!--<a class="register" href="/register" style="margin-left:12px;">点此注册新用户</a>-->
 					</div>
 				</div>

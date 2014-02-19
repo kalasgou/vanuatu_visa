@@ -95,7 +95,7 @@
 				if ($uuid) {
 					$info = $this->ivm->combined_info($uuid);
 					$greeting = '<p>尊敬的<b>'.$info['name_cn'].'/'.$info['name_en'].'</b>'.($info['gender'] == 1 ? '先生' : ($info['gender'] == 2 ? '女士' : '小姐')).'：</p>';
-					$notification = '<p>你申请号<b>'.$uuid.'</b>的签证申请已成功通过全部审核并获得即日起60天有效期的Vanuatu签证（对应护照编号为<b>'.$info['passport_number'].'</b>），签证编号为<b>'.$info['visa_no'].'</b>。</p>';
+					$notification = '<p>你申请号<b>'.$uuid.'</b>的签证申请已成功通过全部审核并获得即日起30天有效期的Vanuatu签证（对应护照编号为<b>'.$info['passport_number'].'</b>），签证编号为<b>'.$info['visa_no'].'</b>。</p>';
 					
 					$data = array();
 					$data['email'] = $info['email'];

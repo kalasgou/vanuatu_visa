@@ -23,7 +23,7 @@
 				<h5>您好，<?php echo $user['nickname'];?>！</h5>
 			</div>
 			<div id="menu">
-				<a href="/apply">申请记录</a> / 
+				<a href="/apply/records">申请记录</a> / 
 				<a style="color:#1100FF;">签证申请</a> / 
 				<a href="/account">帐户信息</a> / 
 				<a href="/password">密码修改</a> / 
@@ -78,7 +78,7 @@
 					Yes是<input type="radio" name="refused" value="on" <?php echo ($behaviour_info['refused'] === 'on' ? 'checked="checked"' : '')?>/> When何时 <input type="text" name="refuse_date" style="width:150px" value="<?php echo $behaviour_info['refuse_date'];?>"/> No否 <input type="radio" name="refused" value="off" <?php echo ($behaviour_info['refused'] === 'off' ? 'checked="checked"' : '')?>/></p>
 					<br>
 					<p id="notice">注意：以上除带*标记为选填项，其余皆为必填项，需全部填写正确才能进入下一步。</p>
-					<button id="next_step" type="submit" class="btn btn-success btn-sm">提交</button>
+					<button id="next_step" type="submit" class="btn btn-success btn-sm">下一步</button>
 					<p></p>
 				</form>
 			</div>

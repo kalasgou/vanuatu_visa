@@ -3,8 +3,12 @@
 require APPPATH .'core/UserController.php';
 
 class Apply extends UserController {
+
+	public function index() {
+		header('Location: '.base_url('/apply/records'));
+	}
 	
-	public function index($page = 1) {
+	public function records($page = 1) {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
@@ -14,7 +18,8 @@ class Apply extends UserController {
 		}
 		
 		$data['userid'] = $this->userid;
-		$data['status'] = intval($this->input->get('cur_status', TRUE));
+		$status = trim($this->input->get('cur_status', TRUE));
+		$data['status'] = intval($this->config->item($status, 'apply_status_code'));
 		$data['page'] = $page - 1;
 		
 		$this->load->model('apply_model', 'alm');
@@ -22,7 +27,7 @@ class Apply extends UserController {
 		$this->load->helper('util');
 		$this->load->library('pagination');
 		
-		$config['base_url'] = '/apply/index/';
+		$config['base_url'] = '/apply/records/';
 		$config['uri_segment'] = 3;
 		$config['num_links'] = 2;
 		$config['total_rows'] = $this->alm->sum_applications($data);
@@ -573,7 +578,7 @@ class Apply extends UserController {
 		
 		if ($this->alm->update_complement_info($data) > 0) {
 			update_status($data['uuid'], COMPLEMENT_UPDATED);
-			header('Location: '.base_url('/apply/sacn_file/'.$data['uuid']));
+			header('Location: '.base_url('/apply/scan_file/'.$data['uuid']));
 		} else {
 			$msg['tips'] = '信息更新失败，请返回重试！';
 			$link = 'javascript:history.go(-1);';
@@ -605,8 +610,9 @@ class Apply extends UserController {
 					'uuid' => $uuid,
 					'passport_pic' => SCAN_DOMAIN .$uuid .'/passport',
 				);
+		$data['user'] = $this->user_info;
 		
-		$this->load->view('audit_upload', $data);
+		$this->load->view('step_upload', $data);
 	}
 	
 	private function upload_pics($uuid, $filename) {
@@ -666,10 +672,10 @@ class Apply extends UserController {
 		}
 		
 		update_status($data['uuid'], PICTURE_UPLOADED);
-		header('Location: '.base_url('/apply/fee_payment/'.$data['uuid']));
+		header('Location: '.base_url('/apply/confirm_info/'.$data['uuid']));
 	}
 	
-	public function fee_payment($uuid = '') {
+	/*public function fee_payment($uuid = '') {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
@@ -745,7 +751,7 @@ class Apply extends UserController {
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
-	}
+	}*/
 	
 	public function confirm_info($uuid = '') {
 		if ($this->permission != RESERVATION_USER) {
@@ -757,7 +763,7 @@ class Apply extends UserController {
 		}
 		
 		$this->load->helper('util');
-		if (!check_status($uuid, PAYMENT_UPDATED)) {
+		if (!check_status($uuid, PICTURE_UPLOADED)) {
 			$msg['tips'] = '请先填写完必要信息再前往下一步！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -774,10 +780,11 @@ class Apply extends UserController {
 		
 		$this->load->model('apply_model', 'alm');
 		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
+		$info['passport_pic'] = SCAN_DOMAIN .$uuid .'/passport';
 		
 		$info['user'] = $this->user_info;
 		if ($info) {
-			$this->load->view('step_five', $info);
+			$this->load->view('step_confirm', $info);
 		} else {
 			$msg['tips'] = '你所请求的申请记录不存在！';
 			$link = 'javascript:history.go(-1);';
@@ -796,14 +803,6 @@ class Apply extends UserController {
 			show_error($msg);
 		}
 		
-		$data['userid'] = $this->userid;
-		$data['uuid'] = $uuid;
-		$data['status'] = APPLY_NOTFINISHED;
-		switch ($opt) {
-			case 'submit': $data['status'] = APPLY_WAITING; break;
-			case 'cancel': $data['status'] = APPLY_TRASHED; break;
-		}
-		
 		$this->load->helper('util');
 		
 		if ($data['uuid'] === '') {
@@ -817,6 +816,18 @@ class Apply extends UserController {
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
+		
+		$data['userid'] = $this->userid;
+		$data['uuid'] = $uuid;
+		$data['status'] = APPLY_NOTFINISHED;
+		switch ($opt) {
+			case 'submit': $data['status'] = APPLY_WAITING; break;
+			case 'cancel': $data['status'] = APPLY_TRASHED; break;
+		}
+		
+		$this->load->library('RedisDB');
+		$redis = $this->redisdb->instance(REDIS_DEFAULT);
+		$data['fee'] = $redis->get('visa_fee');
 		
 		$this->load->model('apply_model', 'alm');
 		

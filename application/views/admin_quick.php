@@ -25,7 +25,7 @@
 					case '2' : location.href = '/admin/fast?orderby=' + selected + '&apply_id=' + $('#apply_id').val(); break;
 					case '3' : location.href = '/admin/fast?orderby=' + selected + '&passport_no=' + $('#passport_no').val(); break;
 					case '4' : location.href = '/admin/fast?orderby=' + selected + '&start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val(); break;
-					case '5' : location.href = '/admin/fast?orderby=' + selected + '&user=1'; break;
+					case '5' : location.href = '/admin/fast?orderby=' + selected + '&user=<?php echo PRESENT_USERID;?>'; break;
 					default : return;
 				}
 			}
@@ -54,10 +54,9 @@
 				<h5>您好，办事处管理员 <?php echo $user['nickname'];?>！</h5>
 			</div>
 			<div id="menu">
-				<a href="/admin/permit">管理员帐号</a> / 
-				<a href="/admin/ordinary">普通用户帐号</a> / 
+				<a href="/admin/account">帐号管理</a> / 
 				<a style="color:#1100FF;">快速通道</a> / 
-				<a href="/admin/agency">办事处管理</a> / 
+				<a href="/admin/agency">合作方管理</a> / 
 				<a href="/account">帐户信息</a> / 
 				<a href="/password">密码修改</a> / 
 				<a href="/logout">安全登出</a>
@@ -78,14 +77,12 @@
 				<div id="od1" style="display:inline-block;">
 					&nbsp;请选择需要查询的状态类型:&nbsp;
 					<select id="cur_status">
-						<option value="wait">待审核</option>
+						<option value="wait">等待审核</option>
 						<option value="fail">未通过</option>
-						<option value="pass">已通过</option>
-						<option value="paid">已缴费</option>
+						<option value="pass">通过审核</option>
+						<option value="oops">被拒签</option>
 						<option value="visa">已发签证</option>
-						<option value="oops">被拒证</option>
-						<option value="lost">已失效</option>
-						<option value="best">已过期</option>
+						<option value="best">签证过期</option>
 					</select>
 				</div>
 				<div id="od2" style="display:none">

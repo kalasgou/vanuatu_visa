@@ -29,7 +29,7 @@
 				<h5>您好，<?php echo $user['nickname'];?>！</h5>
 			</div>
 			<div id="menu">
-				<a href="/apply">申请记录</a> / 
+				<a href="/apply/records">申请记录</a> / 
 				<a style="color:#1100FF;">签证申请</a> / 
 				<a href="/account">帐户信息</a> / 
 				<a href="/password">密码修改</a> / 
@@ -42,7 +42,7 @@
 				<a class="list-group-item" href="/apply/passport_info/<?php echo $uuid;?>">护照信息</a>
 				<a class="list-group-item" href="/apply/travel_info/<?php echo $uuid;?>">行程信息</a>
 				<a class="list-group-item" href="/apply/complement_info/<?php echo $uuid;?>">其他补充信息</a>
-				<a class="list-group-item" href="/apply/fee_payment/<?php echo $uuid;?>">费用交纳</a>
+				<a class="list-group-item" href="/apply/scan_file/<?php echo $uuid;?>">证明文件上传</a>
 				<a class="list-group-item active">所填信息确认</a>
 			</div>
 			<p></p>
@@ -196,6 +196,10 @@
 				<div>
 					22、Have you ever been refused entry to Vanuatu?<br>
 					您曾经被瓦努阿图拒签过吗？ Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'on' ? 'checked="checked"' : 'disabled="disabled"');?>/></span> When何时 <span id="answer" style="width:150px;"><?php echo $behaviour_info['refuse_date'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'off' ? 'checked="checked"' : 'disabled="disabled"');?>/></span><br>
+				</div>
+				<div>
+					护照扫描件：<br>
+					<img src="<?php echo $passport_pic;?>" alt="护照" style="width:822px;"/>
 				</div>
 				<div id="next_step">
 					<a class="btn btn-success" href="/apply/submit_all_info/<?php echo $uuid;?>/submit">确认</a>

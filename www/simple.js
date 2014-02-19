@@ -161,7 +161,7 @@ function change_account_status(user_type, userid, opt, this_a) {
 function pass_or_not(uuid, opt) {
 	var message = $('#message').val();
 	if (opt === 'pass' && message === '') {
-		message = '你的申请顺利通过办事处的审核，请在15天内前往办事处办理余下签证事务。';
+		message = '你的申请已通过办事处的初步审核，请等待大使馆的签证审核。';
 	}
 	
 	$.ajax({
@@ -172,6 +172,7 @@ function pass_or_not(uuid, opt) {
 		success: function (json) {
 			switch (json.msg) {
 				case 'success': alert('对申请号 ' + uuid + ' 审核操作成功！'); break;
+				case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！'); break;
 				case 'fail': alert('出错了'); break;
 			}
 		},
@@ -190,6 +191,7 @@ function visa_or_not(uuid, opt) {
 		success: function(json) {
 			switch (json.msg) {
 				case 'success': alert('对申请号 ' + uuid + ' 审批操作成功！'); break;
+				case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！'); break;
 				case 'fail': alert('出错了'); break;
 			}
 		},
@@ -200,7 +202,8 @@ function visa_or_not(uuid, opt) {
 }
 
 function pass_for_fee(uuid, opt, this_a) {
-	var message = '你的申请顺利通过办事处的审核，请在15天内前往办事处办理余下签证事务。';
+	//var message = '你的申请顺利通过办事处的审核，请在15天内前往办事处办理余下签证事务。';
+	var message = '你的申请已通过办事处的初步审核，请等待大使馆的签证审核。';
 	
 	$.ajax({
 		url: '/admin/auditing/' + uuid + '/' + opt,
@@ -210,6 +213,7 @@ function pass_for_fee(uuid, opt, this_a) {
 		success: function (json) {
 			switch (json.msg) {
 				case 'success': alert('对申请号 ' + uuid + ' 审核操作成功！'); this_a.innerHTML = '已审核'; this_a.style.color = '#DDDDDD'; break;
+				case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！'); break;
 				case 'fail': alert('出错了'); break;
 			}
 		},
@@ -228,7 +232,7 @@ function visa_it(uuid, opt, this_a) {
 		success: function(json) {
 			switch (json.msg) {
 				case 'success': alert('对申请号 ' + uuid + ' 审批操作成功！'); this_a.innerHTML = '签证成功'; this_a.style.color = '#DDDDDD'; break;
-				case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！');
+				case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！'); break;
 				case 'fail': alert('出错了'); break;
 			}
 		},
@@ -238,7 +242,7 @@ function visa_it(uuid, opt, this_a) {
 	});
 }
 
-function pay_for_visa(uuid, this_a) {
+/*function pay_for_visa(uuid, this_a) {
 	var fee = parseInt(prompt('请输入签证费用，单位：人民币'));
 	if (isNaN(fee)) {
 		alert('请输入正整数！');
@@ -260,7 +264,7 @@ function pay_for_visa(uuid, this_a) {
 			alert('Network Error');
 		}
 	});
-}
+}*/
 
 function download_excel() {
 	location.href = '/admin/download_excel?start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val();

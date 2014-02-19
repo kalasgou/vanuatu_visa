@@ -15,14 +15,18 @@
 			}
 			if ($data['uuid'] !== '') {
 				$this->admin_db->where('uuid', $data['uuid']);
-			} else if ($data['passport'] !== '') {
+			} 
+			if ($data['passport'] !== '') {
 				$this->admin_db->where('passport_number', $data['passport']);
-			} else if ($data['start_time'] !== '' && $data['end_time'] !== '') {
+			}
+			if ($data['start_time'] !== '' && $data['end_time'] !== '') {
 				$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
 				$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
-			} else if ($data['status'] !== 0) {
+			}
+			if ($data['status'] !== 0) {
 				$this->admin_db->where('status', $data['status']);
-			} else if ($data['userid'] === '1') {
+			}
+			if ($data['userid'] == PRESENT_USERID) {
 				$this->admin_db->where('userid', $data['userid']);
 			}
 			return $this->admin_db->count_all_results('visa_applying');
@@ -36,14 +40,18 @@
 			}
 			if ($data['uuid'] !== '') {
 				$this->admin_db->where('uuid', $data['uuid']);
-			} else if ($data['passport'] !== '') {
+			}
+			if ($data['passport'] !== '') {
 				$this->admin_db->where('passport_number', $data['passport']);
-			} else if ($data['start_time'] !== '' && $data['end_time'] !== '') {
+			}
+			if ($data['start_time'] !== '' && $data['end_time'] !== '') {
 				$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
 				$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
-			} else if ($data['status'] !== '') {
+			}
+			if ($data['status'] !== 0) {
 				$this->admin_db->where('status', $data['status']);
-			} else if ($data['userid'] === '1') {
+			}
+			if ($data['userid'] == PRESENT_USERID) {
 				$this->admin_db->where('userid', $data['userid']);
 			}
 			$this->admin_db->order_by('submit_time', 'desc');
@@ -90,6 +98,7 @@
 			if ($this->admin_db->affected_rows() > 0) {
 				if ($data['status'] === APPLY_NOTPASSED || $data['status'] === APPLY_PASSED) {
 					$this->admin_db->set('audit_time', $update_time);
+					$this->admin_db->set('pay_time', $update_time);
 				} else if ($data['status'] === APPLY_REJECTED || $data['status'] === APPLY_ACCEPTED) {
 					$this->admin_db->set('approve_time', $update_time);
 					if ($data['visa_no'] !== '') {
@@ -194,8 +203,8 @@
 			$behaviour_info['refused'] = $data['refused'];
 			$behaviour_info['refuse_date'] = $data['refuse_date'];
 			
-			$sql = 	'INSERT INTO visa_applying (userid, uuid, province_id, city_id, status, name_en, name_cn, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, passport_number, passport_place, passport_date, passport_expiry, purpose, other_purpose, destination, relative_info, detail_info, children_info, behaviour_info, modify_time, submit_time, pay_time, fee) '.
-					'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE '.
+			$sql = 	'INSERT INTO visa_applying (userid, uuid, province_id, city_id, status, name_en, name_cn, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, passport_number, passport_place, passport_date, passport_expiry, purpose, other_purpose, destination, relative_info, detail_info, children_info, behaviour_info, modify_time, submit_time, fee) '.
+					'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE '.
 					'status = VALUES(status), '.
 					'name_en = VALUES(name_en), '.
 					'name_cn = VALUES(name_cn), '.
@@ -221,7 +230,6 @@
 					'detail_info = VALUES(detail_info), '.
 					'modify_time = VALUES(modify_time), '.
 					'submit_time = VALUES(submit_time), '.
-					'pay_time = VALUES(pay_time), '.
 					'fee = VALUES(fee)';
 			$args = array(
 						'userid' => $data['userid'],
@@ -271,7 +279,6 @@
 						'behaviour_info' => json_encode($behaviour_info),
 						'modify_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
 						'submit_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
-						'pay_time' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']),
 						'fee' => $data['fee'],
 					);
 					

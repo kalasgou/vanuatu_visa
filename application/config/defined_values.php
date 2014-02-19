@@ -17,15 +17,15 @@
 	$config['apply_status_str'] = array(
 									NEGATIVE_OVERFLOW => '负溢出异常',
 									APPLY_TRASHED => '已删除',
-									APPLY_NOTFINISHED => '未完成',
+									APPLY_NOTFINISHED => '未提交',
 									APPLY_WAITING => '等待审核',
 									APPLY_NOTPASSED => '未通过',
 									APPLY_PASSED => '通过审核',
 									APPLY_PAID => '已缴款',
 									APPLY_REJECTED => '被拒签',
-									APPLY_ACCEPTED => '已出签证',
-									APPLY_EXPIRED => '申请过期无效',
-									VISA_EXPIRED => '签证过期无效',
+									APPLY_ACCEPTED => '已发签证',
+									APPLY_EXPIRED => '申请过期',
+									VISA_EXPIRED => '签证过期',
 									POSITIVE_OVERFLOW => '正溢出异常'
 									);
 	

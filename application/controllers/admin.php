@@ -293,7 +293,9 @@ class Admin extends UserController {
 		$data['refuse_date'] = trim($this->input->post('refuse_date', TRUE));
 		
 		// Fee Payment
-		$data['fee'] = trim($this->input->post('fee', TRUE));
+		$this->load->library('RedisDB');
+		$redis = $this->redisdb->instance(REDIS_DEFAULT);
+		$data['fee'] = $redis->get('visa_fee');
 		
 		$this->load->model('admin_model', 'adm');
 		if ($this->adm->update_application($data) > 0) {
@@ -422,7 +424,7 @@ class Admin extends UserController {
 		$this->load->view('admin_approve', $data);
 	}
 	
-	public function fast($page = 1) {
+	public function quick($page = 1) {
 		if ($this->permission != SYSTEM_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';

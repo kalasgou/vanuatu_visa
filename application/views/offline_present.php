@@ -41,9 +41,6 @@
 				<p>1、Full name 姓名:
 				(English英文)<input type="text" name="name_en" value="<?php echo $name_en;?>"/>
 				(Chinese中文)<input type="text" name="name_cn" value="<?php echo $name_cn;?>"/></p>
-				<!--<input type="checkbox" name="gender" checked="checked" disabled="disabled"/>
-				<input type="checkbox" name="gender" disabled="disabled"/>
-				<input type="checkbox" name="gender" disabled="disabled"/>-->
 				<p>2、Mr.先生<input type="radio" name="gender" value="1" <?php echo ($gender == 1 ? 'checked="checked"' : '')?>/>&nbsp;/
 				Mrs.女士<input type="radio" name="gender" value="2" <?php echo ($gender == 2 ? 'checked="checked"' : '')?>/>&nbsp;/
 				Miss小姐<input type="radio" name="gender" value="3" <?php echo ($gender == 3 ? 'checked="checked"' : '')?>/></p>

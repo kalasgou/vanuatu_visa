@@ -10,9 +10,8 @@
 		
 		public function sum_applications($data) {
 			$this->apply_db->where('userid', $data['userid']);
-			if ($data['status'] !== 0) {
-				$this->apply_db->where('status', $data['status']);
-			}
+			$this->apply_db->where('status', $data['status']);
+			
 			return $this->apply_db->count_all_results('visa_applying');
 		}
 		
@@ -200,6 +199,7 @@
 		
 		public function submit_all_info($data) {
 			$this->apply_db->set('status', $data['status']);
+			$this->apply_db->set('fee', $data['fee']);
 			$this->apply_db->set('submit_time', date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']));
 			$this->apply_db->where('userid', $data['userid']);
 			$this->apply_db->where('uuid', $data['uuid']);

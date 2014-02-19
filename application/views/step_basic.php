@@ -22,7 +22,7 @@
 				<h5>您好，<?php echo $user['nickname'];?>！</h5>
 			</div>
 			<div id="menu">
-				<a href="/apply">申请记录</a> / 
+				<a href="/apply/records">申请记录</a> / 
 				<a style="color:#1100FF;">签证申请</a> / 
 				<a href="/account">帐户信息</a> / 
 				<a href="/password">密码修改</a> / 

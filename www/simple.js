@@ -1,3 +1,57 @@
+function province_list() {
+	$.ajax({
+		url: '/admin/province_list',
+		data: {},
+		async: true,
+		type: 'GET',
+		dataType: 'json',
+		success: function(json) {
+			if (json.msg === 'success') {
+				var options = '';
+				var len = json.provinces.length;
+				for (var i = 0; i < len; i ++) {
+					options += '<option value="' + json.provinces[i].id + '">' + json.provinces[i].province_cn + '</option>';
+				}
+				$('#provinces').empty();
+				$('#provinces').append(options);
+				city_list();
+			} else {
+				alert('Permission Error');
+			}
+		},
+		error: function() {
+			alert('Networking Error');
+		}
+	});
+}
+
+function city_list() {
+	var province_id = $('#provinces').val();
+	$.ajax({
+		url: '/admin/city_list/' + province_id,
+		data: {},
+		async: true,
+		type: 'GET',
+		dataType: 'json',
+		success: function(json) {
+			if (json.msg === 'success') {
+				var options = '';
+				var len = json.cities.length;
+				for (var i = 0; i < len; i ++) {
+					options += '<option value="' + json.cities[i].id + '">' + json.cities[i].city_cn + '</option>';
+				}
+				$('#cities').empty();
+				$('#cities').append(options);
+			} else {
+				alert('Permission Error');
+			}
+		},
+		error: function() {
+			alert('Networking Error');
+		}
+	});
+}
+
 function tips_appear(tips) {
 	$(tips).fadeIn();
 	window.setTimeout(function() {

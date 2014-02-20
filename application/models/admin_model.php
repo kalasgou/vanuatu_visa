@@ -13,22 +13,27 @@
 				$this->admin_db->where('province_id', $data['province_id']);
 				$this->admin_db->where('city_id', $data['city_id']);
 			}
-			if ($data['uuid'] !== '') {
-				$this->admin_db->where('uuid', $data['uuid']);
-			} 
-			if ($data['passport'] !== '') {
-				$this->admin_db->where('passport_number', $data['passport']);
+			switch ($data['orderby']) {
+				case DEFAULT_QUERY : 
+				case APPLY_STATUS : 
+								$this->admin_db->where('status', $data['status']);
+								break;
+				case APPLY_UUID : 
+								$this->admin_db->where('uuid', $data['uuid']);
+								break;
+				case APPLY_PASSPORT : 
+								$this->admin_db->where('passport', $data['passport']);
+								break;
+				case APPLY_PERIOD : 	
+								$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00'); 
+								$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
+								break;
+				case APPLY_PRESENT : 
+								$this->admin_db->where('userid', PRESENT_USERID); 
+								break;
+				default : return 0;
 			}
-			if ($data['start_time'] !== '' && $data['end_time'] !== '') {
-				$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
-				$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
-			}
-			if ($data['status'] !== 0) {
-				$this->admin_db->where('status', $data['status']);
-			}
-			if ($data['userid'] == PRESENT_USERID) {
-				$this->admin_db->where('userid', $data['userid']);
-			}
+			
 			return $this->admin_db->count_all_results('visa_applying');
 		}
 		
@@ -38,21 +43,25 @@
 				$this->admin_db->where('province_id', $data['province_id']);
 				$this->admin_db->where('city_id', $data['city_id']);
 			}
-			if ($data['uuid'] !== '') {
-				$this->admin_db->where('uuid', $data['uuid']);
-			}
-			if ($data['passport'] !== '') {
-				$this->admin_db->where('passport_number', $data['passport']);
-			}
-			if ($data['start_time'] !== '' && $data['end_time'] !== '') {
-				$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
-				$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
-			}
-			if ($data['status'] !== 0) {
-				$this->admin_db->where('status', $data['status']);
-			}
-			if ($data['userid'] == PRESENT_USERID) {
-				$this->admin_db->where('userid', $data['userid']);
+			switch ($data['orderby']) {
+				case DEFAULT_QUERY : 
+				case APPLY_STATUS : 
+								$this->admin_db->where('status', $data['status']);
+								break;
+				case APPLY_UUID : 
+								$this->admin_db->where('uuid', $data['uuid']);
+								break;
+				case APPLY_PASSPORT : 
+								$this->admin_db->where('passport', $data['passport']);
+								break;
+				case APPLY_PERIOD : 	
+								$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00'); 
+								$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
+								break;
+				case APPLY_PRESENT : 
+								$this->admin_db->where('userid', PRESENT_USERID); 
+								break;
+				default : return 0;
 			}
 			$this->admin_db->order_by('submit_time', 'desc');
 			$this->admin_db->limit(20, 20 * $data['page']);
@@ -75,7 +84,7 @@
 			if ($data['province_id'] != 0 || $data['city_id'] != 0) {
 				$this->admin_db->where('province_id', $data['province_id']);
 			}
-			$this->admin_db->where('status >= ', 11);
+			$this->admin_db->where('status >= ', APPLY_WAITING);
 			$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
 			$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
 			$this->admin_db->order_by('submit_time', 'desc');
@@ -287,7 +296,23 @@
 			return $this->admin_db->affected_rows();
 		}
 		
-		public function sum_agency() {
+		public function get_provinces() {
+			$this->admin_db->where('id > ', 0);
+			$this->admin_db->order_by('province_cn', 'asc');
+			$query = $this->admin_db->get('province');
+			
+			return $query->result_array();
+		}
+		
+		public function get_cities($province_id) {
+			$this->admin_db->where('province_id', $province_id);
+			$this->admin_db->order_by('city_cn', 'asc');
+			$query = $this->admin_db->get('city');
+			
+			return $query->result_array();
+		}
+		
+		/*public function sum_agency() {
 			return $this->admin_db->count_all_results('agency');
 		}
 		
@@ -316,6 +341,6 @@
 			$this->admin_db->update('agency');
 			
 			return $this->admin_db->affected_rows();
-		}
+		}*/
 	}
 ?>

@@ -22,6 +22,18 @@ class Welcome extends LoginController {
 		$this->load->view('login', $data);
 	}
 	
+	public function register() {
+		if ($this->permission != SYSTEM_ADMIN) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$this->load->view('register');
+	}
+	
 	/*public function register() {
 		if ($this->userid > ILLEGAL_USER && $this->status == ACCOUNT_NORMAL) {
 			$msg['tips'] = '已经登录，若需注册请先登出帐户！';

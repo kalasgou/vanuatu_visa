@@ -25,7 +25,7 @@
 			.form-control {width:256px;}
 		</style>
 	</head>
-	<body>
+	<body onload="province_list();">
 		<div>
 			<form class="form-horizontal" role="form" method="post" action="/user/register" onsubmit="return submit_form();">
 				<div class="form-group">
@@ -77,20 +77,16 @@
 				<div class="form-group">
 					<label for="inputProvince3" class="col-sm-2 control-label">所属省份:</label>
 					<div class="col-sm-10">
-						<select class="form-control" name="province_id" onchange="">
-							<option value="1">北京</option>
-							<option value="2">广东</option>
-							<option value="3">上海</option>
+						<select class="form-control" id="provinces" name="province_id" onchange="city_list();">
+							<option value="0">加载中</option>
 						</select>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="inputCity3" class="col-sm-2 control-label">所属城市:</label>
 					<div class="col-sm-10">
-						<select class="form-control" name="city_id" onchange="">
-							<option value="1">北京</option>
-							<option value="2">广东</option>
-							<option value="3">上海</option>
+						<select class="form-control" id="cities" name="city_id" onchange="">
+							<option value="0">加载中</option>
 						</select>
 					</div>
 				</div>
@@ -108,7 +104,7 @@
 						<span id="phone_error" class="error_tips">请填写有效的联系电话号码（固话需加区号-）</span>
 					</div>
 				</div>
-				<div class="form-group">
+				<!--<div class="form-group">
 					<label for="inputCaptcha3" class="col-sm-2 control-label">验证码:</label>
 					<div class="col-sm-10">
 						<input type="captcha" class="form-control" name="captcha" id="inputCaptcha3" placeholder="Captcha"/><br>
@@ -118,7 +114,7 @@
 				<div>
 					<input type="hidden" id="user_type" name="user_type" value="applicant"/>
 				</div>
-				<!--<div class="form-group">
+				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<input id="agreement" type="checkbox"/>
 						<span>我已阅读并同意</span>
@@ -127,7 +123,7 @@
 				</div>-->
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-default">注 册</button>
+						<button type="submit" class="btn btn-success">注册</button>
 						<!--<a class="login" href="/login" style="margin-left:12px;">已有帐号？点此登录</a>-->
 					</div>
 				</div>

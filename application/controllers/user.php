@@ -175,6 +175,77 @@ class User extends LoginController {
 		}
 	}*/
 	
+	public function register() {
+		if ($this->permission != SYSTEM_ADMIN) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data['email'] = trim($this->input->post('email', TRUE));
+		$data['password'] = trim($this->input->post('password', TRUE));
+		$data['nickname'] = trim($this->input->post('nickname', TRUE));
+		$data['agency'] = trim($this->input->post('agency', TRUE));
+		$data['telephone'] = trim($this->input->post('telephone', TRUE));
+		$data['permission'] = trim($this->input->post('permission', TRUE));
+		$data['province_id'] = trim($this->input->post('province_id', TRUE));
+		$data['city_id'] = trim($this->input->post('city_id', TRUE));
+		$data['status'] = ACCOUNT_NORMAL;
+		$data['reg_ip'] = ip2long($this->input->ip_address());
+		$data['reg_time'] = date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);
+		
+		$this->load->helper('util');
+		
+		if (!check_parameters($data)) {
+			$msg['tips'] = '所需填写信息不全，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		if (!email_verify($data['email'])) {
+			$msg['tips'] = '电子邮箱格式不正确，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$this->load->model('user_model', 'user');
+		
+		if ($this->user->email_available($data['email']) > 0) {
+			$msg['tips'] = '所填邮箱已被他人使用，请返回重新输入！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		require '../application/third_party/pass/PasswordHash.php';
+		$hasher = new PasswordHash(HASH_COST_LOG2, HASH_PORTABLE);
+		$data['password'] = $hasher->HashPassword($data['password']);
+		if (strlen($data['password']) < 20) {
+			show_error('password hash too short');
+		}
+		
+		if (($userid = $this->user->user_register($data)) > 0) {
+			$msg['tips'] = '注册成功！可点击以下链接可继续注册。';
+			$link = '/register';
+			$location = '点击注册';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		} else {
+			$msg['tips'] = '注册失败，请稍候再试！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+	}
+	
 	public function login() {
 		$captcha = trim($this->input->post('captcha', TRUE));
 		$data['email'] = trim($this->input->post('email', TRUE));
@@ -289,7 +360,7 @@ class User extends LoginController {
 		
 		$ret['msg'] = 'success';
 		
-		if ($this->user->email_availble($email) > 0) {
+		if ($this->user->email_available($email) > 0) {
 			$ret['msg'] = 'fail';
 		}
 		

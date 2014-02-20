@@ -156,7 +156,7 @@
 				$this->user_db->where('status', $data['status']);
 			}
 			$this->user_db->limit(20, 20 * $data['page']);
-			$query = $this->user_db->get();
+			$query = $this->user_db->get('user');
 			
 			return $query->result_array();
 		}
@@ -218,6 +218,15 @@
 			
 			return $query->row_array();
 		}*/
+		
+		public function user_info($userid) {
+			$this->user_db->select('userid, email, nickname, agency, status');
+			$this->user_db->where('userid', $userid);
+			$this->user_db->limit(1);
+			$query = $this->user_db->get('user');
+			
+			return $query->row_array();
+		}
 		
 		public function extra_info($city_id) {
 			$this->user_db->select('province_cn, province_en, city_cn, city_en');

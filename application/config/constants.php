@@ -87,16 +87,24 @@ define('PASSPORT_UPDATED',		3);
 define('TRAVEL_UPDATED',		4);
 define('COMPLEMENT_UPDATED',	5);
 define('PICTURE_UPLOADED',		6);
-//define('PAYMENT_UPDATED',		7);
+define('PAYMENT_UPDATED',		7);
 define('APPLY_WAITING',			11);
 define('APPLY_NOTPASSED',		21);
 define('APPLY_PASSED',			31);
-//define('APPLY_PAID',			41);
+define('APPLY_PAID',			41);
 define('APPLY_REJECTED',		91);
 define('APPLY_ACCEPTED',		101);
-//define('APPLY_EXPIRED',		125);
+define('APPLY_EXPIRED',		125);
 define('VISA_EXPIRED',			126);
 define('POSITIVE_OVERFLOW',		127);
+
+// Query Condition
+define('DEFAULT_QUERY',			0);
+define('APPLY_STATUS',			1);
+define('APPLY_UUID',			2);
+define('APPLY_PASSPORT',		3);
+define('APPLY_PERIOD',			4);
+define('APPLY_PRESENT',			5);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

@@ -8,84 +8,13 @@ class Admin extends UserController {
 		switch (intval($this->permission)) {
 			case OFFICE_ADMIN: header('Location: '. base_url('/admin/audit')); break;
 			case EMBASSY_ADMIN: header('Location: '. base_url('/admin/approve')); break;
-			case SYSTEM_ADMIN: header('Location: '. base_url('/admin/permit')); break;
+			case SYSTEM_ADMIN: header('Location: '. base_url('/admin/account')); break;
 			default : 
 				$msg['tips'] = '你的帐户无此操作权限！';
 				$link = 'javascript:history.go(-1);';
-				$location = '返回上一步';
+				$location = '返回上一页';
 				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 				show_error($msg);
-		}
-	}
-	
-	public function register() {
-		if ($this->permission != SYSTEM_ADMIN) {
-			$msg['tips'] = '你的帐户无此操作权限！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
-		}
-		
-		$data['email'] = trim($this->input->post('email', TRUE));
-		$data['password'] = trim($this->input->post('password', TRUE));
-		$data['nickname'] = trim($this->input->post('nickname', TRUE));
-		$data['agency'] = trim($this->input->post('agency', TRUE));
-		$data['telephone'] = trim($this->input->post('telephone', TRUE));
-		$data['permission'] = trim($this->input->post('permission', TRUE));
-		$data['province_id'] = trim($this->input->post('province_id', TRUE));
-		$data['city_id'] = trim($this->input->post('city_id', TRUE));
-		$data['status'] = ACCOUNT_NORMAL;
-		$data['reg_ip'] = ip2long($this->input->ip_address());
-		$data['reg_time'] = date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);
-		
-		$this->load->helper('util');
-		
-		if (!check_parameters($data)) {
-			$msg['tips'] = '所需填写信息不全，请返回重新输入！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
-		}
-		
-		if (!email_verify($data['email'])) {
-			$msg['tips'] = '电子邮箱格式不正确，请返回重新输入！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
-		}
-		
-		$this->load->model('user_model', 'user');
-		
-		if ($this->user->user_email_available($data['email']) > 0) {
-			$msg['tips'] = '所填邮箱已被他人使用，请返回重新输入！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
-		}
-		
-		require '../application/third_party/pass/PasswordHash.php';
-		$hasher = new PasswordHash(HASH_COST_LOG2, HASH_PORTABLE);
-		$data['password'] = $hasher->HashPassword($data['password']);
-		if (strlen($data['password']) < 20) {
-			show_error('password hash too short');
-		}
-		
-		if (($userid = $this->user->user_register($data)) > 0) {
-			$msg['tips'] = '注册成功！可点击以下链接继续注册。';
-			$link = '/admin/register';
-			$location = '点击注册';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
-		} else {
-			$msg['tips'] = '注册失败，请稍候再试！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
 		}
 	}
 	
@@ -93,14 +22,14 @@ class Admin extends UserController {
 		if ($this->permission != OFFICE_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
 		
 		$data = array(
 					'uuid' => '',
-					'userid' => '1',
+					'userid' => PRESENT_USERID,
 					'province_id' => $this->user_info['province_id'],
 					'city_id' => $this->user_info['city_id'],
 					'name_en' => '',
@@ -198,15 +127,15 @@ class Admin extends UserController {
 		if ($this->permission != OFFICE_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
 		
-		$data['userid'] = trim($this->input->post('userid', TRUE));
+		$data['userid'] = PRESENT_USERID;
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
-		$data['province_id'] = trim($this->input->post('province_id', TRUE));
-		$data['city_id'] = trim($this->input->post('city_id', TRUE));
+		$data['province_id'] = $this->user_info['province_id'];
+		$data['city_id'] = $this->user_info['city_id'];
 		$data['status'] = APPLY_WAITING;
 		
 		$this->load->helper('util');
@@ -217,8 +146,8 @@ class Admin extends UserController {
 		
 		if (!is_editable($data['uuid'])) {
 			$msg['tips'] = '该申请不可再修改！';
-			$link = '/admin';
-			$location = '返回管理主页';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -314,7 +243,7 @@ class Admin extends UserController {
 		if ($this->permission != OFFICE_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -325,13 +254,13 @@ class Admin extends UserController {
 		$data['city_id'] = $this->user_info['city_id'];
 		$data['page'] = $page - 1;
 		
+		$data['orderby'] = intval($this->input->get('orderby', TRUE));
 		$status = trim($this->input->get('cur_status', TRUE));
-		$data['status'] = intval($this->confg->item($status, 'apply_status_code'));
+		$data['status'] = intval($this->config->item($status, 'apply_status_code'));
 		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
-		$data['userid'] = trim($this->input->get('user', TRUE));
 		
 		$this->load->model('admin_model', 'adm');
 		
@@ -371,7 +300,7 @@ class Admin extends UserController {
 		if ($this->permission != EMBASSY_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -382,13 +311,13 @@ class Admin extends UserController {
 		$data['city_id'] = $this->user_info['city_id'];
 		$data['page'] = $page - 1;
 		
+		$data['orderby'] = intval($this->input->get('orderby', TRUE));
 		$status = trim($this->input->get('cur_status', TRUE));
-		$data['status'] = intval($this->confg->item($status, 'apply_status_code'));
+		$data['status'] = intval($this->config->item($status, 'apply_status_code'));
 		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
-		$data['userid'] = trim($this->input->get('user', TRUE));
 		
 		$this->load->model('admin_model', 'adm');
 		
@@ -439,19 +368,19 @@ class Admin extends UserController {
 		$data['city_id'] = $this->user_info['city_id'];
 		$data['page'] = $page - 1;
 		
+		$data['orderby'] = intval($this->input->get('orderby', TRUE));
 		$status = trim($this->input->get('cur_status', TRUE));
-		$data['status'] = intval($this->confg->item($status, 'apply_status_code'));
+		$data['status'] = intval($this->config->item($status, 'apply_status_code'));
 		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
-		$data['userid'] = trim($this->input->get('user', TRUE));
 		
 		$this->load->model('admin_model', 'adm');
 		
 		$this->load->library('pagination');
 		
-		$config['base_url'] = '/admin/fast/';
+		$config['base_url'] = '/admin/quick/';
 		$config['uri_segment'] = 3;
 		$config['num_links'] = 2;
 		$config['total_rows'] = $this->adm->sum_applications($data);
@@ -475,7 +404,7 @@ class Admin extends UserController {
 		$data['num_records'] = $config['total_rows'];
 		
 		foreach ($data['records'] as &$one) {
-			$one['status_str'] = status2text($one['status']);
+			$one['status_str'] = $this->config->item($one['status'], 'apply_status_str');
 		}
 		
 		$this->load->view('admin_quick', $data);
@@ -496,7 +425,7 @@ class Admin extends UserController {
 		$data['status'] = intval($this->input->get('account_status', TRUE));
 		$data['province_id'] = intval($this->input->get('province_id', TRUE));
 		$data['city_id'] = intval($this->input->get('city_id', TRUE));
-		$data['email'] = intval($this->input->get('email', TRUE));
+		$data['email'] = trim($this->input->get('email', TRUE));
 		
 		$this->load->model('user_model', 'user');
 		
@@ -534,7 +463,7 @@ class Admin extends UserController {
 			$one['status_str'] = $this->config->config['account_status'][$one['status']];
 		}
 		
-		$this->load->view('admin_permit', $data);
+		$this->load->view('admin_account', $data);
 	}
 	
 	/*public function permit($page = 1) {
@@ -675,7 +604,7 @@ class Admin extends UserController {
 		$data['uuid'] = $uuid;
 		$data['message'] = trim($this->input->post('message', TRUE));
 		//$data['fee'] = trim($this->input->post('fee', TRUE));
-		$data['status'] = intval($this->confg->item($opt, 'apply_status_code'));
+		$data['status'] = intval($this->config->item($opt, 'apply_status_code'));
 		
 		$this->load->helper('util');
 		
@@ -707,7 +636,7 @@ class Admin extends UserController {
 		}
 		
 		$this->load->helper('util');
-		$data['status'] = intval($this->confg->item($opt, 'apply_status_code'));
+		$data['status'] = intval($this->config->item($opt, 'apply_status_code'));
 		
 		$this->load->model('admin_model', 'adm');
 		
@@ -908,7 +837,7 @@ class Admin extends UserController {
 				$admin_userids = $this->adm->get_admin_userids($one['uuid'], 21, 41);
 				foreach ($admin_userids as $admin) {
 					if (!isset($office_admins[$admin['admin_userid']]['realname'])) {
-						$info = $this->user->administrator_info($admin['admin_userid']);
+						$info = $this->user->user_info($admin['admin_userid']);
 						$office_admins[$info['userid']]['realname'] = $info['realname'];
 					}
 					$name_office .= $office_admins[$admin['admin_userid']]['realname'].'、';
@@ -918,7 +847,7 @@ class Admin extends UserController {
 				$admin_userids = $this->adm->get_admin_userids($one['uuid'], 91, 101);
 				foreach ($admin_userids as $admin) {
 					if (!isset($embassy_admins[$admin['admin_userid']]['realname'])) {
-						$info = $this->user->administrator_info($admin['admin_userid']);
+						$info = $this->user->user_info($admin['admin_userid']);
 						$embassy_admins[$info['userid']]['realname'] = $info['realname'];
 					}
 					$name_embassy .= $embassy_admins[$admin['admin_userid']]['realname'].'、';
@@ -1075,7 +1004,7 @@ class Admin extends UserController {
 		readfile($filename);
 	}
 	
-	public function agency($page = 1) {
+	/*public function agency($page = 1) {
 		if ($this->permission != SYSTEM_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
@@ -1140,6 +1069,38 @@ class Admin extends UserController {
 		} else {
 			$ret['msg'] = 'fail';
 		}
+		
+		echo json_encode($ret);
+	}*/
+	
+	public function province_list() {
+		header('Content-Type: application/json; charset=utf-8');
+		
+		if ($this->permission != SYSTEM_ADMIN) {
+			$ret['msg'] = 'forbidden';
+			echo json_encode($ret);
+			exit('Account Not Allowed to Request This Info');
+		}
+		
+		$ret['msg'] = 'success';
+		$this->load->model('admin_model', 'adm');
+		$ret['provinces'] = $this->adm->get_provinces();
+		
+		echo json_encode($ret);
+	}
+	
+	public function city_list($province_id = 0) {
+		header('Content-Type: application/json; charset=utf-8');
+		
+		if ($this->permission != SYSTEM_ADMIN) {
+			$ret['msg'] = 'forbidden';
+			echo json_encode($ret);
+			exit('Account Not Allowed to Request This Info');
+		}
+		
+		$ret['msg'] = 'success';
+		$this->load->model('admin_model', 'adm');
+		$ret['cities'] = $this->adm->get_cities($province_id);
 		
 		echo json_encode($ret);
 	}

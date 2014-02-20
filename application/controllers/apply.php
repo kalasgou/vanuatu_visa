@@ -12,15 +12,21 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
 		
 		$data['userid'] = $this->userid;
+		$data['page'] = $page - 1;
+		
+		$data['orderby'] = intval($this->input->get('orderby', TRUE));
 		$status = trim($this->input->get('cur_status', TRUE));
 		$data['status'] = intval($this->config->item($status, 'apply_status_code'));
-		$data['page'] = $page - 1;
+		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
+		$data['passport'] = trim($this->input->get('passport_no', TRUE));
+		$data['start_time'] = trim($this->input->get('start_time', TRUE));
+		$data['end_time'] = trim($this->input->get('end_time', TRUE));
 		
 		$this->load->model('apply_model', 'alm');
 		
@@ -97,8 +103,8 @@ class Apply extends UserController {
 		
 		if (!is_editable($data['uuid'])) {
 			$msg['tips'] = '该申请不可再修改！';
-			$link = '/apply';
-			$location = '返回用户主页';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -129,7 +135,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -195,7 +201,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -228,8 +234,8 @@ class Apply extends UserController {
 		
 		if (!is_editable($data['uuid'])) {
 			$msg['tips'] = '该申请不可再修改！';
-			$link = '/apply';
-			$location = '返回用户主页';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -260,7 +266,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -323,8 +329,8 @@ class Apply extends UserController {
 		
 		if (!is_editable($data['uuid'])) {
 			$msg['tips'] = '该申请不可再修改！';
-			$link = '/apply';
-			$location = '返回用户主页';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -363,7 +369,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -419,7 +425,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -446,8 +452,8 @@ class Apply extends UserController {
 		
 		if (!is_editable($data['uuid'])) {
 			$msg['tips'] = '该申请不可再修改！';
-			$link = '/apply';
-			$location = '返回用户主页';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -470,7 +476,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -539,7 +545,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -568,8 +574,8 @@ class Apply extends UserController {
 		
 		if (!is_editable($data['uuid'])) {
 			$msg['tips'] = '该申请不可再修改！';
-			$link = '/apply';
-			$location = '返回用户主页';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -592,7 +598,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -639,7 +645,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -654,8 +660,8 @@ class Apply extends UserController {
 		
 		if (!is_editable($data['uuid'])) {
 			$msg['tips'] = '该申请不可再修改！';
-			$link = '/apply';
-			$location = '返回用户主页';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -679,7 +685,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -716,7 +722,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -733,8 +739,8 @@ class Apply extends UserController {
 		
 		if (!is_editable($data['uuid'])) {
 			$msg['tips'] = '该申请不可再修改！';
-			$link = '/apply';
-			$location = '返回用户主页';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -757,7 +763,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -798,7 +804,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -811,8 +817,8 @@ class Apply extends UserController {
 		
 		if (!is_editable($data['uuid'])) {
 			$msg['tips'] = '该申请不可再修改！';
-			$link = '/apply';
-			$location = '返回用户主页';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -847,7 +853,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -874,7 +880,7 @@ class Apply extends UserController {
 		} else {
 			$msg['tips'] = '你所请求的申请记录不存在！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -884,7 +890,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -904,7 +910,7 @@ class Apply extends UserController {
 		} else {
 			$msg['tips'] = '你所请求的申请记录不存在！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -914,7 +920,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -936,7 +942,7 @@ class Apply extends UserController {
 		if (!file_exists($filename)) {
 			$msg['tips'] = '你所请求的签证文件不存在或已过期！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}

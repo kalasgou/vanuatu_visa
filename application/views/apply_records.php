@@ -21,10 +21,10 @@
 			
 			function filter_them(selected) {
 				switch (selected) {
-					case '1' : location.href = '/apply/records?orderby=' + selected + '&cur_status=' + $('#cur_status').val(); break;
-					case '2' : location.href = '/apply/records?orderby=' + selected + '&apply_id=' + $('#apply_id').val(); break;
-					case '3' : location.href = '/apply/records?orderby=' + selected + '&passport_no=' + $('#passport_no').val(); break;
-					case '4' : location.href = '/apply/records?orderby=' + selected + '&start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val(); break;
+					case '<?php echo APPLY_STATUS;?>' : location.href = '/apply/records?orderby=' + selected + '&cur_status=' + $('#cur_status').val(); break;
+					case '<?php echo APPLY_UUID;?>' : location.href = '/apply/records?orderby=' + selected + '&apply_id=' + $('#apply_id').val(); break;
+					case '<?php echo APPLY_PASSPORT;?>' : location.href = '/apply/records?orderby=' + selected + '&passport_no=' + $('#passport_no').val(); break;
+					case '<?php echo APPLY_PERIOD;?>' : location.href = '/apply/records?orderby=' + selected + '&start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val(); break;
 					default : return;
 				}
 			}
@@ -35,10 +35,10 @@
 				$('#orderby').val(selected);
 				$('#od' + selected).css('display', 'inline-block');
 				switch (selected) {
-					case '1' : $('#cur_status').val(cur_status); break;
-					case '2' : $('#apply_id').val(apply_id); break;
-					case '3' : $('#passport_no').val(passport_no); break;
-					case '4' : $('#start_time').val(start_time); $('#end_time').val(end_time); break;
+					case '<?php echo APPLY_STATUS;?>' : $('#cur_status').val(cur_status); break;
+					case '<?php echo APPLY_UUID;?>' : $('#apply_id').val(apply_id); break;
+					case '<?php echo APPLY_PASSPORT;?>' : $('#passport_no').val(passport_no); break;
+					case '<?php echo APPLY_PERIOD;?>' : $('#start_time').val(start_time); $('#end_time').val(end_time); break;
 					default : return;
 				}
 			}
@@ -62,10 +62,10 @@
 				<div style="display:inline-block;">
 					请选择查询条件:&nbsp;
 					<select id="orderby" onchange="javascript:what_is_selected();">
-						<option value="1">申请状态</option>
-						<option value="2">申请流水号</option>
-						<option value="3">护照号</option>
-						<option value="4">日期范围</option>
+						<option value="<?php echo APPLY_STATUS;?>">申请状态</option>
+						<option value="<?php echo APPLY_UUID;?>">申请流水号</option>
+						<option value="<?php echo APPLY_PASSPORT;?>">护照号</option>
+						<option value="<?php echo APPLY_PERIOD;?>">日期范围</option>
 					</select>
 				</div>
 				<div id="od1" style="display:inline-block;">
@@ -152,7 +152,7 @@
 		</div>
 	</body>
 	<script type="text/javascript">
-		var selected = '1';
+		var selected = '<?php echo APPLY_STATUS;?>';
 		var selected_arg = '', cur_status = '', apply_id = '', passport_no = '', start_time = '', end_time = '';
 		
 		var argument_str = location.search;

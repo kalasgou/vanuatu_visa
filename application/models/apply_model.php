@@ -8,13 +8,6 @@
 			$this->apply_db = $this->load->database('default', TRUE);
 		}
 		
-		public function sum_applications($data) {
-			$this->apply_db->where('userid', $data['userid']);
-			$this->apply_db->where('status', $data['status']);
-			
-			return $this->apply_db->count_all_results('visa_applying');
-		}
-		
 		public function retrieve_some_info($userid, $uuid, $attributes) {
 			$this->apply_db->select($attributes);
 			$this->apply_db->where('userid', $userid);
@@ -187,7 +180,7 @@
 			return $this->apply_db->affected_rows();
 		}
 		
-		public function update_fee_payment($data) {
+		/*public function update_fee_payment($data) {
 			$this->apply_db->set('fee', $data['fee']);
 			$this->apply_db->set('pay_time', date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']));
 			$this->apply_db->where('userid', $data['userid']);
@@ -195,7 +188,7 @@
 			$this->apply_db->update('visa_applying');
 			
 			return $this->apply_db->affected_rows();
-		}
+		}*/
 		
 		public function submit_all_info($data) {
 			$this->apply_db->set('status', $data['status']);
@@ -208,10 +201,49 @@
 			return $this->apply_db->affected_rows();
 		}
 		
+		public function sum_applications($data) {
+			$this->apply_db->where('userid', $data['userid']);
+			switch ($data['orderby']) {
+				case DEFAULT_QUERY : 
+				case APPLY_STATUS : 
+								$this->apply_db->where('status', $data['status']);
+								break;
+				case APPLY_UUID : 
+								$this->apply_db->where('uuid', $data['uuid']);
+								break;
+				case APPLY_PASSPORT : 
+								$this->apply_db->where('passport', $data['passport']);
+								break;
+				case APPLY_PERIOD : 	
+								$this->apply_db->where('submit_time >= ', $data['start_time'].' 00:00:00'); 
+								$this->apply_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
+								break;
+				default : return 0;
+			}
+			
+			return $this->apply_db->count_all_results('visa_applying');
+		}
+		
 		public function get_records($data) {
 			$this->apply_db->select('uuid, name_en, name_cn, status, passport_number, submit_time, audit_time, pay_time, approve_time, fee');
 			$this->apply_db->where('userid', $data['userid']);
-			$this->apply_db->where('status', $data['status']);
+			switch ($data['orderby']) {
+				case DEFAULT_QUERY : 
+				case APPLY_STATUS : 
+								$this->apply_db->where('status', $data['status']);
+								break;
+				case APPLY_UUID : 
+								$this->apply_db->where('uuid', $data['uuid']);
+								break;
+				case APPLY_PASSPORT : 
+								$this->apply_db->where('passport', $data['passport']);
+								break;
+				case APPLY_PERIOD : 	
+								$this->apply_db->where('submit_time >= ', $data['start_time'].' 00:00:00'); 
+								$this->apply_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
+								break;
+				default : FALSE;
+			}
 			$this->apply_db->order_by('submit_time', 'desc');
 			$this->apply_db->limit(20, 20 * $data['page']);
 			$query = $this->apply_db->get('visa_applying');
@@ -251,7 +283,7 @@
 			return $query->result_array();
 		}
 		
-		public function get_agency_info() {
+		/*public function get_agency_info() {
 			$this->apply_db->select('*');
 			$this->apply_db->from('agency');
 			$this->apply_db->join('province', 'province.id = agency.province_id', 'left');
@@ -259,6 +291,6 @@
 			$query = $this->apply_db->get();
 			
 			return $query->result_array();
-		}
+		}*/
 	}
 ?>

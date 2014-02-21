@@ -454,8 +454,6 @@ class Admin extends UserController {
 		$data['users'] = $this->user->user_list($data);
 		$data['num_users'] = $config['total_rows'];
 		
-		$provinces = array('0' => '任何', '1' => '北京', '2' => '广东', '3' => '上海');
-		
 		foreach ($data['users'] as &$one) {
 			$one['province_str'] = $provinces[$one['province_id']];
 			

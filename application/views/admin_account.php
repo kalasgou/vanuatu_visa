@@ -21,8 +21,9 @@
 			
 			function filter_them(selected) {
 				switch (selected) {
-					case '1' : location.href = '/admin/ordinary?orderby=' + selected + '&account_status=' + $('#account_status').val(); break;
-					case '2' : location.href = '/admin/ordinary?orderby=' + selected + '&email=' + $('#email').val(); break;
+					case '1' : location.href = '/admin/account?orderby=' + selected + '&account_status=' + $('#account_status').val(); break;
+					case '2' : location.href = '/admin/account?orderby=' + selected + '&email=' + $('#email').val(); break;
+					case '2' : location.href = '/admin/account?orderby=' + selected + '&province=' + $('#provinces').val() + '&city=' + $('#cities').val(); break;
 					default : return;
 				}
 			}
@@ -35,6 +36,7 @@
 				switch (selected) {
 					case '1' : $('#account_status').val(account_status); break;
 					case '2' : $('#email').val(email); break;
+					case '3' : $('#provinces').val(province); break;
 					default : return;
 				}
 			}
@@ -48,7 +50,7 @@
 			<div id="menu">
 				<a style="color:#1100FF;">帐号管理</a> / 
 				<a href="/admin/quick">快速通道</a> / 
-				<a href="/admin/agency">办事处管理</a> / 
+				<a href="/admin/agency">合作方管理</a> / 
 				<a href="/account">帐户信息</a> / 
 				<a href="/password">密码修改</a> / 
 				<a href="/logout">安全登出</a>
@@ -60,6 +62,7 @@
 					<select id="orderby" onchange="javascript:what_is_selected();">
 						<option value="1">帐号状态</option>
 						<option value="2">邮箱地址</option>
+						<option value="3">省份城市</option>
 					</select>
 				</div>
 				<div id="od1" style="display:inline-block;">
@@ -74,12 +77,22 @@
 					&nbsp;请选择需要查询的邮箱地址:&nbsp;
 					<input id="email" type="email" placeholder="邮箱地址"/>
 				</div>
+				<div id="od3" style="display:none">
+					&nbsp;请选择需要查询的省份与城市:&nbsp;
+					省份：<select id="provinces">
+						<option value="0">加载中</option>
+					</select>
+					城市：<select id="cities">
+						<option value="0">加载中</option>
+					</select>
+				</div>
 				<div style="display:inline-block;">
 					<button onclick="javascript:filter_them(selected);">搜索</button>
 				</div>
 			</div>
 			<table class="table table-hover">
 				<colgroup>
+					<col style="width:10%;"/>
 					<col style="width:10%;"/>
 					<col style="width:10%;"/>
 					<col style="width:20%"/>
@@ -91,13 +104,14 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<th>帐号昵称</th>
-						<th>真实姓名</th>
+						<th>用户姓名</th>
 						<th>电子邮箱</th>
+						<th>机构</th>
+						<th>省市</th>
 						<th>联系电话</th>
+						<th>权限</th>
+						<th>状态</th>
 						<th>注册日期</th>
-						<th>帐号权限</th>
-						<th>帐号状态</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -107,12 +121,13 @@
 					?>
 					<tr>
 						<td><?php echo $one['nickname'];?></td>
-						<td><?php echo $one['realname'];?></td>
 						<td><?php echo $one['email'];?></td>
+						<td><?php echo $one['agency'];?></td>
+						<td><?php echo $one['province_str'].$one['city_str'];?>
 						<td><?php echo $one['phone'];?></td>
-						<td><span title="具体时间 <?php echo $one['reg_time'];?>"><?php echo substr($one['reg_time'], 0, 10);?></span></td>
-						<td>普通用户</td>
+						<td><?php echo $one['permission_str'];?></td>
 						<td><?php echo $one['status_str'];?></td>
+						<td><span title="具体时间 <?php echo $one['reg_time'];?>"><?php echo substr($one['reg_time'], 0, 10);?></span></td>
 						<td>
 							<?php if ($one['status'] == 0) { ?>
 								<a href="javascript:void(0);" onclick="change_account_status('applicant', '<?php echo $one['userid'];?>', 'yes', this);">激活</a>
@@ -135,7 +150,7 @@
 	</body>
 	<script type="text/javascript">
 		var selected = '1';
-		var selected_arg = '', account_status = '', email = '';
+		var selected_arg = '', account_status = '', email = '', province = '';
 		
 		var argument_str = location.search;
 		if (argument_str.indexOf('?') != -1) {

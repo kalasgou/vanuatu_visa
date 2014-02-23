@@ -14,7 +14,7 @@
 		<script type="text/javascript" src="/simple.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
-				
+				province_list();
 			});
 			
 			function submit_form() {
@@ -25,7 +25,7 @@
 			.form-control {width:256px;}
 		</style>
 	</head>
-	<body onload="province_list();">
+	<body>
 		<div>
 			<form class="form-horizontal" role="form" method="post" action="/user/register" onsubmit="return submit_form();">
 				<div class="form-group">

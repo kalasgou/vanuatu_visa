@@ -1,20 +1,23 @@
-function province_list() {
+function province_list(selection) {
 	$.ajax({
 		url: '/admin/province_list',
 		data: {},
-		async: true,
+		async: false,
 		type: 'GET',
 		dataType: 'json',
 		success: function(json) {
 			if (json.msg === 'success') {
 				var options = '';
 				var len = json.provinces.length;
+				if (selection === 'all') {
+					options += '<option value="0">全部</option>';
+				}
 				for (var i = 0; i < len; i ++) {
 					options += '<option value="' + json.provinces[i].id + '">' + json.provinces[i].province_cn + '</option>';
 				}
 				$('#provinces').empty();
 				$('#provinces').append(options);
-				city_list();
+				city_list(selection);
 			} else {
 				alert('Permission Error');
 			}
@@ -25,18 +28,21 @@ function province_list() {
 	});
 }
 
-function city_list() {
+function city_list(selection) {
 	var province_id = $('#provinces').val();
 	$.ajax({
 		url: '/admin/city_list/' + province_id,
 		data: {},
-		async: true,
+		async: false,
 		type: 'GET',
 		dataType: 'json',
 		success: function(json) {
 			if (json.msg === 'success') {
 				var options = '';
 				var len = json.cities.length;
+				if (selection === 'all') {
+					options += '<option value="0">全部</option>';
+				}
 				for (var i = 0; i < len; i ++) {
 					options += '<option value="' + json.cities[i].id + '">' + json.cities[i].city_cn + '</option>';
 				}
@@ -194,15 +200,37 @@ function check_login_email() {
 	return true;
 }
 
-function change_account_status(user_type, userid, opt, this_a) {
+function change_account_status(userid, opt, this_a) {
 	$.ajax({
 		url: '/admin/activate_account',
-		data: {user_type: user_type, userid: userid, activate: opt},
+		data: {userid: userid, activate: opt},
 		type: 'POST',
 		dataType: 'json',
 		success: function(json) {
 			switch (json.msg) {
 				case 'success': alert('对ID: ' + userid + ' 用户帐户操作成功！');  this_a.innerHTML = '已更新'; this_a.style.color = '#DDDDDD'; break;
+				case 'forbidden': alert('无此操作权限'); break;
+				case 'fail': alert('出错了'); break;
+			}
+		},
+		error: function() {
+			alert('Network Error');
+		}
+	});
+}
+
+function update_account_superior(userid, original_superior_id, this_a) {
+	var superior_id = $('#charge_' + userid).val();
+	
+	$.ajax({
+		url: '/admin/update_superior',
+		data: {userid: userid, superior_id: superior_id, original_superior_id: original_superior_id},
+		type: 'POST',
+		dataType: 'json',
+		success: function(json) {
+			switch (json.msg) {
+				case 'success': alert('对ID: ' + userid + ' 用户帐户操作成功！');  this_a.innerHTML = '已更新'; this_a.style.color = '#DDDDDD'; break;
+				case 'forbidden': alert('无此操作权限'); break;
 				case 'fail': alert('出错了'); break;
 			}
 		},

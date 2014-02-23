@@ -57,27 +57,15 @@
 				<h5>您好，办事处管理员 <?php echo $user['nickname'];?>！</h5>
 			</div>
 			<div id="menu">
-				<a href="/admin/permit">管理员帐号</a> / 
-				<a href="/admin/ordinary">普通用户帐号</a> / 
-				<a href="/admin/fast">快速通道</a> / 
-				<a style="color:#1100FF;">办事处管理</a> / 
+				<a href="/admin/account">帐号管理</a> / 
+				<a href="/admin/quick">快速通道</a> / 
+				<a style="color:#1100FF;">合作方管理</a> / 
 				<a href="/account">帐户信息</a> / 
 				<a href="/password">密码修改</a> / 
 				<a href="/logout">安全登出</a>
 			</div>
 		</nav>
 		<div id="list_box">
-			<div>
-				<div style="display:inline-block;">
-					<select id="orderby" onchange="javascript:what_is_selected();">
-						<option value="1">申请状态</option>
-						<option value="2">申请流水号</option>
-						<option value="3">护照号</option>
-						<option value="4">日期范围</option>
-						<option value="5">线下申请</option>
-					</select>
-				</div>
-			</div>
 			<table class="table table-hover">
 				<colgroup>
 					<col style="width:10%"/>

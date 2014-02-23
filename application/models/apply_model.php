@@ -212,7 +212,7 @@
 								$this->apply_db->where('uuid', $data['uuid']);
 								break;
 				case APPLY_PASSPORT : 
-								$this->apply_db->where('passport', $data['passport']);
+								$this->apply_db->where('passport_number', $data['passport']);
 								break;
 				case APPLY_PERIOD : 	
 								$this->apply_db->where('submit_time >= ', $data['start_time'].' 00:00:00'); 
@@ -236,7 +236,7 @@
 								$this->apply_db->where('uuid', $data['uuid']);
 								break;
 				case APPLY_PASSPORT : 
-								$this->apply_db->where('passport', $data['passport']);
+								$this->apply_db->where('passport_number', $data['passport']);
 								break;
 				case APPLY_PERIOD : 	
 								$this->apply_db->where('submit_time >= ', $data['start_time'].' 00:00:00'); 

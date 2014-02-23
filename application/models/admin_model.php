@@ -12,7 +12,9 @@
 			if ($data['province_id'] != 0 || $data['city_id'] != 0) {
 				$this->admin_db->where('province_id', $data['province_id']);
 				$this->admin_db->where('city_id', $data['city_id']);
+				$this->admin_db->where_in('userid', $data['userids']);
 			}
+			
 			switch ($data['orderby']) {
 				case DEFAULT_QUERY : 
 				case APPLY_STATUS : 
@@ -22,14 +24,11 @@
 								$this->admin_db->where('uuid', $data['uuid']);
 								break;
 				case APPLY_PASSPORT : 
-								$this->admin_db->where('passport', $data['passport']);
+								$this->admin_db->where('passport_number', $data['passport']);
 								break;
 				case APPLY_PERIOD : 	
 								$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00'); 
 								$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
-								break;
-				case APPLY_PRESENT : 
-								$this->admin_db->where('userid', PRESENT_USERID); 
 								break;
 				default : return 0;
 			}
@@ -42,7 +41,9 @@
 			if ($data['province_id'] != 0 || $data['city_id'] != 0) {
 				$this->admin_db->where('province_id', $data['province_id']);
 				$this->admin_db->where('city_id', $data['city_id']);
+				$this->admin_db->where_in('userid', $data['userids']);
 			}
+			
 			switch ($data['orderby']) {
 				case DEFAULT_QUERY : 
 				case APPLY_STATUS : 
@@ -52,14 +53,11 @@
 								$this->admin_db->where('uuid', $data['uuid']);
 								break;
 				case APPLY_PASSPORT : 
-								$this->admin_db->where('passport', $data['passport']);
+								$this->admin_db->where('passport_number', $data['passport']);
 								break;
 				case APPLY_PERIOD : 	
 								$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00'); 
 								$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
-								break;
-				case APPLY_PRESENT : 
-								$this->admin_db->where('userid', PRESENT_USERID); 
 								break;
 				default : return 0;
 			}
@@ -305,6 +303,7 @@
 		}
 		
 		public function get_cities($province_id) {
+			$this->admin_db->where('province_id >', 0);
 			$this->admin_db->where('province_id', $province_id);
 			$this->admin_db->order_by('city_cn', 'asc');
 			$query = $this->admin_db->get('city');
@@ -312,21 +311,51 @@
 			return $query->result_array();
 		}
 		
-		/*public function sum_agency() {
-			return $this->admin_db->count_all_results('agency');
+		public function get_locations() {
+			$locations = array();
+			
+			$this->load->library('RedisDB');
+			$redis = $this->redisdb->instance(REDIS_DEFAULT);
+			
+			if (($cache = $redis->get('city_and_province')) !== FALSE) {
+				$locations = json_decode($cache, TRUE);
+			} else {
+				$this->admin_db->select('city.id as id, province_cn, city_cn');
+				$this->admin_db->from('city');
+				$this->admin_db->join('province', 'province.id = city.province_id', 'left');
+				$query = $this->admin_db->get();
+				
+				foreach ($query->result_array() as $one) {
+					$locations[$one['id']]['province_cn'] = $one['province_cn'];
+					$locations[$one['id']]['city_cn'] = $one['city_cn'];
+				}
+				
+				$redis->setex('city_and_province', 86400, json_encode($locations));
+			}
+			
+			return $locations;
 		}
 		
-		public function get_agencies($page) {
-			$item = 20;
+		public function admin_by_city($province_id, $city_id) {
+			$superiors = array();
+			$superiors[OFFICE_ADMIN]['0'] = '请选择';
+			$superiors[EMBASSY_ADMIN]['0'] = '请选择';
+			$superiors[SYSTEM_ADMIN]['0'] = '无';
 			
-			$this->admin_db->select('*');
-			$this->admin_db->from('agency');
-			$this->admin_db->join('province', 'province.id = agency.province_id', 'left');
-			$this->admin_db->order_by('date', 'desc');
-			$this->admin_db->limit($item, $item * $page);
-			$query = $this->admin_db->get();
+			$this->admin_db->select('userid, nickname, permission');
+			$this->admin_db->where('city_id', $city_id);
+			$this->admin_db->where_in('permission', array(OFFICE_ADMIN, EMBASSY_ADMIN));
+			$query = $this->admin_db->get('user');
 			
-			return $query->result_array();
+			foreach ($query->result_array() as $one) {
+				$superiors[$one['permission']][$one['userid']] = $one['nickname'];
+			}
+			
+			return $superiors;
+		}
+		
+		/*public function sum_agency() {
+			return $this->admin_db->count_all_results('agency');
 		}
 		
 		public function upsert_agency($data) {

@@ -21,11 +21,11 @@
 			
 			function filter_them(selected) {
 				switch (selected) {
-					case '<?php echo APPLY_STATUS;?>' : location.href = '/admin/fast?orderby=' + selected + '&cur_status=' + $('#cur_status').val(); break;
-					case '<?php echo APPLY_UUID;?>' : location.href = '/admin/fast?orderby=' + selected + '&apply_id=' + $('#apply_id').val(); break;
-					case '<?php echo APPLY_PASSPORT;?>' : location.href = '/admin/fast?orderby=' + selected + '&passport_no=' + $('#passport_no').val(); break;
-					case '<?php echo APPLY_PERIOD;?>' : location.href = '/admin/fast?orderby=' + selected + '&start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val(); break;
-					case '<?php echo APPLY_PRESENT;?>' : location.href = '/admin/fast?orderby=' + selected; break;
+					case '<?php echo APPLY_STATUS;?>' : location.href = '/admin/quick?orderby=' + selected + '&cur_status=' + $('#cur_status').val(); break;
+					case '<?php echo APPLY_UUID;?>' : location.href = '/admin/quick?orderby=' + selected + '&apply_id=' + $('#apply_id').val(); break;
+					case '<?php echo APPLY_PASSPORT;?>' : location.href = '/admin/quick?orderby=' + selected + '&passport_no=' + $('#passport_no').val(); break;
+					case '<?php echo APPLY_PERIOD;?>' : location.href = '/admin/quick?orderby=' + selected + '&start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val(); break;
+					case '<?php echo APPLY_PRESENT;?>' : location.href = '/admin/quick?orderby=' + selected; break;
 					default : return;
 				}
 			}

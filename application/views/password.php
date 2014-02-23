@@ -32,10 +32,10 @@
 						type: 'POST',
 						dataType: 'json',
 						success: function(json) {
-							var jump_to = user_type === 'applicant' ? '/login' : '/admin_login';
+							//var jump_to = user_type === 'applicant' ? '/login' : '/admin_login';
 							switch(json.msg) {
 								case 'captcha': alert('验证码错误！'); location.reload(); break;
-								case 'success': alert('密码修改成功，请重新登录！'); location.href = jump_to; break;
+								case 'success': alert('密码修改成功，请重新登录！'); location.href = '/login'; break;
 								case 'fail': alert('密码修改失败，请稍后再试！'); location.reload(); break;
 								case 'different': alert('输入的旧密码不匹配！'); location.reload(); break;
 								default : alert('非法操作！');
@@ -88,7 +88,7 @@
 						<span id="captcha"><?php echo $captcha;?></span> <a href="javascript:void(0);" onclick="refresh_captcha();">换过另一张</a>
 					</div>
 				</div>
-				<?php if ($permission == 10000) { ?>
+				<!--<?php if ($permission == 10000) { ?>
 				<div>
 					<input type="hidden" id="user_type" value="applicant"/>
 				</div>
@@ -96,7 +96,7 @@
 				<div>
 					<input type="hidden" id="user_type" value="administrator"/>
 				</div>
-				<?php } ?>
+				<?php } ?>-->
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<button type="button" class="btn btn-success" onclick="javascript:change_password();">确定修改</button>&nbsp;&nbsp;&nbsp;

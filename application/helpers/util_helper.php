@@ -212,4 +212,26 @@
 		
 		return FALSE;
 	}
+	
+	function get_reservation_subordinates($userid) {
+		$CI = & get_instance();
+		$CI->load->library('RedisDB');
+		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
+		
+		return $redis->sMembers($userid.'_subordinate_ids');
+	}
+	
+	function get_office_reservation_subordinates($userid) {
+		$CI = & get_instance();
+		$CI->load->library('RedisDB');
+		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
+		
+		$userids = array();
+		$office_admins = $redis->sMembers($userid.'_subordinate_ids');
+		foreach ($office_admins as $one) {
+			$userids = array_merge($userids, $redis->sMembers($one.'_subordinate_ids'));
+		}
+		
+		return $userids;
+	}
 ?>

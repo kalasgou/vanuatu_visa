@@ -262,6 +262,12 @@ class Admin extends UserController {
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
 		
+		if ($data['orderby'] === APPLY_PRESENT) {
+			$data['userids'] = array(PRESENT_USERID);
+		} else {
+			$data['userids'] = get_reservation_subordinates($this->user_info['userid']);
+		}
+		
 		$this->load->model('admin_model', 'adm');
 		
 		$this->load->library('pagination');
@@ -318,6 +324,12 @@ class Admin extends UserController {
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
+		
+		if ($data['orderby'] === APPLY_PRESENT) {
+			$data['userids'] = array(PRESENT_USERID);
+		} else {
+			$data['userids'] = get_office_reservation_subordinates($this->user_info['userid']);
+		}
 		
 		$this->load->model('admin_model', 'adm');
 		
@@ -423,8 +435,10 @@ class Admin extends UserController {
 		
 		$data['page'] = $page - 1;
 		$data['status'] = intval($this->input->get('account_status', TRUE));
-		$data['province_id'] = intval($this->input->get('province_id', TRUE));
-		$data['city_id'] = intval($this->input->get('city_id', TRUE));
+		$data['permission'] = intval($this->input->get('account_type', TRUE));
+		$data['province_id'] = intval($this->input->get('province', TRUE));
+		$data['city_id'] = intval($this->input->get('city', TRUE));
+		
 		$data['email'] = trim($this->input->get('email', TRUE));
 		
 		$this->load->model('user_model', 'user');
@@ -454,11 +468,24 @@ class Admin extends UserController {
 		$data['users'] = $this->user->user_list($data);
 		$data['num_users'] = $config['total_rows'];
 		
+		$this->load->model('admin_model', 'adm');
+		$locations = $this->adm->get_locations();
+		
 		foreach ($data['users'] as &$one) {
-			$one['province_str'] = $provinces[$one['province_id']];
+			$one['province_str'] = $locations[$one['city_id']]['province_cn'];
+			$one['city_str'] = $locations[$one['city_id']]['city_cn'];
 			
 			$one['permission_str'] = $this->config->item($one['permission'], 'account_type');
 			$one['status_str'] = $this->config->config['account_status'][$one['status']];
+			
+			$superiors = $this->adm->admin_by_city($one['province_id'], $one['city_id']);
+			if ($one['permission'] == RESERVATION_USER) {
+				$one['superiors'] = $superiors[OFFICE_ADMIN];
+			} else if ($one['permission'] == OFFICE_ADMIN) {
+				$one['superiors'] = $superiors[EMBASSY_ADMIN];
+			} else {
+				$one['superiors'] = $superiors[SYSTEM_ADMIN];
+			}
 		}
 		
 		$this->load->view('admin_account', $data);
@@ -578,12 +605,12 @@ class Admin extends UserController {
 		$info = $this->adm->retrieve_some_info($uuid, $attributes);
 		
 		if ($info) {
-			if ($info['status'] >= 41) {
-				$info['photo_pic'] = SCAN_DOMAIN .$uuid .'/photo';
+			if ($info['status'] >= APPLY_PASSED) {
+				//$info['photo_pic'] = SCAN_DOMAIN .$uuid .'/photo';
 				$info['passport_pic'] = SCAN_DOMAIN .$uuid .'/passport';
-				$info['identity_pic'] = SCAN_DOMAIN .$uuid .'/identity';
-				$info['ticket_pic'] = SCAN_DOMAIN .$uuid .'/ticket';
-				$info['deposition_pic'] = SCAN_DOMAIN .$uuid .'/deposition';
+				//$info['identity_pic'] = SCAN_DOMAIN .$uuid .'/identity';
+				//$info['ticket_pic'] = SCAN_DOMAIN .$uuid .'/ticket';
+				//$info['deposition_pic'] = SCAN_DOMAIN .$uuid .'/deposition';
 			}
 			
 			$info['user'] = $this->user_info;
@@ -889,15 +916,12 @@ class Admin extends UserController {
 	
 	public function activate_account() {
 		if ($this->permission != SYSTEM_ADMIN) {
-			$msg['tips'] = '你的帐户无此操作权限！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
+			$ret['msg'] = 'forbidden';
+			echo json_encode($ret);
+			exit('Forbidden');
 		}
 		
 		$data['userid'] = trim($this->input->post('userid', TRUE));
-		$data['user_type'] = trim($this->input->post('user_type', TRUE));
 		$activate = trim($this->input->post('activate', TRUE));
 		$data['status'] = $activate === 'yes' ? 1 : ($activate === 'no' ? -1 : 0);
 		
@@ -906,6 +930,28 @@ class Admin extends UserController {
 		$ret['msg'] = 'fail';
 		
 		if ($this->user->change_account_status($data) > 0) {
+			$ret['msg'] = 'success';
+		}
+		
+		echo json_encode($ret);
+	}
+	
+	public function update_superior() {
+		if ($this->permission != SYSTEM_ADMIN) {
+			$ret['msg'] = 'forbidden';
+			echo json_encode($ret);
+			exit('Forbidden');
+		}
+		
+		$data['userid'] = trim($this->input->post('userid', TRUE));
+		$data['superior_id'] = trim($this->input->post('superior_id', TRUE));
+		$data['original_superior_id'] = trim($this->input->post('original_superior_id', TRUE));
+		
+		$this->load->model('user_model', 'user');
+		
+		$ret['msg'] = 'fail';
+		
+		if ($this->user->update_superior($data) > 0) {
 			$ret['msg'] = 'success';
 		}
 		

@@ -137,7 +137,13 @@
 				if ($data['city_id'] !== 0) {
 					$this->user_db->where('city_id', $data['city_id']);
 				}
-				$this->user_db->where('status', $data['status']);
+				if ($data['status'] !== 0) {
+					$this->user_db->where('status', $data['status']);
+				}
+				if ($data['permission'] !== 0) {
+					$this->user_db->where('permission', $data['permission']);
+				}
+				$this->user_db->where('userid > ', 2);
 			}
 			
 			return $this->user_db->count_all_results('user');
@@ -153,7 +159,13 @@
 				if ($data['city_id'] !== 0) {
 					$this->user_db->where('city_id', $data['city_id']);
 				}
-				$this->user_db->where('status', $data['status']);
+				if ($data['status'] !== 0) {
+					$this->user_db->where('status', $data['status']);
+				}
+				if ($data['permission'] !== 0) {
+					$this->user_db->where('permission', $data['permission']);
+				}
+				$this->user_db->where('userid > ', 2);
 			}
 			$this->user_db->limit(20, 20 * $data['page']);
 			$query = $this->user_db->get('user');
@@ -195,6 +207,23 @@
 		
 		public function update_password($data) {
 			$this->user_db->set('password', $data['password']);
+			$this->user_db->where('userid', $data['userid']);
+			$this->user_db->update('user');
+			
+			return $this->user_db->affected_rows();
+		}
+		
+		public function update_superior($data) {
+			if ($data['superior_id'] === '0') {
+				return -1;
+			}
+			
+			$this->load->library('RedisDB');
+			$redis = $this->redisdb->instance(REDIS_DEFAULT);
+			$redis->sRem($data['original_superior_id'].'_subordinate_ids', $data['userid']);
+			$redis->sAdd($data['superior_id'].'_subordinate_ids', $data['userid']);
+			
+			$this->user_db->set('superior_id', $data['superior_id']);
 			$this->user_db->where('userid', $data['userid']);
 			$this->user_db->update('user');
 			

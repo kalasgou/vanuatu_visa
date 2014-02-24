@@ -40,15 +40,15 @@
 						</tr>
 						<tr>
 							<td>申请号：</td>
-							<td><input class="text" type="text" name="apply_id" placeholder="Serial Numnber"/></td>
+							<td><input class="text" type="text" name="apply_id" placeholder="Serial Number"/></td>
 						</tr>
 						<tr>
 							<td>护照号：</td>
-							<td><input class="text" type="text" name="passport" placeholder="Passport Numnber"/></td>
+							<td><input class="text" type="text" name="passport" placeholder="Passport Number"/></td>
 						</tr>
 						<tr>
 							<td>签证号：</td>
-							<td><input type="text" name="visa" placeholder="Visa Numnber"/></td>
+							<td><input type="text" name="visa" placeholder="Visa Number"/></td>
 						</tr>
 						<tr>
 							<td colspan="2" align="right"><button class="btn btn-success" type="submit">查 询</button></td>

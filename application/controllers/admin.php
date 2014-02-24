@@ -250,6 +250,7 @@ class Admin extends UserController {
 		
 		$this->load->helper('util');
 		
+		$data['userids'] = array();
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['city_id'] = $this->user_info['city_id'];
 		$data['page'] = $page - 1;
@@ -313,6 +314,7 @@ class Admin extends UserController {
 		
 		$this->load->helper('util');
 		
+		$data['userids'] = array();
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['city_id'] = $this->user_info['city_id'];
 		$data['page'] = $page - 1;
@@ -376,6 +378,7 @@ class Admin extends UserController {
 		
 		$this->load->helper('util');
 		
+		$data['userids'] = array();
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['city_id'] = $this->user_info['city_id'];
 		$data['page'] = $page - 1;
@@ -387,6 +390,10 @@ class Admin extends UserController {
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
+		
+		if ($data['orderby'] === APPLY_PRESENT) {
+			$data['userids'] = array(PRESENT_USERID);
+		}
 		
 		$this->load->model('admin_model', 'adm');
 		

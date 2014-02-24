@@ -12,6 +12,8 @@
 			if ($data['province_id'] != 0 || $data['city_id'] != 0) {
 				$this->admin_db->where('province_id', $data['province_id']);
 				$this->admin_db->where('city_id', $data['city_id']);
+			}
+			if ($data['userids']) {
 				$this->admin_db->where_in('userid', $data['userids']);
 			}
 			
@@ -40,7 +42,9 @@
 			$this->admin_db->select('uuid, name_en, name_cn, status, passport_number, submit_time, audit_time, pay_time, approve_time, fee');
 			if ($data['province_id'] != 0 || $data['city_id'] != 0) {
 				$this->admin_db->where('province_id', $data['province_id']);
-				$this->admin_db->where('city_id', $data['city_id']);
+				$this->admin_db->where('city_id', $data['city_id']);	
+			}
+			if ($data['userids']) {
 				$this->admin_db->where_in('userid', $data['userids']);
 			}
 			
@@ -81,6 +85,7 @@
 			$this->admin_db->select('uuid, name_cn, name_en, birth_day, birth_month, birth_year, gender, nationality, passport_number, submit_time, status, audit_time, pay_time, fee, approve_time, visa_no');
 			if ($data['province_id'] != 0 || $data['city_id'] != 0) {
 				$this->admin_db->where('province_id', $data['province_id']);
+				$this->admin_db->where('city_id', $data['city_id']);
 			}
 			$this->admin_db->where('status >= ', APPLY_WAITING);
 			$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
@@ -330,7 +335,7 @@
 					$locations[$one['id']]['city_cn'] = $one['city_cn'];
 				}
 				
-				$redis->setex('city_and_province', 86400, json_encode($locations));
+				$redis->setex('city_and_province', 3600, json_encode($locations));
 			}
 			
 			return $locations;

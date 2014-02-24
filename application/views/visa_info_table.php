@@ -46,7 +46,7 @@
 						<td><?php echo $name;?></td>
 					</tr>
 					<tr>
-						<td>性别 / Gender</td>
+						<td>性别 / Sex</td>
 						<td><?php echo $gender;?></td>
 					</tr>
 					<tr>

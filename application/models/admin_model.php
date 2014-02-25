@@ -9,10 +9,10 @@
 		}
 		
 		public function sum_applications($data) {
-			if ($data['province_id'] != 0 || $data['city_id'] != 0) {
+			/*if ($data['province_id'] != 0 || $data['city_id'] != 0) {
 				$this->admin_db->where('province_id', $data['province_id']);
 				$this->admin_db->where('city_id', $data['city_id']);
-			}
+			}*/
 			if ($data['userids']) {
 				$this->admin_db->where_in('userid', $data['userids']);
 			}
@@ -40,10 +40,10 @@
 		
 		public function get_applications($data) {
 			$this->admin_db->select('uuid, name_en, name_cn, status, passport_number, submit_time, audit_time, pay_time, approve_time, fee');
-			if ($data['province_id'] != 0 || $data['city_id'] != 0) {
+			/*if ($data['province_id'] != 0 || $data['city_id'] != 0) {
 				$this->admin_db->where('province_id', $data['province_id']);
 				$this->admin_db->where('city_id', $data['city_id']);	
-			}
+			}*/
 			if ($data['userids']) {
 				$this->admin_db->where_in('userid', $data['userids']);
 			}
@@ -341,7 +341,7 @@
 			return $locations;
 		}
 		
-		public function admin_by_city($province_id, $city_id) {
+		/*public function admin_by_city($province_id, $city_id) {
 			$superiors = array();
 			$superiors[OFFICE_ADMIN]['0'] = '请选择';
 			$superiors[EMBASSY_ADMIN]['0'] = '请选择';
@@ -354,6 +354,33 @@
 			
 			foreach ($query->result_array() as $one) {
 				$superiors[$one['permission']][$one['userid']] = $one['nickname'];
+			}
+			
+			return $superiors;
+		}*/
+		
+		public function superior_for_account($province_id, $permission) {
+			$superiors = array();
+			$superiors['0'] = '请选择';
+			
+			$this->admin_db->select('userid, nickname, permission');
+			switch ($permission) {
+				case RESERVATION_USER: 
+							$this->admin_db->where('province_id', $province_id);
+							$this->admin_db->where('permission', OFFICE_ADMIN);
+							break;
+				case OFFICE_ADMIN:
+							$this->admin_db->where('permission', EMBASSY_ADMIN);
+							break;
+				case EMBASSY_ADMIN:
+							$superiors['0'] = '无';
+							return $superiors;
+				default: $superiors['0'] = '权限出错'; return $superiors;
+			}
+			
+			$query = $this->admin_db->get('user');
+			foreach ($query->result_array() as $one) {
+				$superiors[$one['userid']] = $one['nickname'];
 			}
 			
 			return $superiors;

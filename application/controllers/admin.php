@@ -256,8 +256,9 @@ class Admin extends UserController {
 		$data['page'] = $page - 1;
 		
 		$data['orderby'] = intval($this->input->get('orderby', TRUE));
-		$status = trim($this->input->get('cur_status', TRUE));
-		$data['status'] = intval($this->config->item($status, 'apply_status_code'));
+		$status_str = trim($this->input->get('cur_status', TRUE));
+		$status_code = intval($this->config->item($status_str, 'apply_status_code'));
+		$data['status'] = $status_code === 0 ? APPLY_WAITING : $status_code;
 		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
@@ -320,8 +321,9 @@ class Admin extends UserController {
 		$data['page'] = $page - 1;
 		
 		$data['orderby'] = intval($this->input->get('orderby', TRUE));
-		$status = trim($this->input->get('cur_status', TRUE));
-		$data['status'] = intval($this->config->item($status, 'apply_status_code'));
+		$status_str = trim($this->input->get('cur_status', TRUE));
+		$status_code = intval($this->config->item($status_str, 'apply_status_code'));
+		$data['status'] = $status_code === 0 ? APPLY_PASSED : $status_code;
 		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
@@ -361,7 +363,7 @@ class Admin extends UserController {
 		$data['num_records'] = $config['total_rows'];
 		
 		foreach ($data['records'] as &$one) {
-			$one['status_str'] = status2text($one['status']);
+			$one['status_str'] = $this->config->config['apply_status_str'][$one['status']];
 		}
 		
 		$this->load->view('admin_approve', $data);
@@ -384,8 +386,9 @@ class Admin extends UserController {
 		$data['page'] = $page - 1;
 		
 		$data['orderby'] = intval($this->input->get('orderby', TRUE));
-		$status = trim($this->input->get('cur_status', TRUE));
-		$data['status'] = intval($this->config->item($status, 'apply_status_code'));
+		$status_str = trim($this->input->get('cur_status', TRUE));
+		$status_code = intval($this->config->item($status_str, 'apply_status_code'));
+		$data['status'] = $status_code === 0 ? APPLY_WAITING : $status_code;
 		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
 		$data['passport'] = trim($this->input->get('passport_no', TRUE));
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
@@ -485,14 +488,7 @@ class Admin extends UserController {
 			$one['permission_str'] = $this->config->item($one['permission'], 'account_type');
 			$one['status_str'] = $this->config->config['account_status'][$one['status']];
 			
-			$superiors = $this->adm->admin_by_city($one['province_id'], $one['city_id']);
-			if ($one['permission'] == RESERVATION_USER) {
-				$one['superiors'] = $superiors[OFFICE_ADMIN];
-			} else if ($one['permission'] == OFFICE_ADMIN) {
-				$one['superiors'] = $superiors[EMBASSY_ADMIN];
-			} else {
-				$one['superiors'] = $superiors[SYSTEM_ADMIN];
-			}
+			$one['superiors'] = $this->adm->superior_for_account($one['province_id'], $one['permission']);
 		}
 		
 		$this->load->view('admin_account', $data);

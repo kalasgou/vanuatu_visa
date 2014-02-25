@@ -190,8 +190,18 @@ class User extends LoginController {
 		$data['agency'] = trim($this->input->post('agency', TRUE));
 		$data['telephone'] = trim($this->input->post('telephone', TRUE));
 		$data['permission'] = trim($this->input->post('permission', TRUE));
-		$data['province_id'] = trim($this->input->post('province_id', TRUE));
-		$data['city_id'] = trim($this->input->post('city_id', TRUE));
+		switch ($data['permission']) {
+			case RESERVATION_USER:
+					$data['province_id'] = intval($this->input->post('province_id', TRUE));
+					$data['city_id'] = intval($this->input->post('city_id', TRUE));
+					break;
+			case OFFICE_ADMIN:
+					$data['province_id'] = intval($this->input->post('province_id', TRUE));
+					$data['city_id'] = 0;
+					break;
+			default : $data['province_id'] = 0; $data['city_id'] = 0;
+		}
+		
 		$data['status'] = ACCOUNT_NORMAL;
 		$data['reg_ip'] = ip2long($this->input->ip_address());
 		$data['reg_time'] = date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);

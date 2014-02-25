@@ -94,7 +94,7 @@
 						<td><?php echo $max_stay;?></td>
 					</tr>
 					<tr>
-						<td colspan="2" align="right"><button class="btn btn-success" type="button">下载签证</button></td>
+						<td colspan="2" align="right"><button class="btn btn-success" type="button" onclick="javascript:location.href='/api/download_visa/<?php echo $apply_id;?>/<?php echo $visa_number;?>'">下载签证</button></td>
 					</tr>
 					<?php } else { ?>
 						<tr>

@@ -32,6 +32,7 @@
 								$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00'); 
 								$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
 								break;
+				case APPLY_PRESENT: break;
 				default : return 0;
 			}
 			
@@ -63,7 +64,8 @@
 								$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00'); 
 								$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
 								break;
-				default : return 0;
+				case APPLY_PRESENT: break;
+				default : return array();
 			}
 			$this->admin_db->order_by('submit_time', 'desc');
 			$this->admin_db->limit(20, 20 * $data['page']);

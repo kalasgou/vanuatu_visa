@@ -67,7 +67,7 @@
 				<div class="form-group">
 					<label for="inputPermission3" class="col-sm-2 control-label">帐号类型:</label>
 					<div class="col-sm-10">
-						<select class="form-control" name="permission">
+						<select class="form-control" name="permission" onchange="">
 							<option value="<?php echo RESERVATION_USER;?>">预约用户</option>
 							<option value="<?php echo OFFICE_ADMIN;?>">办事处</option>
 							<option value="<?php echo EMBASSY_ADMIN;?>">领事馆</option>

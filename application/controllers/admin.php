@@ -695,7 +695,7 @@ class Admin extends UserController {
 				$document->setValue('visa_no', $data['visa_no']);
 				$document->setValue('date_of_issue_v', date('j M, Y', $data['start_time']));
 				$document->setValue('date_of_expiry_v', date('j M, Y', $data['end_time']));
-				$document->setValue('sex', ($info['gender'] > 1 ? 'Female' : 'Male'));
+				$document->setValue('gender', ($info['gender'] > 1 ? 'Female' : 'Male'));
 				$document->setValue('place_of_birth', $info['birth_place']);
 				$document->setValue('passport_no', $info['passport_number']);
 				$document->setValue('date_of_birth', date('j M, Y', strtotime($info['birth_year'].'-'.$info['birth_month'].'-'.$info['birth_day'])));
@@ -999,7 +999,7 @@ class Admin extends UserController {
 			$one['status_str'] = $this->config->item($one['status'], 'apply_status_str');
 		}
 		
-		if ($this->permission == 2) {
+		if ($this->permission == EMBASSY_ADMIN) {
 			$this->load->view('admin_approve_records', $data);
 		} else {
 			$this->load->view('admin_audit_records', $data);

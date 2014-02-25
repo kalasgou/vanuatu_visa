@@ -68,6 +68,7 @@ class Api extends CI_Controller {
 		
 		if ($info) {
 			$output['valid_visa'] = TRUE;
+			$output['apply_id'] = $info['uuid'];
 			$output['name'] = $info['name_en'].'/'.$info['name_cn'];
 			$output['gender'] = $info['gender'] > 1 ? 'Female' : 'Male';
 			$output['birth_place'] = $info['birth_place'];
@@ -84,6 +85,32 @@ class Api extends CI_Controller {
 		}
 		
 		$this->load->view('visa_info_table', $output);
+	}
+	
+	function download_visa($apply_id = '', $visa = '') {
+		if ($apply_id === '' || $visa === '') {
+			$msg['tips'] = '参数不足，出错了！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$filename = VISA_PATH .$apply_id.'/'.$visa.'.docx';
+		if (!file_exists($filename)) {
+			$msg['tips'] = '你所请求的签证文件不存在或已过期！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		header('Content-Description: File Transfer');
+		header('Content-Type: application/force-download');
+		header('Content-Disposition: attachment; filename='.basename($filename));
+		header('Content-Transfer-Encoding: binary');
+		header('Content-Length: '.filesize($filename));
+		readfile($filename);
 	}
 }
 ?>

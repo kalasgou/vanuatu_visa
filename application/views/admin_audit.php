@@ -151,7 +151,7 @@
 							<a href="/admin/scan_upload/<?php echo $one['uuid'];?>" target="_blank">上传证明</a>
 							<?php } ?>-->
 							<?php if ($one['status'] == APPLY_ACCEPTED) { ?>
-							<a href="/admin/download_visa/<?php echo $one['uuid'];?>" target="_blank">下载签证文件</a>
+							<a href="/admin/download_visa/<?php echo $one['uuid'];?>" target="_blank">下载签证</a>
 							<?php } ?>
 						</td>
 					</tr>

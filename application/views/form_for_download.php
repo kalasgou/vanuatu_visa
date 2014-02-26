@@ -19,7 +19,7 @@
 	</head>
 	<body>
 		<div>
-			<div id="annoucement"><img src="/var/www.visa2vanuatu.cn/www/vanuatu.jpg" style="width:80px;"/></div>
+			<div id="annoucement"><img src="/data/file/resource/vanuatu.jpg" style="width:80px;"/></div>
 			<div id="annoucement"><b>THE REPUBLIC OF VANUATU</b></div>
 			<div id="annoucement"><b>APPLICATION FOR A VISA FOR VANUATU</b></div>
 			<div id="annoucement"><b>瓦努阿图共和国签证申请表</b></div>

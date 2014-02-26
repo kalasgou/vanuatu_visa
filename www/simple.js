@@ -313,8 +313,27 @@ function visa_it(uuid, opt, this_a) {
 		dataType: 'json',
 		success: function(json) {
 			switch (json.msg) {
-				case 'success': alert('对申请号 ' + uuid + ' 审批操作成功！'); this_a.innerHTML = '签证成功'; this_a.style.color = '#DDDDDD'; break;
+				case 'success': alert('对申请号 ' + uuid + ' 审批操作成功！'); this_a.innerHTML = '已更新'; this_a.style.color = '#DDDDDD'; break;
 				case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！'); break;
+				case 'fail': alert('出错了'); break;
+			}
+		},
+		error: function() {
+			alert('Network Error');
+		}
+	});
+}
+
+function trash_application(uuid, this_a) {
+	$.ajax({
+		url: '/apply/trash/' + uuid,
+		data: {},
+		type: 'POST',
+		dataType: 'json',
+		success: function(json) {
+			switch (json.msg) {
+				case 'success': this_a.parentNode.parentNode.style.display = 'none'; break;
+				case 'forbidden': alert('无此操作权限'); break;
 				case 'fail': alert('出错了'); break;
 			}
 		},

@@ -67,7 +67,7 @@
 				<div class="form-group">
 					<label for="inputPermission3" class="col-sm-2 control-label">帐号类型:</label>
 					<div class="col-sm-10">
-						<select class="form-control" name="permission" onchange="">
+						<select class="form-control" name="permission" onchange="user_type_change();">
 							<option value="<?php echo RESERVATION_USER;?>">预约用户</option>
 							<option value="<?php echo OFFICE_ADMIN;?>">办事处</option>
 							<option value="<?php echo EMBASSY_ADMIN;?>">领事馆</option>
@@ -85,7 +85,7 @@
 				<div class="form-group">
 					<label for="inputCity3" class="col-sm-2 control-label">所属城市:</label>
 					<div class="col-sm-10">
-						<select class="form-control" id="cities" name="city_id" onchange="">
+						<select class="form-control" id="cities" name="city_id" onchange="agency_list();">
 							<option value="0">加载中</option>
 						</select>
 					</div>
@@ -93,6 +93,9 @@
 				<div class="form-group">
 					<label for="inputAgency3" class="col-sm-2 control-label">所属机构:</label>
 					<div class="col-sm-10">
+						<select class="form-control" id="agencies" name="agency_id" onchange="">
+							<option value="0">加载中</option>
+						</select>
 						<input type="text" class="form-control" name="agency" id="inputAgency3" placeholder="Agency"/>
 						<span id="agency_empty" class="error_tips">请填写帐户所属机构全称</span>
 					</div>

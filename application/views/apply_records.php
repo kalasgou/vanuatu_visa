@@ -78,6 +78,7 @@
 						<option value="oops">被拒签</option>
 						<option value="visa">已发签证</option>
 						<option value="best">签证过期</option>
+						<option value="drop">已删除</option>
 					</select>
 				</div>
 				<div id="od2" style="display:none">
@@ -134,8 +135,9 @@
 						<td><span title="具体时间 <?php echo $one['approve_time'];?>"><?php echo substr($one['approve_time'], 0, 10);?></span></td>
 						<td>
 							<a href="/apply/view/<?php echo $one['uuid'];?>" target="_blank">查看</a>
-							<?php if ($one['status'] <= APPLY_NOTPASSED) { ?><a href="/apply/basic_info/<?php echo $one['uuid'];?>">修改</a><?php } ?>
-							<a href="/apply/download_form/<?php echo $one['uuid'];?>" target="_blank">下载申请表</a>
+							<?php if ($one['status'] >= APPLY_NOTFINISHED && $one['status'] <= APPLY_NOTPASSED) { ?><a href="/apply/basic_info/<?php echo $one['uuid'];?>">修改</a><?php } ?>
+							<?php if ($one['status'] >= APPLY_NOTFINISHED && $one['status'] < APPLY_PASSED) { ?><a href="javascript:void(0);" onclick="trash_application('<?php echo $one['uuid'];?>', this)">删除</a><?php } ?>
+							<a href="/apply/download_form/<?php echo $one['uuid'];?>" target="_blank">下载表格</a>
 							<?php if ($one['status'] == APPLY_ACCEPTED) { ?><a href="/apply/download_visa/<?php echo $one['uuid'];?>" target="_blank">下载签证</a><?php } ?>
 						</td>
 					</tr>

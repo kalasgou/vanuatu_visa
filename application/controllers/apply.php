@@ -849,6 +849,30 @@ class Apply extends UserController {
 		}
 	}
 	
+	public function trash($uuid = '') {
+		if ($this->permission != RESERVATION_USER) {
+			$ret['msg'] = 'forbidden';
+			echo json_encode($ret);
+			exit('Forbidden');
+		}
+		
+		if ($uuid === '') {
+			show_error('申请流水号出错');
+		}
+		
+		$this->load->helper('util');
+		
+		$ret['msg'] = 'fail';
+		
+		$this->load->model('apply_model', 'alm');
+		if ($this->alm->trash_application($uuid, $this->userid) > 0) {
+			update_status($uuid, APPLY_TRASHED);
+			$ret['msg'] = 'success';
+		}
+		
+		echo json_encode($ret);
+	}
+	
 	public function view($uuid = '') {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';

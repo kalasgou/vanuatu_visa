@@ -608,13 +608,11 @@ class Admin extends UserController {
 		$info = $this->adm->retrieve_some_info($uuid, $attributes);
 		
 		if ($info) {
-			if ($info['status'] >= APPLY_PASSED) {
-				//$info['photo_pic'] = SCAN_DOMAIN .$uuid .'/photo';
-				$info['passport_pic'] = SCAN_DOMAIN .$uuid .'/passport';
-				//$info['identity_pic'] = SCAN_DOMAIN .$uuid .'/identity';
-				//$info['ticket_pic'] = SCAN_DOMAIN .$uuid .'/ticket';
-				//$info['deposition_pic'] = SCAN_DOMAIN .$uuid .'/deposition';
-			}
+			//$info['photo_pic'] = SCAN_DOMAIN .$uuid .'/photo';
+			$info['passport_pic'] = SCAN_DOMAIN .$uuid .'/passport';
+			//$info['identity_pic'] = SCAN_DOMAIN .$uuid .'/identity';
+			//$info['ticket_pic'] = SCAN_DOMAIN .$uuid .'/ticket';
+			//$info['deposition_pic'] = SCAN_DOMAIN .$uuid .'/deposition';
 			
 			$info['user'] = $this->user_info;
 			$this->load->view('admin_view', $info);
@@ -654,6 +652,12 @@ class Admin extends UserController {
 	}
 	
 	public function approving($uuid = '', $opt = '') {
+		if ($this->permission != EMBASSY_ADMIN && $this->permission != SYSTEM_ADMIN) {
+			$ret['msg'] = 'forbidden';
+			echo json_encode($ret);
+			exit('Forbidden');
+		}
+		
 		$data['uuid'] = $uuid;
 		$data['userid'] = $this->userid;
 		$data['visa_no'] = '';
@@ -713,7 +717,7 @@ class Admin extends UserController {
 				$document->save($path.$data['visa_no'].'.docx');
 				
 				update_status($data['uuid'], $data['status']);
-				push_email_queue($opt.'_notification', $data['uuid']);
+				//push_email_queue($opt.'_notification', $data['uuid']);
 			} else {
 				$data['visa_no'] = '';
 				$data['message'] = '该申请已作最终审核，无须重复操作！';
@@ -723,11 +727,20 @@ class Admin extends UserController {
 			$data['message'] = '该申请未能正常获得签证，如还需签证请另作申请！';
 			
 			update_status($data['uuid'], $data['status']);
-			push_email_queue($opt.'_notification', $data['uuid']);
+		} else if ($this->permission == SYSTEM_ADMIN && $data['status'] === VISA_EXPIRED) {
+			$data['visa_no'] = 'Expired';
+			$data['message'] = '该签证由系统管理员设置为过期状态！';
+			
+			update_status($data['uuid'], $data['status']);
+		} else if ($this->permission == SYSTEM_ADMIN && $data['status'] === APPLY_TRASHED) {
+			$data['visa_no'] = 'Trashed';
+			$data['message'] = '该申请已被系统管理员删除！';
+			
+			update_status($data['uuid'], $data['status']);
 		} else {
 			$ret['msg'] = 'fail';
 			echo json_encode($ret);
-			exit('Forbidden');
+			exit('Invalid Arguments');
 		}
 		
 		$ret['msg'] = 'success';
@@ -794,7 +807,7 @@ class Admin extends UserController {
 	}*/
 	
 	public function download_excel() {
-		if ($this->permission != OFFICE_ADMIN || $this->permission != SYSTEM_ADMIN) {
+		if ($this->permission != OFFICE_ADMIN && $this->permission != SYSTEM_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
@@ -962,7 +975,7 @@ class Admin extends UserController {
 	}
 	
 	public function audit_trace($page = 1) {
-		if ($this->permission < EMBASSY_ADMIN || $this->permission > OFFICE_ADMIN) {
+		if ($this->permission != EMBASSY_ADMIN && $this->permission != OFFICE_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';

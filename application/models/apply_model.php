@@ -292,5 +292,14 @@
 			
 			return $query->result_array();
 		}*/
+		
+		public function trash_application($uuid, $userid) {
+			$this->apply_db->set('status', APPLY_TRASHED);
+			$this->apply_db->where('uuid', $uuid);
+			$this->apply_db->where('userid', $userid);
+			$this->apply_db->update('visa_applying');
+			
+			return $this->apply_db->affected_rows();
+		}
 	}
 ?>

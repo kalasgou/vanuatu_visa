@@ -121,6 +121,8 @@
 				/*} else if ($data['status'] === APPLY_PAID) {
 					$this->admin_db->set('pay_time', $update_time);
 					$this->admin_db->set('fee', $data['fee']);*/
+				} else if ($data['status'] === APPLY_TRASHED || $data['status'] === VISA_EXPIRED) {
+					$this->admin_db->set('audit_time', $update_time);
 				} else {
 					return FALSE;
 				}

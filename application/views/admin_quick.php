@@ -51,7 +51,7 @@
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div id="hello">
-				<h5>您好，办事处管理员 <?php echo $user['nickname'];?>！</h5>
+				<h5>您好，<?php echo $user['nickname'];?>！</h5>
 			</div>
 			<div id="menu">
 				<a href="/admin/account">帐号管理</a> / 
@@ -139,9 +139,15 @@
 						<td><span title="具体时间 <?php echo $one['audit_time'];?>"><?php echo substr($one['audit_time'], 0, 10);?></span></td>
 						<td><span title="具体时间 <?php echo $one['approve_time'];?>"><?php echo substr($one['approve_time'], 0, 10);?></span></td>
 						<td>
-							<a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank">查看详细</a>
+							<a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank">详细</a>
+							<?php if ($one['status'] >= APPLY_WAITING && $one['status'] < APPLY_ACCEPTED) { ?> / 
+								<a href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'drop', this);">删除</a>
+							<?php } ?>
 							<?php if ($one['status'] != APPLY_ACCEPTED) { ?> / 
 								<a href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'visa', this);">通过签证</a>
+							<?php } ?>
+							<?php if ($one['status'] == APPLY_ACCEPTED) { ?> / 
+								<a href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'best', this);">注销签证</a>
 							<?php } ?>
 						</td>
 					</tr>

@@ -320,6 +320,15 @@
 			return $query->result_array();
 		}
 		
+		public function get_cities($data) {
+			$this->admin_db->where('city_id', $data['city_id']);
+			$this->admin_db->where('permission', $data['permission']);
+			$this->admin_db->order_by('date', 'desc');
+			$query = $this->admin_db->get('agency');
+			
+			return $query->result_array();
+		}
+		
 		public function get_locations() {
 			$locations = array();
 			
@@ -344,24 +353,6 @@
 			
 			return $locations;
 		}
-		
-		/*public function admin_by_city($province_id, $city_id) {
-			$superiors = array();
-			$superiors[OFFICE_ADMIN]['0'] = '请选择';
-			$superiors[EMBASSY_ADMIN]['0'] = '请选择';
-			$superiors[SYSTEM_ADMIN]['0'] = '无';
-			
-			$this->admin_db->select('userid, nickname, permission');
-			$this->admin_db->where('city_id', $city_id);
-			$this->admin_db->where_in('permission', array(OFFICE_ADMIN, EMBASSY_ADMIN));
-			$query = $this->admin_db->get('user');
-			
-			foreach ($query->result_array() as $one) {
-				$superiors[$one['permission']][$one['userid']] = $one['nickname'];
-			}
-			
-			return $superiors;
-		}*/
 		
 		public function superior_for_account($province_id, $permission) {
 			$superiors = array();
@@ -390,22 +381,12 @@
 			return $superiors;
 		}
 		
-		/*public function sum_agency() {
+		public function sum_agencies() {
 			return $this->admin_db->count_all_results('agency');
 		}
 		
 		public function upsert_agency($data) {
-			$this->admin_db->set('city_cn', $data['city_cn']);
-			$this->admin_db->set('addr_cn', $data['addr_cn']);
-			//$this->admin_db->set('city_en', $data['city_en']);
-			//$this->admin_db->set('addr_en', $data['addr_en']);
-			$this->admin_db->set('contact', $data['contact']);
-			$this->admin_db->set('date', $data['date']);
-			$this->admin_db->where('id', $data['id']);
-			
-			$this->admin_db->update('agency');
-			
 			return $this->admin_db->affected_rows();
-		}*/
+		}
 	}
 ?>

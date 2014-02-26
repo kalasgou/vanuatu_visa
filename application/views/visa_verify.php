@@ -17,7 +17,7 @@
 			.country_logo {display:inline-block; position:relative; left:124px; top:2px;}
 			.title {display:inline-block; position:relative; font-size:32px; font-weight:bold; font-family:arial; top:6px; color:#fefefe;}
 			.content {width:47.4pc; height:auto; margin:0 auto; background:#ffffff;}
-			.description {display:inline-block; position:relative; font-size:24px; font-weight:bold; font-family:arial; top:24px; color:#434ad6; text-align:center;}
+			.description {display:inline-block; position:relative; font-size:24px; font-weight:bold; font-family:arial; top:24px; left:136px; color:#434ad6; text-align:center;}
 			.search_form {width:360px; margin:0 auto; font-size:20px;}
 			input {border:none; border-bottom:1px solid #000000;}
 		</style>
@@ -25,12 +25,12 @@
 	<body>
 		<div class="header">
 			<div class="header_inner">
-				<div class="country_flag"><img src="/vanuatu_flag.png" style="width:84%;"/></div>
+				<div class="country_flag"><img src="/vanuatu_flag.png" style="width:121px;"/></div>
 				<div class="title">Vanuatu Embassy eVisa</div>
 			</div>
 		</div>
 		<div class="content">
-			<div class="country_logo"><img src="/vanuatu.png" style="width:50%;"></div>
+			<div class="country_logo"><img src="/vanuatu.png" style="width:147px;"></div>
 			<div class="description">Vanuatu Embassy eVisa<br>瓦努阿图驻华大使馆电子签证</div>
 			<div class="search_form">
 				<form action="/api/visa_verify_table" method="get" style="padding:24px;">

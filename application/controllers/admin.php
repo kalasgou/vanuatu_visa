@@ -1164,6 +1164,26 @@ class Admin extends UserController {
 		
 		echo json_encode($ret);
 	}
+	
+	public function agency_list() {
+		$data['province_id'] = intval($this->input->get('province_id', TRUE));
+		$data['city_id'] = intval($this->input->get('city_id', TRUE));
+		$data['permission'] = intval($this->input->get('permission', TRUE));
+		
+		header('Content-Type: application/json; charset=utf-8');
+		
+		if ($this->permission != SYSTEM_ADMIN) {
+			$ret['msg'] = 'forbidden';
+			echo json_encode($ret);
+			exit('Account Not Allowed to Request This Info');
+		}
+		
+		$ret['msg'] = 'success';
+		$this->load->model('admin_model', 'adm');
+		$ret['agencies'] = $this->adm->get_agencies($data);
+		
+		echo json_encode($ret);
+	}
 }
 
 /* End of file */

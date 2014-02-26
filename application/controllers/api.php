@@ -59,6 +59,14 @@ class Api extends CI_Controller {
 		$data['visa'] = trim($this->input->get('visa', TRUE));
 		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
 		
+		if (strlen($data['passport']) + strlen($data['visa']) + strlen($data['uuid']) === 0) {
+			$msg['tips'] = '请输入有效查询参数！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
 		$info = array();
 		$output = array();
 		$output['valid_visa'] = FALSE;

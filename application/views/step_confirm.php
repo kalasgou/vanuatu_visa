@@ -122,7 +122,7 @@
 					$relative_info = json_decode($relative_info, TRUE);
 				?>
 				<div>
-					13、Details of Family in Vanuatu if visiting relative 如属探亲在瓦亲属概况:<br>&nbsp;&nbsp;
+					13、Details of Family in Vanuatu if visiting relative 如属探亲在瓦亲属概况<label id="not_necessary">*</label>:<br>&nbsp;&nbsp;
 					Name 姓名: <span id="answer" style="width:120px;"><?php echo $relative_info['relative_name'];?></span>
 					Add. 地址: <span id="answer" style="width:330px;"><?php echo $relative_info['relative_addr'];?></span>
 				</div>
@@ -149,7 +149,7 @@
 				</div>
 				<div>
 					18、Details of family included in passport<br>&nbsp;&nbsp;
-					护照内偕行儿童详细信息:<br>
+					护照内偕行儿童详细信息<label id="not_necessary">*</label>:<br>
 					<table id="children_info">
 						<thead>
 							<tr>

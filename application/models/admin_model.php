@@ -220,7 +220,7 @@
 			$behaviour_info['refuse_date'] = $data['refuse_date'];
 			
 			$sql = 	'INSERT INTO visa_applying (userid, uuid, province_id, city_id, status, name_en, name_cn, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, passport_number, passport_place, passport_date, passport_expiry, purpose, other_purpose, destination, relative_info, detail_info, children_info, behaviour_info, modify_time, submit_time, fee) '.
-					'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE '.
+					'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE '.
 					'status = VALUES(status), '.
 					'name_en = VALUES(name_en), '.
 					'name_cn = VALUES(name_cn), '.
@@ -320,7 +320,7 @@
 			return $query->result_array();
 		}
 		
-		public function get_cities($data) {
+		public function get_agencies($data) {
 			$this->admin_db->where('city_id', $data['city_id']);
 			$this->admin_db->where('permission', $data['permission']);
 			$this->admin_db->order_by('date', 'desc');

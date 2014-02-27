@@ -258,7 +258,7 @@
 			
 			$row = $query->row_array();
 			
-			if (strcmp($passport_number, $row['passport_number']) === 0) {
+			if (isset($row['passport_number']) && strcmp($passport_number, $row['passport_number']) === 0) {
 				return TRUE;
 			} else {
 				$sql_a = 'SELECT uuid FROM visa_applying WHERE passport_number = "'.$passport_number.'" AND status >= 11 AND status <= 31';

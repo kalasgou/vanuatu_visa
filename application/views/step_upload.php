@@ -51,7 +51,7 @@
 					</p>
 					<p><img src="<?php echo $passport_pic;?>" alt="护照" style="width:822px;"/></P>
 					<p id="notice">注意：请限制文件大小在3MB以内避免上传时间过长或无法上传；分辨率不小于800×600像素。</p>
-					<button id="next_step" class="btn btn-success btn-sm">上传</button>
+					<button id="next_step" type="submit" class="btn btn-success btn-sm">上传</button>
 				</form>
 			</div>
 		</div>

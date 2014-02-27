@@ -47,9 +47,9 @@
 				<p>3、Nationality 国籍:
 				<input type="text" name="nationality" value="<?php echo $nationality;?>"/></p>
 				<p>4、Date of Birth 出生日期:
-				Day 日<input type="text" name="birth_day" style="width:100px;" placeholder="dd" value="<?php echo $birth_day;?>"/>&nbsp;/&nbsp;
-				Month 月<input type="text" name="birth_month" style="width:100px;" placeholder="mm" value="<?php echo $birth_month;?>"/>&nbsp;/&nbsp;
-				Year 年<input type="text" name="birth_year" style="width:100px;" placeholder="yyyy" value="<?php echo $birth_year;?>"/></p>
+				Day 日<input type="text" name="birth_day" style="width:100px;" maxlength="2" placeholder="dd" value="<?php echo $birth_day;?>"/>&nbsp;/&nbsp;
+				Month 月<input type="text" name="birth_month" style="width:100px;" maxlength="2" placeholder="mm" value="<?php echo $birth_month;?>"/>&nbsp;/&nbsp;
+				Year 年<input type="text" name="birth_year" style="width:100px;" maxlength="4" placeholder="yyyy" value="<?php echo $birth_year;?>"/></p>
 				<p>5、Place of birth 出生地点:
 				<input type="text" name="birth_place" value="<?php echo $birth_place;?>"/></p>
 				<p>6、Family Situation 婚姻状况:
@@ -82,7 +82,7 @@
 				<input type="text" name="other_purpose" style="width:128px" value="<?php echo $other_purpose;?>"/></p>
 				<p>12、Address in Vanuatu 在瓦地址:
 				<input type="text" name="destination" style="width:300px" value="<?php echo $destination;?>"/></p>
-				<p>13、Details of Family in Vanuatu if visiting relative 如属探亲在瓦亲属概况*:<br>
+				<p>13、Details of Family in Vanuatu if visiting relative 如属探亲在瓦亲属概况<label id="not_necessary">*</label>:<br>
 				Name 姓名:
 				<input type="text" name="relative_name" style="width:150px" value="<?php echo $relative_info['relative_name'];?>"/>
 				Add. 地址:
@@ -99,7 +99,7 @@
 				<input type="text" name="duration" value="<?php echo $detail_info['duration']?>"/></p>
 				<p>17、Source of financial support in Vanuatu 在瓦费用来源:
 				<input type="text" name="financial_source" value="<?php echo $detail_info['financial_source']?>"/></p>
-				<p>18、Details of family included in passport 护照内偕行儿童详细信息*:<br>
+				<p>18、Details of family included in passport 护照内偕行儿童详细信息<label id="not_necessary">*</label>:<br>
 				<table id="children_info">
 					<thead>
 						<tr>
@@ -133,9 +133,8 @@
 				您曾经被瓦努阿图拒签过吗？
 				Yes是<input type="radio" name="refused" value="on" <?php echo ($behaviour_info['refused'] === 'on' ? 'checked="checked"' : '')?>/> When何时 <input type="text" name="refuse_date" style="width:150px" value="<?php echo $behaviour_info['refuse_date'];?>"/> No否 <input type="radio" name="refused" value="off" <?php echo ($behaviour_info['refused'] === 'off' ? 'checked="checked"' : '')?>/></p>
 				<br>
-				<div id="next_step">
-					<button type="submit" class="btn btn-success">提交</button>
-				</div>
+				<p id="notice">注意：除带*号外其余皆为必填项，需全部填写正确才能提交申请。</p>
+				<button id="next_step" type="submit" class="btn btn-success">下一步</button>
 			</form>
 		</div>
 		<br>

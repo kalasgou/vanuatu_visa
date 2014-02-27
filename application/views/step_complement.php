@@ -43,7 +43,7 @@
 			<div id="filling_info">
 				<form id="passport_form" method="POST" action="/apply/update_complement_info">
 					<input type="hidden" name="uuid" value="<?php echo $uuid;?>"/>
-					<p>18、Details of family included in passport 护照内偕行儿童详细信息*:<br>
+					<p>18、Details of family included in passport 护照内偕行儿童详细信息<label id="not_necessary">*</label>:<br>
 					<table id="children_info">
 						<thead>
 							<tr>

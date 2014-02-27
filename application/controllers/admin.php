@@ -120,7 +120,7 @@ class Admin extends UserController {
 		
 		$data['user'] = $this->user_info;
 		
-		$this->load->view('offline_present', $data);
+		$this->load->view('offline_present_form', $data);
 	}
 	
 	public function submit_present() {
@@ -228,8 +228,8 @@ class Admin extends UserController {
 		
 		$this->load->model('admin_model', 'adm');
 		if ($this->adm->update_application($data) > 0) {
-			update_status($data['uuid'], 11);
-			header('Location: '.base_url('/admin/audit?orderby=2&apply_id='.$data['uuid']));
+			update_status($data['uuid'], APPLY_WAITING);
+			header('Location: '.base_url('/admin/present_upload/'.$data['uuid']));
 		} else {
 			$msg['tips'] = '信息更新失败，请返回重试！';
 			$link = 'javascript:history.go(-1);';
@@ -237,6 +237,77 @@ class Admin extends UserController {
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
+	}
+	
+	public function present_upload($uuid = '') {
+		if ($this->permission != OFFICE_ADMIN) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		if ($uuid === '') {
+			show_error('申请流水号出错');
+		}
+		
+		$data = array(
+					'uuid' => $uuid,
+					'passport_pic' => SCAN_DOMAIN .$uuid .'/passport',
+				);
+		$data['user'] = $this->user_info;
+		
+		$this->load->view('offline_present_upload', $data);
+	}
+	
+	private function upload_pics($uuid, $filename) {
+		if (($_FILES[$filename]['type'] == 'image/png') || ($_FILES[$filename]['type'] == 'image/jpeg') ||
+			($_FILES[$filename]['type'] == 'image/pjpeg') || ($_FILES[$filename]['type'] == 'image/gif')) {
+			if ($_FILES[$filename]['error'] > 0) {
+				return FALSE;
+			} else {
+				$path = SCAN_PATH .$uuid .'/';
+				if (file_exists($path) === FALSE) {
+					mkdir($path, 0777);
+				}
+				$destination = $path.$filename;
+				if (move_uploaded_file($_FILES[$filename]['tmp_name'], $destination)) {
+					return TRUE;
+				}
+			}
+		} else {
+			return FALSE;
+		}
+	}
+	
+	public function upload_scan_file() {
+		if ($this->permission != OFFICE_ADMIN) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data['uuid'] = trim($this->input->post('uuid', TRUE));
+		
+		if ($data['uuid'] === '') {
+			show_error('申请流水号出错');
+		}
+		
+		$scan_files = array('passport');
+		foreach ($scan_files as $val) {
+			if (!$this->upload_pics($data['uuid'], $val)) {
+				$msg['tips'] = '上传失败，请返回重新操作！';
+				$link = 'javascript:history.go(-1);';
+				$location = '返回上一步';
+				$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+				show_error($msg);
+			}
+		}
+		
+		header('Location: '.base_url('/admin/audit?orderby=5'));
 	}
 	
 	public function audit($page = 1) {

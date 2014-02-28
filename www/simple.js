@@ -12,6 +12,9 @@ function province_list(selection) {
 				if (selection === 'all') {
 					options += '<option value="0">全部</option>';
 				}
+				if (selection === 'new') {
+					options += '<option value="0">请选择省份</option>';
+				}
 				for (var i = 0; i < len; i ++) {
 					options += '<option value="' + json.provinces[i].id + '">' + json.provinces[i].province_cn + '</option>';
 				}
@@ -43,11 +46,49 @@ function city_list(selection) {
 				if (selection === 'all') {
 					options += '<option value="0">全部</option>';
 				}
+				if (selection === 'new') {
+					options += '<option value="0">请选择城市</option>';
+				}
 				for (var i = 0; i < len; i ++) {
 					options += '<option value="' + json.cities[i].id + '">' + json.cities[i].city_cn + '</option>';
 				}
 				$('#cities').empty();
 				$('#cities').append(options);
+			} else {
+				alert('Permission Error');
+			}
+		},
+		error: function() {
+			alert('Networking Error');
+		}
+	});
+}
+
+function agency_list(selection) {
+	var province_id = $('#provinces').val();
+	var city_id = $('#cities').val();
+	var permission = $('#permissions').val();
+	$.ajax({
+		url: '/admin/agency_list',
+		data: {province_id: province_id, city_id: city_id, permission: permission},
+		async: false,
+		type: 'GET',
+		dataType: 'json',
+		success: function(json) {
+			if (json.msg === 'success') {
+				var options = '';
+				var len = json.agencies.length;
+				if (selection === 'all') {
+					options += '<option value="0">全部</option>';
+				}
+				if (selection === 'new') {
+					options += '<option value="0">请选择机构</option>';
+				}
+				for (var i = 0; i < len; i ++) {
+					options += '<option value="' + json.agencies[i].id + '">' + json.agencies[i].name_cn + '</option>';
+				}
+				$('#agencies').empty();
+				$('#agencies').append(options);
 			} else {
 				alert('Permission Error');
 			}

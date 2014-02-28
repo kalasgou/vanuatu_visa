@@ -1135,7 +1135,7 @@ class Admin extends UserController {
 		readfile($filename);
 	}
 	
-	/*public function agency($page = 1) {
+	public function agency($page = 1) {
 		if ($this->permission != SYSTEM_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
@@ -1178,31 +1178,50 @@ class Admin extends UserController {
 		$this->load->view('admin_agency', $data);
 	}
 	
-	public function update_agency() {
+	public function new_province_city_agency() {
 		if ($this->permission != SYSTEM_ADMIN) {
 			$ret['msg'] = 'forbidden';
 			echo json_encode($ret);
 			exit('Account Not Allowed to Perform This Task');
 		}
 		
-		$data['id'] = trim($this->input->post('id', TRUE));
-		$data['city_cn'] = trim($this->input->post('city_cn', TRUE));
-		$data['addr_cn'] = trim($this->input->post('addr_cn', TRUE));
-		//$data['city_en'] = trim($this->input->post('city_en', TRUE));
-		//$data['addr_en'] = trim($this->input->post('addr_en', TRUE));
-		$data['contact'] = trim($this->input->post('contact', TRUE));
-		$data['date'] = $_SERVER['REQUEST_TIME'];
+		$data['province_id'] = intval($this->input->post('province_id', TRUE));
+		$data['new_province'] = trim($this->input->post('new_province', TRUE));
+		$data['city_id'] = intval($this->input->post('city_id', TRUE));
+		$data['new_city'] = trim($this->input->post('new_city', TRUE));
+		$data['new_agency_name'] = trim($this->input->post('new_agency_name', TRUE));
+		$data['new_agency_addr'] = trim($this->input->post('new_agency_addr', TRUE));
+		$data['permission'] = intval($this->input->post('permission', TRUE));
+		$data['time'] = $_SERVER['REQUEST_TIME'];
 		
 		$this->load->model('admin_model', 'adm');
 		
-		if ($this->adm->upsert_agency($data) > 0) {
-			$ret['msg'] = 'success';
-		} else {
-			$ret['msg'] = 'fail';
+		$ret['msg'] = 'fail';
+		
+		if ($data['province_id'] === 0 && $data['new_province'] !== '') {
+			if (($data['province_id'] = $this->adm->upsert_province($data)) <= 0) {
+				$ret['msg'] = 'province fail';
+				echo json_encode($ret);
+				exit();
+			}
+		}
+		
+		if ($data['city_id'] === 0 && $data['new_city'] !== '') {
+			if (($data['city_id'] = $this->adm->upsert_city($data)) <= 0) {
+				$ret['msg'] = 'city fail';
+				echo json_encode($ret);
+				exit();
+			}
+		}
+		var_dump($data);
+		if ($data['province_id'] > 0 && $data['city_id'] > 0 && $data['new_agency_name'] !== '' && $data['new_agency_addr'] !== '') {
+			if ($this->adm->upsert_agency($data) > 0) {
+				$ret['msg'] = 'success';
+			}
 		}
 		
 		echo json_encode($ret);
-	}*/
+	}
 	
 	public function province_list() {
 		header('Content-Type: application/json; charset=utf-8');

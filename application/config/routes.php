@@ -41,6 +41,7 @@
 $route['default_controller'] = 'welcome';
 $route['login'] = 'welcome/login';
 $route['register'] = 'welcome/register';
+$route['partner'] = 'welcome/partner';
 //$route['admin_login'] = 'welcome/admin_login';
 //$route['admin_register'] = 'welcome/admin_register';
 $route['logout'] = 'user/logout';

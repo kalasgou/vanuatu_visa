@@ -385,8 +385,39 @@
 			return $this->admin_db->count_all_results('agency');
 		}
 		
+		public function upsert_province($data) {
+			$sql = 'INSERT INTO province (province_cn, date) VALUES (?, ?) ON DUPLICATE KEY UPDATE date = VALUES(date)';
+			$args = array(
+						'province_cn' => $data['new_province'],
+						'date' => $data['time']
+					);
+			$this->admin_db->query($sql, $args);
+			
+			return $this->admin_db->insert_id();
+		}
+		
+		public function upsert_city($data) {
+			$sql = 'INSERT INTO city (province_id, city_cn, date) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE date = VALUES(date)';
+			$args = array(
+						'province_id' => $data['province_id'],
+						'city_cn' => $data['new_city'],
+						'date' => $data['time']
+					);
+			$this->admin_db->query($sql, $args);
+			
+			return $this->admin_db->insert_id();
+		}
+		
 		public function upsert_agency($data) {
-			return $this->admin_db->affected_rows();
+			$this->admin_db->set('province_id', $data['province_id']);
+			$this->admin_db->set('city_id', $data['city_id']);
+			$this->admin_db->set('permission', $data['permission']);
+			$this->admin_db->set('name_cn', $data['new_agency_name']);
+			$this->admin_db->set('addr_cn', $data['new_agency_addr']);
+			$this->admin_db->set('date', $data['time']);
+			$this->admin_db->insert('agency');
+			
+			return $this->admin_db->insert_id();
 		}
 	}
 ?>

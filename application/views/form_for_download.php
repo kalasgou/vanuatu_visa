@@ -34,9 +34,9 @@
 		<br>
 		<div id="application_form">
 			<div>
-				1、Full name 姓名:
-				(English英文) <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $name_en;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-				(Chinese中文) <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $name_cn;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				1、Full Name 姓名:
+				First Name 名 <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $first_name;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				Last Name 姓 <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $last_name;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div>
 				2、Mr.先生
@@ -54,7 +54,7 @@
 				Year 年 <span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $birth_year;?>&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div>
-				5、Place of birth 出生地点:
+				5、Place of Birth 出生地点:
 				<span id="answer" style="width:200px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $birth_place;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div>

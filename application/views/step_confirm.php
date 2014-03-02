@@ -48,9 +48,9 @@
 			<p></p>
 			<div id="application_form">
 				<div>
-					1、Full name 姓名:
-					(English英文) <span id="answer" style="width:150px;"><?php echo $name_en;?></span>
-					(Chinese中文) <span id="answer" style="width:150px;"><?php echo $name_cn;?></span>
+					1、Full Name 姓名:
+					First Name 名 <span id="answer" style="width:150px;"><?php echo $first_name;?></span>
+					Last Name 姓 <span id="answer" style="width:150px;"><?php echo $last_name;?></span>
 				</div>
 				<div>
 					2、Mr.先生
@@ -68,7 +68,7 @@
 					Year 年 <span id="answer" style="width:60px;"><?php echo $birth_year;?></span>
 				</div>
 				<div>
-					5、Place of birth 出生地点:
+					5、Place of Birth 出生地点:
 					<span id="answer" style="width:200px;"><?php echo $birth_place;?></span>
 				</div>
 				<div>
@@ -82,20 +82,20 @@
 					$occupation_info = json_decode($occupation_info, TRUE);
 				?>
 				<div>
-					7、Occupation 职业: 
+					7、Occupation 职业<label id="not_necessary">*</label>: 
 					<span id="answer" style="width:200px;"><?php echo $occupation_info['occupation'];?></span>
 				</div>
 				<div>
-					8、(a) Employer 就业单位:
+					8、(a) Employer 就业单位<label id="not_necessary">*</label>:
 					<span id="answer" style="width:250px;"><?php echo $occupation_info['employer'];?></span>
 					Tel No.电话: <span id="answer" style="width:150px;"><?php echo $occupation_info['employer_tel'];?></span><br>&nbsp;&nbsp;
-					(b) Address 单位地址: <span id="answer" style="width:350px;"><?php echo $occupation_info['employer_addr'];?></span>
+					(b) Address 单位地址<label id="not_necessary">*</label>: <span id="answer" style="width:350px;"><?php echo $occupation_info['employer_addr'];?></span>
 				</div>
 				<?php
 					$home_info = json_decode($home_info, TRUE);
 				?>
 				<div>
-					9、Home Address 家庭住址:
+					9、Home Address 家庭住址<label id="not_necessary">*</label>:
 					<span id="answer" style="width:350px;"><?php echo $home_info['home_addr'];?></span><br>&nbsp;&nbsp;
 					Tel No.电话: <span id="answer" style="width:150px;"><?php echo $home_info['home_tel'];?></span>
 				</div>

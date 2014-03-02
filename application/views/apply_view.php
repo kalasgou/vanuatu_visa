@@ -59,9 +59,9 @@
 	<body>
 		<div id="application_form">
 			<div>
-				1、Full name 姓名:
-				(English英文) <span id="answer" style="width:150px;"><?php echo $name_en;?></span>
-				(Chinese中文) <span id="answer" style="width:150px;"><?php echo $name_cn;?></span>
+				1、Full Name 姓名:
+				First Name 名 <span id="answer" style="width:150px;"><?php echo $first_name;?></span>
+				Last Name 姓 <span id="answer" style="width:150px;"><?php echo $last_name;?></span>
 			</div>
 			<div>
 				2、Mr.先生
@@ -79,7 +79,7 @@
 				Year 年 <span id="answer" style="width:60px;"><?php echo $birth_year;?></span>
 			</div>
 			<div>
-				5、Place of birth 出生地点:
+				5、Place of Birth 出生地点:
 				<span id="answer" style="width:200px;"><?php echo $birth_place;?></span>
 			</div>
 			<div>

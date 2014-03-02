@@ -18,6 +18,19 @@
 			return $query->row_array();
 		}
 		
+		public function retrieve_records($data, $page) {
+			$this->admin_db->select('userid, uuid, status, first_name, last_name, birth_day, birth_month, birth_year, gender, nationality, passport_number, submit_time, audit_time, pay_time, fee, approve_time, visa_no');
+			//$this->admin_db->where('status >= ', APPLY_WAITING);
+			$this->admin_db->where('agency_id', $data['agency_id']);
+			$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
+			$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
+			$this->admin_db->order_by('submit_time', 'desc');
+			$this->admin_db->limit(1000, 1000 * $page);
+			$query = $this->admin_db->get('visa_applying');
+			
+			return $query->result_array();
+		}
+		
 		/*public function select_agency($data) {
 			$sql = 	'INSERT INTO visa_applying (userid, uuid, province_id, city_id, modify_time) '.
 					'VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE '.
@@ -38,10 +51,10 @@
 		}*/
 		
 		public function update_basic_info($data) {
-			$sql = 	'INSERT INTO visa_applying (userid, uuid, province_id, city_id, name_en, name_cn, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, modify_time) '.
+			$sql = 	'INSERT INTO visa_applying (userid, uuid, province_id, city_id, first_name, last_name, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, modify_time) '.
 					'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE '.
-					'name_en = VALUES(name_en), '.
-					'name_cn = VALUES(name_cn), '.
+					'first_name = VALUES(first_name), '.
+					'last_name = VALUES(last_name), '.
 					'gender = VALUES(gender), '.
 					'family = VALUES(family), '.
 					'nationality = VALUES(nationality), '.
@@ -57,8 +70,8 @@
 						'uuid' => $data['uuid'],
 						'province_id' => $data['province_id'],
 						'city_id' => $data['city_id'],
-						'name_en' => $data['name_en'],
-						'name_cn' => $data['name_cn'],
+						'first_name' => $data['first_name'],
+						'last_name' => $data['last_name'],
 						'gender' => $data['gender'],
 						'family' => $data['family'],
 						'nationality' => $data['nationality'],
@@ -225,7 +238,7 @@
 		}
 		
 		public function get_records($data) {
-			$this->apply_db->select('uuid, name_en, name_cn, status, passport_number, submit_time, audit_time, pay_time, approve_time, fee');
+			$this->apply_db->select('uuid, first_name, last_name, status, passport_number, submit_time, audit_time, pay_time, approve_time, fee');
 			$this->apply_db->where('userid', $data['userid']);
 			switch ($data['orderby']) {
 				case DEFAULT_QUERY : 
@@ -272,6 +285,18 @@
 			}
 			
 			return FALSE;
+		}
+		
+		public function get_admin_userid($uuid, $start, $end) {
+			$sql = 'SELECT admin_userid FROM visa_auditing WHERE uuid = ? AND status >= ? AND status <= ? LIMIT 1';
+			$query = $this->apply_db->query($sql, array($uuid, $start, $end));
+			
+			if ($query->num_rows() > 0) {
+				$row = $query->row_array();
+				return $row['admin_userid'];
+			} else {
+				return 0;
+			}
 		}
 		
 		public function get_auditing_records_by_uuid($uuid) {

@@ -115,7 +115,7 @@
 				<thead>
 					<tr>
 						<th>申请流水号</th>
-						<th>申请人英文/中文姓名</th>
+						<th>申请人姓名</th>
 						<th>护照号</th>
 						<th>签证费用</th>
 						<th>提交日期</th>
@@ -131,7 +131,7 @@
 					?>
 					<tr>
 						<td><?php echo $one['uuid'];?></td>
-						<td><?php echo $one['name_en'];?> / <?php echo $one['name_cn'];?></td>
+						<td><?php echo $one['first_name'];?> <?php echo $one['last_name'];?></td>
 						<td><?php echo $one['passport_number'];?></td>
 						<td><?php echo $one['fee'];?></td>
 						<td><span title="具体时间 <?php echo $one['submit_time'];?>"><?php echo substr($one['submit_time'], 0, 10);?></span></td>

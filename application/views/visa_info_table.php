@@ -50,19 +50,19 @@
 						<td><?php echo $gender;?></td>
 					</tr>
 					<tr>
-						<td>出生地/Place of Birth</td>
+						<td>出生地 / Place of Birth</td>
 						<td><?php echo $birth_place;?></td>
 					</tr>
 					<tr>
-						<td>出生日期/Date of Birth</td>
+						<td>出生日期 / Date of Birth</td>
 						<td><?php echo $birth_date;?></td>
 					</tr>
 					<tr>
-						<td>护照号/Passport No.</td>
+						<td>护照号 / Passport No.</td>
 						<td><?php echo $passport_number;?></td>
 					</tr>
 					<tr>
-						<td>护照签发地/Place of Issue</td>
+						<td>护照签发地 / Place of Issue</td>
 						<td><?php echo $passport_place;?></td>
 					</tr>
 					<tr>
@@ -74,28 +74,38 @@
 						<td><?php echo $passport_expiry;?></td>
 					</tr>
 					<tr>
-						<td>签证类型/Visa Type</td>
+						<td>签证类型 / Visa Type</td>
 						<td><?php echo $type;?></td>
 					</tr>
 					<tr>
-						<td>签证号/Visa No.</td>
+						<td>签证号 / Visa No.</td>
 						<td><?php echo $visa_number;?></td>
 					</tr>
 					<tr>
-						<td>签证签发日期/Visa Date of Issue</td>
+						<td>签证签发日期 / Visa Date of Issue</td>
 						<td><?php echo $visa_date;?></td>
 					</tr>
 					<tr>
-						<td>签证有效日期/Visa Date of Expiry</td>
+						<td>签证有效日期 / Visa Date of Expiry</td>
 						<td><?php echo $visa_expiry;?></td>
 					</tr>
 					<tr>
-						<td>最长逗留时间/Max Days of Stay</td>
+						<td>最长逗留时间 / Max Days of Stay</td>
 						<td><?php echo $max_stay;?></td>
 					</tr>
 					<tr>
+						<td>申请进度 / Application Status</td>
+						<td><?php echo $application_status;?></td>
+					</tr>
+					<tr>
+						<td>签证状态 / Visa Status</td>
+						<td><?php echo $visa_status;?></td>
+					</tr>
+					<?php if ($status == APPLY_ACCEPTED) { ?>
+					<tr>
 						<td colspan="2" align="right"><button class="btn btn-success" type="button" onclick="javascript:location.href='/api/download_visa/<?php echo $apply_id;?>/<?php echo $visa_number;?>'">下载签证</button></td>
 					</tr>
+					<? } ?>
 					<?php } else { ?>
 						<tr>
 						<td colspan="2" align="center">找不到所需签证信息 / No Visa Found</td>

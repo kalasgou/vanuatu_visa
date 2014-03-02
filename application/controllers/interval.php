@@ -59,7 +59,7 @@
 				$uuid = pop_email_queue('pass_notification');
 				if ($uuid) {
 					$info = $this->ivm->combined_info($uuid);
-					$greeting = '<p>尊敬的<b>'.$info['name_cn'].'/'.$info['name_en'].'</b>'.($info['gender'] == 1 ? '先生' : ($info['gender'] == 2 ? '女士' : '小姐')).'：</p>';
+					$greeting = '<p>尊敬的<b>'.$info['first_name'].' '.$info['last_name'].'</b>'.($info['gender'] == 1 ? '先生' : ($info['gender'] == 2 ? '女士' : '小姐')).'：</p>';
 					$notification = '<p>你申请号<b>'.$uuid.'</b>的签证申请已通过初步审核，请在15天内带备相关证明及签证费用前往办事处作进一步确认。</p>';
 					
 					$data = array();
@@ -94,7 +94,7 @@
 				$uuid = pop_email_queue('visa_notification');
 				if ($uuid) {
 					$info = $this->ivm->combined_info($uuid);
-					$greeting = '<p>尊敬的<b>'.$info['name_cn'].'/'.$info['name_en'].'</b>'.($info['gender'] == 1 ? '先生' : ($info['gender'] == 2 ? '女士' : '小姐')).'：</p>';
+					$greeting = '<p>尊敬的<b>'.$info['first_name'].' '.$info['last_name'].'</b>'.($info['gender'] == 1 ? '先生' : ($info['gender'] == 2 ? '女士' : '小姐')).'：</p>';
 					$notification = '<p>你申请号<b>'.$uuid.'</b>的签证申请已成功通过全部审核并获得即日起30天有效期的Vanuatu签证（对应护照编号为<b>'.$info['passport_number'].'</b>），签证编号为<b>'.$info['visa_no'].'</b>。</p>';
 					
 					$data = array();

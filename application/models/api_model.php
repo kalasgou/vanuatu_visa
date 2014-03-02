@@ -9,7 +9,7 @@
 		}
 		
 		public function get_visa_info($data) {
-			$this->db_reader->select('visa_applying.uuid as uuid, name_cn, name_en, gender, birth_day, birth_month, birth_year, birth_place, birth_place, passport_number, passport_place, passport_date, passport_expiry, fee, visa_approved.visa_no as visa_no, start_time, end_time');
+			$this->db_reader->select('visa_applying.uuid as uuid, status, first_name, last_name, gender, birth_day, birth_month, birth_year, birth_place, birth_place, passport_number, passport_place, passport_date, passport_expiry, fee, visa_approved.visa_no as visa_no, start_time, end_time');
 			$this->db_reader->from('visa_applying');
 			$this->db_reader->join('visa_approved', 'visa_approved.uuid = visa_applying.uuid', 'left');
 			if ($data['uuid'] !== '') {

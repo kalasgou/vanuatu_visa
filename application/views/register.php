@@ -18,7 +18,7 @@
 			});
 			
 			function submit_form() {
-				return check_register_email() && check_password() && check_nickname() && check_agency() && check_phone() && reshape_password();
+				return check_register_email() && check_password() && check_nickname() && check_province_city_agency() && check_phone() && reshape_password();
 			}
 		</script>
 		<style type="text/css">
@@ -67,7 +67,7 @@
 				<div class="form-group">
 					<label for="inputPermission3" class="col-sm-2 control-label">帐号类型:</label>
 					<div class="col-sm-10">
-						<select class="form-control" id="permissions" name="permission" onchange="user_type_change();">
+						<select class="form-control" id="permissions" name="permission" onchange="agency_list();">
 							<option value="<?php echo RESERVATION_USER;?>">预约用户</option>
 							<option value="<?php echo OFFICE_ADMIN;?>">办事处</option>
 							<option value="<?php echo EMBASSY_ADMIN;?>">领事馆</option>
@@ -80,6 +80,7 @@
 						<select class="form-control" id="provinces" name="province_id" onchange="city_list();">
 							<option value="0">加载中</option>
 						</select>
+						<span id="province_empty" class="error_tips">请选择有效的省份</span>
 					</div>
 				</div>
 				<div class="form-group">
@@ -88,6 +89,7 @@
 						<select class="form-control" id="cities" name="city_id" onchange="agency_list();">
 							<option value="0">加载中</option>
 						</select>
+						<span id="city_empty" class="error_tips">请选择有效的城市</span>
 					</div>
 				</div>
 				<div class="form-group">
@@ -96,8 +98,8 @@
 						<select class="form-control" id="agencies" name="agency_id" onchange="">
 							<option value="0">加载中</option>
 						</select>
-						<input type="text" class="form-control" name="agency" id="inputAgency3" placeholder="Agency"/>
-						<span id="agency_empty" class="error_tips">请填写帐户所属机构全称</span>
+						<input id="agency_text" name="agency" type="hidden" value=""/>
+						<span id="agency_empty" class="error_tips">请选择有效的机构</span>
 					</div>
 				</div>
 				<div class="form-group">

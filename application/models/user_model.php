@@ -268,6 +268,53 @@
 			return $query->row_array();
 		}
 		
+		public function get_reservation_users_by_agency($agency_id) {
+			$reservation_users = array();
+			
+			$this->user_db->select('userid, nickname, agency');
+			$this->user_db->where('agency_id', $agency_id);
+			$this->user_db->where('permission', RESERVATION_USER);
+			$query = $this->user_db->get('user');
+			
+			foreach ($query->result_array() as $one) {
+				$reservation_users[$one['userid']]['nickname'] = $one['nickname'];
+				$reservation_users[$one['userid']]['agency'] = $one['agency'];
+			}
+			
+			return $reservation_users;
+		}
+		
+		public function get_office_admins_by_province($province_id) {
+			$office_admins = array();
+			
+			$this->user_db->select('userid, nickname, agency');
+			$this->user_db->where('province_id', $province_id);
+			$this->user_db->where('permission', OFFICE_ADMIN);
+			$query = $this->user_db->get('user');
+			
+			foreach ($query->result_array() as $one) {
+				$office_admins[$one['userid']]['nickname'] = $one['nickname'];
+				$office_admins[$one['userid']]['agency'] = $one['agency'];
+			}
+			
+			return $office_admins;
+		}
+		
+		public function get_embassy_admins_by_all() {
+			$embassy_admins = array();
+			
+			$this->user_db->select('userid, nickname, agency');
+			$this->user_db->where('permission', EMBASSY_ADMIN);
+			$query = $this->user_db->get('user');
+			
+			foreach ($query->result_array() as $one) {
+				$embassy_admins[$one['userid']]['nickname'] = $one['nickname'];
+				$embassy_admins[$one['userid']]['agency'] = $one['agency'];
+			}
+			
+			return $embassy_admins;
+		}
+		
 		public function __call($foo, $bar) {
 			return FALSE;
 		}

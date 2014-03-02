@@ -32,8 +32,8 @@ class Admin extends UserController {
 					'userid' => PRESENT_USERID,
 					'province_id' => $this->user_info['province_id'],
 					'city_id' => $this->user_info['city_id'],
-					'name_en' => '',
-					'name_cn' => '',
+					'first_name' => '',
+					'last_name' => '',
 					'gender' => '',
 					'family' => '',
 					'nationality' => '',
@@ -153,8 +153,8 @@ class Admin extends UserController {
 		}
 		
 		// Basic Info
-		$data['name_en'] = trim($this->input->post('name_en', TRUE));
-		$data['name_cn'] = trim($this->input->post('name_cn', TRUE));
+		$data['first_name'] = trim($this->input->post('first_name', TRUE));
+		$data['last_name'] = trim($this->input->post('last_name', TRUE));
 		$data['gender'] = trim($this->input->post('gender', TRUE));
 		$data['family'] = trim($this->input->post('family', TRUE));
 		$data['nationality'] = trim($this->input->post('nationality', TRUE));
@@ -162,12 +162,6 @@ class Admin extends UserController {
 		$data['birth_month'] = trim($this->input->post('birth_month', TRUE));
 		$data['birth_year'] = trim($this->input->post('birth_year', TRUE));
 		$data['birth_place'] = trim($this->input->post('birth_place', TRUE));
-		$data['occupation'] = trim($this->input->post('occupation', TRUE));
-		$data['employer'] = trim($this->input->post('employer', TRUE));
-		$data['employer_tel'] = trim($this->input->post('employer_tel', TRUE));
-		$data['employer_addr'] = trim($this->input->post('employer_addr', TRUE));
-		$data['home_addr'] = trim($this->input->post('home_addr', TRUE));
-		$data['home_tel'] = trim($this->input->post('home_tel', TRUE));
 		
 		// Passport Info
 		$data['passport_number'] = trim($this->input->post('passport_number', TRUE));
@@ -192,6 +186,13 @@ class Admin extends UserController {
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
+		
+		$data['occupation'] = trim($this->input->post('occupation', TRUE));
+		$data['employer'] = trim($this->input->post('employer', TRUE));
+		$data['employer_tel'] = trim($this->input->post('employer_tel', TRUE));
+		$data['employer_addr'] = trim($this->input->post('employer_addr', TRUE));
+		$data['home_addr'] = trim($this->input->post('home_addr', TRUE));
+		$data['home_tel'] = trim($this->input->post('home_tel', TRUE));
 		
 		// Travel Info
 		$data['purpose'] = trim($this->input->post('purpose', TRUE));
@@ -766,7 +767,7 @@ class Admin extends UserController {
 
 				$document = $PHPWord->loadTemplate(VISA_TEMPLATE);
 
-				$document->setValue('name', $info['name_en'].'/'.$info['name_cn']);
+				$document->setValue('name', $info['first_name'].' '.$info['last_name']);
 				$document->setValue('visa_no', $data['visa_no']);
 				$document->setValue('date_of_issue_v', date('j M, Y', $data['start_time']));
 				$document->setValue('date_of_expiry_v', date('j M, Y', $data['end_time']));
@@ -878,16 +879,6 @@ class Admin extends UserController {
 	}*/
 	
 	public function download_excel() {
-		if ($this->permission != OFFICE_ADMIN && $this->permission != SYSTEM_ADMIN) {
-			$msg['tips'] = '你的帐户无此操作权限！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
-		}
-		
-		$data['province_id'] = $this->user_info['province_id'];
-		$data['city_id'] = $this->user_info['city_id'];
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
 		
@@ -902,13 +893,13 @@ class Admin extends UserController {
 		$excel	->setActiveSheetIndex(0)
 				->setCellValue('A1', '')
 				->setCellValue('B1', '申请流水号')
-				->setCellValue('C1', '申请人中文/英文姓名')
+				->setCellValue('C1', '申请人姓名')
 				->setCellValue('D1', '出生日期')
 				->setCellValue('E1', '性别')
 				->setCellValue('F1', '国籍')
 				->setCellValue('G1', '护照号')
 				->setCellValue('H1', '申请时间')
-				->setCellValue('I1', '当前申请状态')
+				->setCellValue('I1', '申请状态')
 				->setCellValue('J1', '审核时间')
 				->setCellValue('K1', '缴费时间')
 				->setCellValue('L1', '签证费用')
@@ -932,7 +923,7 @@ class Admin extends UserController {
 				$excel	->setActiveSheetIndex(0)
 						->setCellValue('A'.$cur_column, $i)
 						->setCellValue('B'.$cur_column, $one['uuid'])
-						->setCellValue('C'.$cur_column, $one['name_cn'].'/'.$one['name_en'])
+						->setCellValue('C'.$cur_column, $one['first_name'].' '.$one['last_name'])
 						->setCellValue('D'.$cur_column, date('Y-m-d', strtotime($one['birth_year'].'-'.$one['birth_month'].'-'.$one['birth_day'])))
 						->setCellValue('E'.$cur_column, ($one['gender'] == 1 ? '男' : '女'))
 						->setCellValue('F'.$cur_column, $one['nationality'])
@@ -946,7 +937,7 @@ class Admin extends UserController {
 						->setCellValue('N'.$cur_column, $one['visa_no']);
 				
 				$name_office = '';
-				$admin_userids = $this->adm->get_admin_userids($one['uuid'], 21, 41);
+				$admin_userids = $this->adm->get_admin_userids($one['uuid'], APPLY_NOTPASSED, APPLY_PASSED);
 				foreach ($admin_userids as $admin) {
 					if (!isset($office_admins[$admin['admin_userid']]['realname'])) {
 						$info = $this->user->user_info($admin['admin_userid']);
@@ -956,7 +947,7 @@ class Admin extends UserController {
 				}
 				
 				$name_embassy = '';
-				$admin_userids = $this->adm->get_admin_userids($one['uuid'], 91, 101);
+				$admin_userids = $this->adm->get_admin_userids($one['uuid'], APPLY_REJECTED, VISA_EXPIIRED);
 				foreach ($admin_userids as $admin) {
 					if (!isset($embassy_admins[$admin['admin_userid']]['realname'])) {
 						$info = $this->user->user_info($admin['admin_userid']);
@@ -1139,7 +1130,7 @@ class Admin extends UserController {
 		if ($this->permission != SYSTEM_ADMIN) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -1151,7 +1142,7 @@ class Admin extends UserController {
 		$config['base_url'] = '/admin/agency/';
 		$config['uri_segment'] = 3;
 		$config['num_links'] = 2;
-		$config['total_rows'] = $this->adm->sum_agency();
+		$config['total_rows'] = $this->adm->sum_agencies();
 		$config['per_page'] = 20;
 		$config['use_page_numbers'] = TRUE;
 		if (count($_GET) > 0) {
@@ -1168,11 +1159,17 @@ class Admin extends UserController {
 		
 		$data['user'] = $this->user_info;
 		$data['pagination'] = $this->pagination->create_links();
-		$data['agencies'] = $this->adm->get_agencies($page - 1);
+		$data['agencies'] = $this->adm->get_agency_list($page - 1);
 		$data['num_agencies'] = $config['total_rows'];
 		
+		$locations = $this->adm->get_locations();
+		
 		foreach ($data['agencies'] as &$one) {
-			$one['status_str'] = $one['status'] == 1 ? '正常' : '失效';
+			$one['province_str'] = $locations[$one['city_id']]['province_cn'];
+			$one['city_str'] = $locations[$one['city_id']]['city_cn'];
+			
+			$one['permission_str'] = $this->config->item($one['permission'], 'agency_type');
+			$one['status_str'] = $this->config->config['account_status'][$one['status']];
 		}
 
 		$this->load->view('admin_agency', $data);
@@ -1191,6 +1188,7 @@ class Admin extends UserController {
 		$data['new_city'] = trim($this->input->post('new_city', TRUE));
 		$data['new_agency_name'] = trim($this->input->post('new_agency_name', TRUE));
 		$data['new_agency_addr'] = trim($this->input->post('new_agency_addr', TRUE));
+		$data['new_agency_cont'] = trim($this->input->post('new_agency_cont', TRUE));
 		$data['permission'] = intval($this->input->post('permission', TRUE));
 		$data['time'] = $_SERVER['REQUEST_TIME'];
 		
@@ -1213,8 +1211,8 @@ class Admin extends UserController {
 				exit();
 			}
 		}
-		var_dump($data);
-		if ($data['province_id'] > 0 && $data['city_id'] > 0 && $data['new_agency_name'] !== '' && $data['new_agency_addr'] !== '') {
+		
+		if ($data['province_id'] > 0 && $data['city_id'] > 0 && $data['new_agency_name'] !== '' && $data['new_agency_addr'] !== '' && $data['new_agency_cont']) {
 			if ($this->adm->upsert_agency($data) > 0) {
 				$ret['msg'] = 'success';
 			}
@@ -1256,7 +1254,6 @@ class Admin extends UserController {
 	}
 	
 	public function agency_list() {
-		$data['province_id'] = intval($this->input->get('province_id', TRUE));
 		$data['city_id'] = intval($this->input->get('city_id', TRUE));
 		$data['permission'] = intval($this->input->get('permission', TRUE));
 		
@@ -1273,6 +1270,12 @@ class Admin extends UserController {
 		$ret['agencies'] = $this->adm->get_agencies($data);
 		
 		echo json_encode($ret);
+	}
+	
+	public function fix_relation() {
+		$this->load->library('RedisDB');
+		$this->load->model('admin_model', 'adm');
+		$this->adm->fix_relation();
 	}
 }
 

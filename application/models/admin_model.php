@@ -40,7 +40,7 @@
 		}
 		
 		public function get_applications($data) {
-			$this->admin_db->select('uuid, name_en, name_cn, status, passport_number, submit_time, audit_time, pay_time, approve_time, fee');
+			$this->admin_db->select('uuid, first_name, last_name, status, passport_number, submit_time, audit_time, pay_time, approve_time, fee');
 			/*if ($data['province_id'] != 0 || $data['city_id'] != 0) {
 				$this->admin_db->where('province_id', $data['province_id']);
 				$this->admin_db->where('city_id', $data['city_id']);	
@@ -84,11 +84,7 @@
 		}
 		
 		public function retrieve_records($data, $page) {
-			$this->admin_db->select('uuid, name_cn, name_en, birth_day, birth_month, birth_year, gender, nationality, passport_number, submit_time, status, audit_time, pay_time, fee, approve_time, visa_no');
-			if ($data['province_id'] != 0 || $data['city_id'] != 0) {
-				$this->admin_db->where('province_id', $data['province_id']);
-				$this->admin_db->where('city_id', $data['city_id']);
-			}
+			$this->admin_db->select('userid, uuid, status, first_name, last_name, birth_day, birth_month, birth_year, gender, nationality, passport_number, submit_time, audit_time, pay_time, fee, approve_time, visa_no');
 			$this->admin_db->where('status >= ', APPLY_WAITING);
 			$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
 			$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
@@ -163,10 +159,15 @@
 		}
 		
 		public function get_admin_userids($uuid, $start, $end) {
-			$sql = 'SELECT DISTINCT(admin_userid) FROM visa_auditing WHERE uuid = ? AND status >= ? AND status <= ?';
+			$sql = 'SELECT admin_userid FROM visa_auditing WHERE uuid = ? AND status >= ? AND status <= ? LIMIT 1';
 			$query = $this->admin_db->query($sql, array($uuid, $start, $end));
 			
-			return $query->result_array();
+			if ($query->num_rows() > 0) {
+				$row = $query->row_array();
+				return $row['admin_userid'];
+			} else {
+				return 0;
+			}
 		}
 		
 		public function sum_auditing_records($userid) {
@@ -219,11 +220,11 @@
 			$behaviour_info['refused'] = $data['refused'];
 			$behaviour_info['refuse_date'] = $data['refuse_date'];
 			
-			$sql = 	'INSERT INTO visa_applying (userid, uuid, province_id, city_id, status, name_en, name_cn, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, passport_number, passport_place, passport_date, passport_expiry, purpose, other_purpose, destination, relative_info, detail_info, children_info, behaviour_info, modify_time, submit_time, fee) '.
+			$sql = 	'INSERT INTO visa_applying (userid, uuid, province_id, city_id, status, first_name, last_name, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, passport_number, passport_place, passport_date, passport_expiry, purpose, other_purpose, destination, relative_info, detail_info, children_info, behaviour_info, modify_time, submit_time, fee) '.
 					'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE '.
 					'status = VALUES(status), '.
-					'name_en = VALUES(name_en), '.
-					'name_cn = VALUES(name_cn), '.
+					'first_name = VALUES(first_name), '.
+					'last_name = VALUES(last_name), '.
 					'gender = VALUES(gender), '.
 					'family = VALUES(family), '.
 					'nationality = VALUES(nationality), '.
@@ -253,8 +254,8 @@
 						'province_id' => $data['province_id'],
 						'city_id' => $data['city_id'],
 						'status' => $data['status'],
-						'name_en' => $data['name_en'],
-						'name_cn' => $data['name_cn'],
+						'first_name' => $data['first_name'],
+						'last_name' => $data['last_name'],
 						'gender' => $data['gender'],
 						'family' => $data['family'],
 						'nationality' => $data['nationality'],
@@ -385,6 +386,14 @@
 			return $this->admin_db->count_all_results('agency');
 		}
 		
+		public function get_agency_list($page) {
+			$this->admin_db->limit(20, 20 * $page);
+			$this->admin_db->order_by('date', 'desc');
+			$query = $this->admin_db->get('agency');
+			
+			return $query->result_array();
+		}
+		
 		public function upsert_province($data) {
 			$sql = 'INSERT INTO province (province_cn, date) VALUES (?, ?) ON DUPLICATE KEY UPDATE date = VALUES(date)';
 			$args = array(
@@ -414,10 +423,25 @@
 			$this->admin_db->set('permission', $data['permission']);
 			$this->admin_db->set('name_cn', $data['new_agency_name']);
 			$this->admin_db->set('addr_cn', $data['new_agency_addr']);
+			$this->admin_db->set('contact', $data['new_agency_cont']);
 			$this->admin_db->set('date', $data['time']);
 			$this->admin_db->insert('agency');
 			
 			return $this->admin_db->insert_id();
+		}
+		
+		public function fix_relation() {
+			$redis = $this->redisdb->instance(REDIS_DEFAULT);
+			$this->admin_db->select('userid, superior_id');
+			$this->admin_db->where('userid > ', 2);
+			$query = $this->admin_db->get('user');
+			
+			foreach ($query->result_array() as $one) {
+				if ($one['superior_id'] == 0) {
+					continue;
+				}
+				$redis->sAdd($one['superior_id'].'_subordinate_ids', $one['userid']);
+			}
 		}
 	}
 ?>

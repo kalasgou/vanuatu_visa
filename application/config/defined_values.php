@@ -41,4 +41,27 @@
 									'lost' => APPLY_EXPIRED,
 									'best' => VISA_EXPIRED
 									);
+	
+	$config['agency_type'] = array(
+									ILLEGAL_USER => '非法', 
+									SYSTEM_ADMIN => '系统', 
+									EMBASSY_ADMIN => '大使馆', 
+									OFFICE_ADMIN => '办事处', 
+									RESERVATION_USER => '旅行社'
+								);
+	
+	$config['apply_status_str_en'] = array(
+									NEGATIVE_OVERFLOW => 'Overflow',
+									APPLY_TRASHED => 'Deleted',
+									APPLY_NOTFINISHED => 'Not Finished',
+									APPLY_WAITING => 'Waiting for Audition',
+									APPLY_NOTPASSED => 'Audition Failed',
+									APPLY_PASSED => 'Audition Passed',
+									APPLY_PAID => 'Fee Paid',
+									APPLY_REJECTED => 'Visa Rejected',
+									APPLY_ACCEPTED => 'Visa Issued',
+									APPLY_EXPIRED => 'Application Expired',
+									VISA_EXPIRED => 'Expired',
+									POSITIVE_OVERFLOW => 'Overflow'
+									);
 ?>

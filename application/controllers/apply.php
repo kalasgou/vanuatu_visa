@@ -151,8 +151,8 @@ class Apply extends UserController {
 		
 		$data = array(
 					'uuid' => '',
-					'name_en' => '',
-					'name_cn' => '',
+					'first_name' => '',
+					'last_name' => '',
 					'gender' => '',
 					'family' => '',
 					'nationality' => '',
@@ -172,7 +172,7 @@ class Apply extends UserController {
 						),
 				);
 		
-		$attributes = 'uuid, name_en, name_cn, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info';
+		$attributes = 'uuid, first_name, last_name, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info';
 		
 		$this->load->model('apply_model', 'alm');
 		$info = $this->alm->retrieve_some_info($this->userid, $uuid, $attributes);
@@ -180,8 +180,8 @@ class Apply extends UserController {
 		$data['user'] = $this->user_info;
 		if ($info) {
 			$data['uuid'] = $info['uuid'];
-			$data['name_en'] = $info['name_en'];
-			$data['name_cn'] = $info['name_cn'];
+			$data['first_name'] = $info['first_name'];
+			$data['last_name'] = $info['last_name'];
 			$data['gender'] = $info['gender'];
 			$data['family'] = $info['family'];
 			$data['nationality'] = $info['nationality'];
@@ -210,8 +210,8 @@ class Apply extends UserController {
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['city_id'] = $this->user_info['city_id'];
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
-		$data['name_en'] = trim($this->input->post('name_en', TRUE));
-		$data['name_cn'] = trim($this->input->post('name_cn', TRUE));
+		$data['first_name'] = trim($this->input->post('first_name', TRUE));
+		$data['last_name'] = trim($this->input->post('last_name', TRUE));
 		$data['gender'] = trim($this->input->post('gender', TRUE));
 		$data['family'] = trim($this->input->post('family', TRUE));
 		$data['nationality'] = trim($this->input->post('nationality', TRUE));
@@ -219,12 +219,6 @@ class Apply extends UserController {
 		$data['birth_month'] = trim($this->input->post('birth_month', TRUE));
 		$data['birth_year'] = trim($this->input->post('birth_year', TRUE));
 		$data['birth_place'] = trim($this->input->post('birth_place', TRUE));
-		$data['occupation'] = trim($this->input->post('occupation', TRUE));
-		$data['employer'] = trim($this->input->post('employer', TRUE));
-		$data['employer_tel'] = trim($this->input->post('employer_tel', TRUE));
-		$data['employer_addr'] = trim($this->input->post('employer_addr', TRUE));
-		$data['home_addr'] = trim($this->input->post('home_addr', TRUE));
-		$data['home_tel'] = trim($this->input->post('home_tel', TRUE));
 		
 		$this->load->helper('util');
 		
@@ -232,18 +226,25 @@ class Apply extends UserController {
 			$data['uuid'] = hex16to64(uuid(), 0);
 		}
 		
-		if (!is_editable($data['uuid'])) {
-			$msg['tips'] = '该申请不可再修改！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一页';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
-		}
-		
 		if (!check_parameters($data)) {
 			$msg['tips'] = '所需填写信息不全，请返回重新输入！';
 			$link = 'javascript:history.go(-1);';
 			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data['occupation'] = trim($this->input->post('occupation', TRUE));
+		$data['employer'] = trim($this->input->post('employer', TRUE));
+		$data['employer_tel'] = trim($this->input->post('employer_tel', TRUE));
+		$data['employer_addr'] = trim($this->input->post('employer_addr', TRUE));
+		$data['home_addr'] = trim($this->input->post('home_addr', TRUE));
+		$data['home_tel'] = trim($this->input->post('home_tel', TRUE));
+		
+		if (!is_editable($data['uuid'])) {
+			$msg['tips'] = '该申请不可再修改！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -991,6 +992,140 @@ class Apply extends UserController {
 		$ret['records'] = $records;
 		
 		echo json_encode($ret);
+	}
+	
+	public function download_excel() {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一步';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data['agency_id'] = $this->user_info['agency_id'];
+		$data['start_time'] = trim($this->input->get('start_time', TRUE));
+		$data['end_time'] = trim($this->input->get('end_time', TRUE));
+		
+		$this->load->helper('util');
+		if (!check_parameters($data)) exit('Parameters Not Enough');
+		
+		require '../application/third_party/PHPExcel/PHPExcel.php';
+		
+		$excel = new PHPExcel();
+		
+		// Set Head Titles
+		$excel	->setActiveSheetIndex(0)
+				->setCellValue('A1', '')
+				->setCellValue('B1', '申请流水号')
+				->setCellValue('C1', '申请人姓名')
+				->setCellValue('D1', '出生日期')
+				->setCellValue('E1', '性别')
+				->setCellValue('F1', '国籍')
+				->setCellValue('G1', '护照号')
+				->setCellValue('H1', '申请时间')
+				->setCellValue('I1', '申请状态')
+				->setCellValue('J1', '审核时间')
+				->setCellValue('K1', '缴费时间')
+				->setCellValue('L1', '签证费用')
+				->setCellValue('M1', '签证时间')
+				->setCellValue('N1', '签证编号')
+				->setCellValue('O1', '旅行社')
+				->setCellValue('P1', '旅行社经手人')
+				->setCellValue('Q1', '办事处')
+				->setCellValue('R1', '办事处经手人')
+				->setCellValue('S1', '大使馆')
+				->setCellValue('T1', '大使馆经手人');
+		
+		$page = 0;
+		
+		$this->load->model('user_model', 'user');
+		
+		$reservation_users = array();
+		$reservation_users = $this->user->get_reservation_users_by_agency($data['agency_id']);
+		$reservation_users['0']['agency'] = $reservation_users['0']['nickname'] = '';
+		
+		$office_admins = array();
+		$office_admins = $this->user->get_office_admins_by_province($this->user_info['province_id']);
+		$office_admins['0']['agency'] = $office_admins['0']['nickname'] = '';
+		
+		$embassy_admins = array();
+		$embassy_admins = $this->user->get_embassy_admins_by_all();
+		$embassy_admins['0']['agency'] = $embassy_admins['0']['nickname'] = '';
+		
+		$this->load->model('apply_model', 'alm');
+		while ($records = $this->alm->retrieve_records($data, $page)) {
+			// Set Cell Content
+			$i = 1;
+			foreach ($records as $one) {
+				$userid = $this->alm->get_admin_userid($one['uuid'], APPLY_NOTPASSED, APPLY_PASSED);
+				$one['office'] = $office_admins[$userid]['agency'];
+				$one['office_admin'] = $office_admins[$userid]['nickname'];
+				
+				$userid = $this->alm->get_admin_userid($one['uuid'], APPLY_REJECTED, VISA_EXPIIRED);
+				$one['embassy'] = $embassy_admins[$userid]['agency'];
+				$one['embassy_admin'] = $embassy_admins[$userid]['nickname'];
+				
+				$one['agency'] = $reservation_users[$one['userid']]['agency'];
+				$one['agency_admin'] = $reservation_users[$one['userid']]['nickname'];
+				
+				$cur_column = $i + 1;
+				$excel	->setActiveSheetIndex(0)
+						->setCellValue('A'.$cur_column, $i)
+						->setCellValue('B'.$cur_column, $one['uuid'])
+						->setCellValue('C'.$cur_column, $one['first_name'].' '.$one['last_name'])
+						->setCellValue('D'.$cur_column, date('Y-m-d', strtotime($one['birth_year'].'-'.$one['birth_month'].'-'.$one['birth_day'])))
+						->setCellValue('E'.$cur_column, ($one['gender'] == 1 ? '男' : '女'))
+						->setCellValue('F'.$cur_column, $one['nationality'])
+						->setCellValue('G'.$cur_column, $one['passport_number'])
+						->setCellValue('H'.$cur_column, $one['submit_time'])
+						->setCellValue('I'.$cur_column, $this->config->item($one['status'], 'apply_status_str'))
+						->setCellValue('J'.$cur_column, $one['audit_time'])
+						->setCellValue('K'.$cur_column, $one['pay_time'])
+						->setCellValue('L'.$cur_column, 'RMB'.$one['fee'])
+						->setCellValue('M'.$cur_column, $one['approve_time'])
+						->setCellValue('N'.$cur_column, $one['visa_no'])
+						->setCellValue('O'.$cur_column, $one['agency'])
+						->setCellValue('P'.$cur_column, $one['agency_admin'])
+						->setCellValue('Q'.$cur_column, $one['office'])
+						->setCellValue('R'.$cur_column, $one['office_admin'])
+						->setCellValue('S'.$cur_column, $one['embassy'])
+						->setCellValue('T'.$cur_column, $one['embassy_admin']);
+				
+				$i ++;
+			}
+			$page ++;
+		}
+		
+		$excel->getActiveSheet()->getColumnDimension('B')->setWidth(16);
+		$excel->getActiveSheet()->getColumnDimension('C')->setWidth(24);
+		$excel->getActiveSheet()->getColumnDimension('D')->setWidth(12);
+		$excel->getActiveSheet()->getColumnDimension('E')->setWidth(8);
+		$excel->getActiveSheet()->getColumnDimension('F')->setWidth(16);
+		$excel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+		$excel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+		$excel->getActiveSheet()->getColumnDimension('I')->setWidth(16);
+		$excel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+		$excel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+		$excel->getActiveSheet()->getColumnDimension('L')->setWidth(12);
+		$excel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
+		$excel->getActiveSheet()->getColumnDimension('N')->setWidth(12);
+		$excel->getActiveSheet()->getColumnDimension('O')->setWidth(32);
+		$excel->getActiveSheet()->getColumnDimension('P')->setWidth(16);
+		$excel->getActiveSheet()->getColumnDimension('Q')->setWidth(32);
+		$excel->getActiveSheet()->getColumnDimension('R')->setWidth(16);
+		$excel->getActiveSheet()->getColumnDimension('S')->setWidth(32);
+		$excel->getActiveSheet()->getColumnDimension('T')->setWidth(16);
+		$excel->getActiveSheet()->setTitle('申请记录');
+		$excel->setActiveSheetIndex(0);
+		
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="'.$data['start_time'].'至'.$data['end_time'].'.xlsx"');
+		header('Cache-Control: max-age=0');
+		
+		$objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+		$objWriter->save('php://output');
+		exit(0);
 	}
 }
 

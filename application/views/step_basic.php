@@ -42,9 +42,9 @@
 			<div id="filling_info">
 				<form id="basic_form" method="POST" action="/apply/update_basic_info">
 					<input type="hidden" name="uuid" value="<?php echo $uuid;?>"/>
-					<p>1、Full name 姓名:
-					(English英文)<input type="text" name="name_en" value="<?php echo $name_en;?>"/>
-					(Chinese中文)<input type="text" name="name_cn" value="<?php echo $name_cn;?>"/></p>
+					<p>1、Full Name 姓名:
+					First Name 名<input type="text" name="first_name" value="<?php echo $first_name;?>"/>
+					Last Name 姓<input type="text" name="last_name" value="<?php echo $last_name;?>"/></p>
 					<!--<input type="checkbox" name="gender" checked="checked" disabled="disabled"/>
 					<input type="checkbox" name="gender" disabled="disabled"/>
 					<input type="checkbox" name="gender" disabled="disabled"/>-->
@@ -57,27 +57,27 @@
 					Day 日<input type="text" name="birth_day" style="width:100px;" placeholder="dd" value="<?php echo $birth_day;?>"/>&nbsp;/&nbsp;
 					Month 月<input type="text" name="birth_month" style="width:100px;" placeholder="mm" value="<?php echo $birth_month;?>"/>&nbsp;/&nbsp;
 					Year 年<input type="text" name="birth_year" style="width:100px;" placeholder="yyyy" value="<?php echo $birth_year;?>"/></p>
-					<p>5、Place of birth 出生地点:
+					<p>5、Place of Birth 出生地点:
 					<input type="text" name="birth_place" value="<?php echo $birth_place;?>"/></p>
 					<p>6、Family Situation 婚姻状况:
 					Married已婚<input type="radio" name="family" value="4" <?php echo ($family == 4 ? 'checked="checked"' : '')?>/>
 					Single单身<input type="radio" name="family" value="5" <?php echo ($family == 5 ? 'checked="checked"' : '')?>/>
 					Widowed丧偶<input type="radio" name="family" value="6" <?php echo ($family == 6 ? 'checked="checked"' : '')?>/>
 					Divorced离异<input type="radio" name="family" value="7" <?php echo ($family == 7 ? 'checked="checked"' : '')?>/></p>
-					<p>7、Occupation 职业:
+					<p>7、Occupation 职业<label id="not_necessary">*</label>:
 					<input type="text" name="occupation" value="<?php echo $occupation_info['occupation'];?>"/></p>
-					<p>8、(a) Employer 就业单位:
+					<p>8、(a) Employer 就业单位<label id="not_necessary">*</label>:
 					<input type="text" name="employer" style="width:300px;" value="<?php echo $occupation_info['employer'];?>"/>
 					Tel No.电话:
 					<input type="text" name="employer_tel" style="width:150px;" value="<?php echo $occupation_info['employer_tel'];?>"/><br>
-					(b) Address 单位地址:
+					(b) Address 单位地址<label id="not_necessary">*</label>:
 					<input type="text" name="employer_addr" style="width:400px;" value="<?php echo $occupation_info['employer_addr'];?>"/></p>
-					<p>9、Home Address 家庭住址:
+					<p>9、Home Address 家庭住址<label id="not_necessary">*</label>:
 					<input type="text" name="home_addr" style="width:400px;" value="<?php echo $home_info['home_addr'];?>"/><br>
 					Tel No.电话:
 					<input type="text" name="home_tel" style="width:150px;" value="<?php echo $home_info['home_tel'];?>"/></p>
 					<br>
-					<p id="notice">注意：以上皆为必填项，需全部填写正确才能进入下一步。</p>
+					<p id="notice">注意：以上除带*标记为选填项，其余皆为必填项，需全部填写正确才能进入下一步。</p>
 					<button id="next_step" type="submit" class="btn btn-success btn-sm">下一步</button>
 				</form>
 			</div>

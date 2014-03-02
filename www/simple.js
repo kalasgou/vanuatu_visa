@@ -54,6 +54,7 @@ function city_list(selection) {
 				}
 				$('#cities').empty();
 				$('#cities').append(options);
+				agency_list(selection);
 			} else {
 				alert('Permission Error');
 			}
@@ -65,12 +66,11 @@ function city_list(selection) {
 }
 
 function agency_list(selection) {
-	var province_id = $('#provinces').val();
 	var city_id = $('#cities').val();
 	var permission = $('#permissions').val();
 	$.ajax({
 		url: '/admin/agency_list',
-		data: {province_id: province_id, city_id: city_id, permission: permission},
+		data: {city_id: city_id, permission: permission},
 		async: false,
 		type: 'GET',
 		dataType: 'json',
@@ -83,6 +83,9 @@ function agency_list(selection) {
 				}
 				if (selection === 'new') {
 					options += '<option value="0">请选择机构</option>';
+				}
+				if (len === 0) {
+					options += '<option value="0">暂无</option>';
 				}
 				for (var i = 0; i < len; i ++) {
 					options += '<option value="' + json.agencies[i].id + '">' + json.agencies[i].name_cn + '</option>';
@@ -197,14 +200,23 @@ function check_nickname() {
 	return true;
 }
 
-function check_agency() {
-	var agency = $('#inputAgency3').val();
-	
-	if (agency.length == 0) {
+function check_province_city_agency() {
+	var agency = $('#agencies').val();
+	if (agency == 0) {
 		tips_appear('#agency_empty');
 		return false;
 	}
-	
+	var province = $('#provinces').val();
+	if (province == 0) {
+		tips_appear('#province_empty');
+		return false;
+	}
+	var city = $('#cities').val();
+	if (city == 0) {
+		tips_appear('#city_empty');
+		return false;
+	}
+	$('#agency_text').val($('#agencies').find('option:selected').text());
 	return true;
 }
 function check_phone() {

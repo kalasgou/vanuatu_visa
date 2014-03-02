@@ -23,7 +23,7 @@ class Api extends CI_Controller {
 			imagecopyresampled($image_out, $image_in, 0, 0, 0, 0, $w, $h, $w, $h);
 			$color = imagecolorallocate($image_out, 0x00, 0x00, 0x00);
 			imagettftext($image_out, 38, 0, 720, 580, $color, VISA_FONT_TYPE, "Single Entry Visa\n");
-			imagettftext($image_out, $font_size, 0, 272, 680, $color, VISA_FONT_TYPE, 'Name :'.$info['name_en'].'/'.$info['name_cn']."\n");
+			imagettftext($image_out, $font_size, 0, 272, 680, $color, VISA_FONT_TYPE, 'Name :'.$info['first_name'].' '.$info['last_name']."\n");
 			imagettftext($image_out, $font_size, 0, 272, 775, $color, VISA_FONT_TYPE, 'Visa No. :'.$info['visa_no']."\n");
 			imagettftext($image_out, $font_size, 0, 272, 870, $color, VISA_FONT_TYPE, 'Date of Issue :'.date('j M, Y', $info['start_time'])."\n");
 			imagettftext($image_out, $font_size, 0, 272, 965, $color, VISA_FONT_TYPE, 'Date of Expiry :'.date('j M, Y', $info['end_time'])."\n");
@@ -77,7 +77,8 @@ class Api extends CI_Controller {
 		if ($info) {
 			$output['valid_visa'] = TRUE;
 			$output['apply_id'] = $info['uuid'];
-			$output['name'] = $info['name_en'].'/'.$info['name_cn'];
+			$output['status'] = $info['status'];
+			$output['name'] = $info['first_name'].' '.$info['last_name'];
 			$output['gender'] = $info['gender'] > 1 ? 'Female' : 'Male';
 			$output['birth_place'] = $info['birth_place'];
 			$output['birth_date'] = date('j M, Y', strtotime($info['birth_year'].'-'.$info['birth_month'].'-'.$info['birth_day']));
@@ -90,6 +91,16 @@ class Api extends CI_Controller {
 			$output['visa_date'] = date('j M, Y', $info['start_time']);
 			$output['visa_expiry'] = date('j M, Y', $info['end_time']);
 			$output['max_stay'] = MAX_STAY_DAYS .' Days';
+			$output['application_status'] = $this->config->item($info['status'], 'apply_status_str_en');
+			$output['visa_status'] = 'Not Available';
+			
+			if ($info['status'] == APPLY_ACCEPTED) {
+				$output['application_status'] = 'Visa Issued';
+				$output['visa_status'] = 'Valid';
+			} else if ($info['status'] == VISA_EXPIRED) {
+				$output['application_status'] = 'Visa Issued';
+				$output['visa_status'] = 'Expired';
+			}
 		}
 		
 		$this->load->view('visa_info_table', $output);

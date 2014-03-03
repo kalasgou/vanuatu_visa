@@ -43,7 +43,7 @@ define('HASH_PORTABLE', 		FALSE);
 define('COOKIE_TTL_HOUR',		24);
 
 // Visa
-define('VISA_VALID_DAYS',		30);
+define('VISA_VALID_DAYS',		90);
 define('MAX_STAY_DAYS',			90);
 
 // Location

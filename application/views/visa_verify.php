@@ -9,6 +9,27 @@
 		<link rel="shortcut icon" href=""/>
 		<link rel="stylesheet" type="text/css" href="/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" type="text/css" href="/common.css"/>
+		<script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript">
+			function submit_form() {
+				var valid_num = 0;
+				if ($('#SN').val() !== '') {
+					valid_num ++;
+				}
+				if ($('#PN').val() !== '') {
+					valid_num ++;
+				}
+				if ($('#VN').val() !== '') {
+					valid_num ++;
+				}
+				if (valid_num < 2) {
+					alert('请选择任意两个条件作为查询条件！');
+					return false;
+				} else {
+					return true;
+				}
+			}
+		</script>
 		<style type="text/css">
 			body {margin:0; padding:0; background:#f5f5f5;}
 			.header {width:100%; height:72px; background:#1D8BDF;}
@@ -33,22 +54,22 @@
 			<div class="country_logo"><img src="/vanuatu.png" style="width:147px;"></div>
 			<div class="description">Vanuatu Embassy eVisa<br>瓦努阿图驻华大使馆电子签证</div>
 			<div class="search_form">
-				<form action="/api/visa_verify_table" method="get" style="padding:24px;">
+				<form action="/api/visa_verify_table" method="get" style="padding:24px;" onsubmit="return submit_form();">
 					<table>
 						<tr>
 							<td colspan="2" style="font-size:16px; font-weight:bold;"  align="center">请输入需要查询的签证的相关信息<br>&nbsp;</td>
 						</tr>
 						<tr>
 							<td>申请号：</td>
-							<td><input class="text" type="text" name="apply_id" placeholder="Serial Number"/></td>
+							<td><input class="text" id="SN" type="text" name="apply_id" placeholder="Serial Number"/></td>
 						</tr>
 						<tr>
 							<td>护照号：</td>
-							<td><input class="text" type="text" name="passport" placeholder="Passport Number"/></td>
+							<td><input class="text" id="PN" type="text" name="passport" placeholder="Passport Number"/></td>
 						</tr>
 						<tr>
 							<td>签证号：</td>
-							<td><input type="text" name="visa" placeholder="Visa Number"/></td>
+							<td><input type="text" id="VN" name="visa" placeholder="Visa Number"/></td>
 						</tr>
 						<tr>
 							<td colspan="2" align="right"><button class="btn btn-success" type="submit">查 询</button></td>

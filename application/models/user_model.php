@@ -268,11 +268,17 @@
 			return $query->row_array();
 		}
 		
-		public function get_reservation_users_by_agency($agency_id) {
+		public function get_reservation_users($agency_id) {
 			$reservation_users = array();
+			$reservation_users['0']['agency'] = '';
+			$reservation_users['0']['nickname'] = '';
+			$reservation_users['2']['agency'] = '当地办事处';
+			$reservation_users['2']['nickname'] = '现场申请用户';
 			
 			$this->user_db->select('userid, nickname, agency');
-			$this->user_db->where('agency_id', $agency_id);
+			if ($agency_id > 0) {
+				$this->user_db->where('agency_id', $agency_id);
+			}
 			$this->user_db->where('permission', RESERVATION_USER);
 			$query = $this->user_db->get('user');
 			
@@ -284,11 +290,20 @@
 			return $reservation_users;
 		}
 		
-		public function get_office_admins_by_province($province_id) {
+		public function get_office_admins($province_id, $agency_id) {
 			$office_admins = array();
+			$office_admins['0']['agency'] = '';
+			$office_admins['0']['nickname'] = '';
+			$office_admins['1']['agency'] = '签证系统';
+			$office_admins['1']['nickname'] = '系统管理员';
 			
 			$this->user_db->select('userid, nickname, agency');
-			$this->user_db->where('province_id', $province_id);
+			if ($province_id > 0) {
+				$this->user_db->where('province_id', $province_id);
+			}
+			if ($agency_id > 0) {
+				$this->user_db->where('agency_id', $agency_id);
+			}
 			$this->user_db->where('permission', OFFICE_ADMIN);
 			$query = $this->user_db->get('user');
 			
@@ -300,8 +315,12 @@
 			return $office_admins;
 		}
 		
-		public function get_embassy_admins_by_all() {
+		public function get_embassy_admins() {
 			$embassy_admins = array();
+			$embassy_admins['0']['agency'] = '';
+			$embassy_admins['0']['nickname'] = '';
+			$embassy_admins['1']['agency'] = '签证系统';
+			$embassy_admins['1']['nickname'] = '系统管理员';
 			
 			$this->user_db->select('userid, nickname, agency');
 			$this->user_db->where('permission', EMBASSY_ADMIN);

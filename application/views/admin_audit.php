@@ -94,7 +94,7 @@
 				<div id="od4" style="display:none">
 					&nbsp;请输入需要查询的日期范围:&nbsp;<input id="start_time" type="text" placeholder="起始日期" onclick="WdatePicker({readOnly:true, dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d'})"/> ~ 
 					<input id="end_time" type="text" placeholder="结束日期" onclick="WdatePicker({readOnly:true, dateFmt:'yyyy-MM-dd', maxDate:'%y-%M-%d'})"/>
-					<a href="javascript:void(0)" onclick="download_excel();" target="_blank">导出Excel表格</a>
+					<a href="javascript:void(0)" onclick="download_excel('admin');" target="_blank">导出Excel表格</a>
 				</div>
 				<div style="display:inline-block;">
 					<button onclick="javascript:filter_them(selected);">搜索</button>
@@ -140,7 +140,7 @@
 						<td><span title="具体时间 <?php echo $one['approve_time'];?>"><?php echo substr($one['approve_time'], 0, 10);?></span></td>
 						<td>
 							<a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank">详细</a> / 
-							<?php if ($one['status'] < APPLY_PASSED) { ?>
+							<?php if ($one['status'] > APPLY_NOTFINISHED && $one['status'] < APPLY_PASSED) { ?>
 								<a href="/admin/present/<?php echo $one['uuid'];?>" target="_blank">修改</a> / 
 								<a href="javascript:void(0);" onclick="pass_for_fee('<?php echo $one['uuid'];?>', 'pass', this);">通过审核</a> 
 							<?php } ?>

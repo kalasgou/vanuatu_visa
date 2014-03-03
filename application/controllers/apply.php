@@ -213,7 +213,6 @@ class Apply extends UserController {
 		$data['first_name'] = trim($this->input->post('first_name', TRUE));
 		$data['last_name'] = trim($this->input->post('last_name', TRUE));
 		$data['gender'] = trim($this->input->post('gender', TRUE));
-		$data['family'] = trim($this->input->post('family', TRUE));
 		$data['nationality'] = trim($this->input->post('nationality', TRUE));
 		$data['birth_day'] = trim($this->input->post('birth_day', TRUE));
 		$data['birth_month'] = trim($this->input->post('birth_month', TRUE));
@@ -234,6 +233,7 @@ class Apply extends UserController {
 			show_error($msg);
 		}
 		
+		$data['family'] = trim($this->input->post('family', TRUE));
 		$data['occupation'] = trim($this->input->post('occupation', TRUE));
 		$data['employer'] = trim($this->input->post('employer', TRUE));
 		$data['employer_tel'] = trim($this->input->post('employer_tel', TRUE));
@@ -998,7 +998,7 @@ class Apply extends UserController {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
+			$location = '返回上一页';
 			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 			show_error($msg);
 		}
@@ -1042,32 +1042,29 @@ class Apply extends UserController {
 		$this->load->model('user_model', 'user');
 		
 		$reservation_users = array();
-		$reservation_users = $this->user->get_reservation_users_by_agency($data['agency_id']);
-		$reservation_users['0']['agency'] = $reservation_users['0']['nickname'] = '';
+		$reservation_users = $this->user->get_reservation_users($this->user_info['agency_id']);
 		
 		$office_admins = array();
-		$office_admins = $this->user->get_office_admins_by_province($this->user_info['province_id']);
-		$office_admins['0']['agency'] = $office_admins['0']['nickname'] = '';
+		$office_admins = $this->user->get_office_admins($this->user_info['province_id'], 0);
 		
 		$embassy_admins = array();
-		$embassy_admins = $this->user->get_embassy_admins_by_all();
-		$embassy_admins['0']['agency'] = $embassy_admins['0']['nickname'] = '';
+		$embassy_admins = $this->user->get_embassy_admins();
 		
 		$this->load->model('apply_model', 'alm');
 		while ($records = $this->alm->retrieve_records($data, $page)) {
 			// Set Cell Content
 			$i = 1;
 			foreach ($records as $one) {
+				$one['agency'] = $reservation_users[$one['userid']]['agency'];
+				$one['agency_admin'] = $reservation_users[$one['userid']]['nickname'];
+				
 				$userid = $this->alm->get_admin_userid($one['uuid'], APPLY_NOTPASSED, APPLY_PASSED);
 				$one['office'] = $office_admins[$userid]['agency'];
 				$one['office_admin'] = $office_admins[$userid]['nickname'];
 				
-				$userid = $this->alm->get_admin_userid($one['uuid'], APPLY_REJECTED, VISA_EXPIIRED);
+				$userid = $this->alm->get_admin_userid($one['uuid'], APPLY_REJECTED, VISA_EXPIRED);
 				$one['embassy'] = $embassy_admins[$userid]['agency'];
 				$one['embassy_admin'] = $embassy_admins[$userid]['nickname'];
-				
-				$one['agency'] = $reservation_users[$one['userid']]['agency'];
-				$one['agency_admin'] = $reservation_users[$one['userid']]['nickname'];
 				
 				$cur_column = $i + 1;
 				$excel	->setActiveSheetIndex(0)
@@ -1082,7 +1079,7 @@ class Apply extends UserController {
 						->setCellValue('I'.$cur_column, $this->config->item($one['status'], 'apply_status_str'))
 						->setCellValue('J'.$cur_column, $one['audit_time'])
 						->setCellValue('K'.$cur_column, $one['pay_time'])
-						->setCellValue('L'.$cur_column, 'RMB'.$one['fee'])
+						->setCellValue('L'.$cur_column, $one['fee'])
 						->setCellValue('M'.$cur_column, $one['approve_time'])
 						->setCellValue('N'.$cur_column, $one['visa_no'])
 						->setCellValue('O'.$cur_column, $one['agency'])

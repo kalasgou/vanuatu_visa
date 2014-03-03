@@ -121,6 +121,7 @@
 		}
 		
 		public function best_noti() {
+			
 		}
 	}
 ?>

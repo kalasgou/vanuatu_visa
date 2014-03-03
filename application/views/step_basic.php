@@ -59,7 +59,7 @@
 					Year 年<input type="text" name="birth_year" style="width:100px;" placeholder="yyyy" value="<?php echo $birth_year;?>"/></p>
 					<p>5、Place of Birth 出生地点:
 					<input type="text" name="birth_place" value="<?php echo $birth_place;?>"/></p>
-					<p>6、Family Situation 婚姻状况:
+					<p>6、Family Situation 婚姻状况<label id="not_necessary">*</label>:
 					Married已婚<input type="radio" name="family" value="4" <?php echo ($family == 4 ? 'checked="checked"' : '')?>/>
 					Single单身<input type="radio" name="family" value="5" <?php echo ($family == 5 ? 'checked="checked"' : '')?>/>
 					Widowed丧偶<input type="radio" name="family" value="6" <?php echo ($family == 6 ? 'checked="checked"' : '')?>/>

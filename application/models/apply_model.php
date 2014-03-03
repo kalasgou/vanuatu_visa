@@ -19,14 +19,14 @@
 		}
 		
 		public function retrieve_records($data, $page) {
-			$this->admin_db->select('userid, uuid, status, first_name, last_name, birth_day, birth_month, birth_year, gender, nationality, passport_number, submit_time, audit_time, pay_time, fee, approve_time, visa_no');
-			//$this->admin_db->where('status >= ', APPLY_WAITING);
-			$this->admin_db->where('agency_id', $data['agency_id']);
-			$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
-			$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
-			$this->admin_db->order_by('submit_time', 'desc');
-			$this->admin_db->limit(1000, 1000 * $page);
-			$query = $this->admin_db->get('visa_applying');
+			$this->apply_db->select('userid, uuid, status, first_name, last_name, birth_day, birth_month, birth_year, gender, nationality, passport_number, submit_time, audit_time, pay_time, fee, approve_time, visa_no');
+			$this->apply_db->where('status >= ', APPLY_ACCEPTED);
+			$this->apply_db->where('agency_id', $data['agency_id']);
+			$this->apply_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
+			$this->apply_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
+			$this->apply_db->order_by('submit_time', 'desc');
+			$this->apply_db->limit(1000, 1000 * $page);
+			$query = $this->apply_db->get('visa_applying');
 			
 			return $query->result_array();
 		}

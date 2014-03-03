@@ -10,11 +10,7 @@ class Welcome extends LoginController {
 	
 	public function login() {
 		if ($this->userid > ILLEGAL_USER && $this->status == ACCOUNT_NORMAL) {
-			$msg['tips'] = '已经登录无需重复登录！';
-			$link = '/user/index';
-			$location = '返回用户主页';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
+			header('Location: '.base_url('/user/index'));
 		}
 		
 		$this->load->helper('util');

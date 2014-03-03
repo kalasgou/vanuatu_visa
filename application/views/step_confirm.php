@@ -72,7 +72,7 @@
 					<span id="answer" style="width:200px;"><?php echo $birth_place;?></span>
 				</div>
 				<div>
-					6、Family Situation 婚姻状况:<br>&nbsp;&nbsp;
+					6、Family Situation 婚姻状况<label id="not_necessary">*</label>:<br>&nbsp;&nbsp;
 					Married 已婚 <span id="option"><input type="checkbox" <?php echo ($family == 4 ? 'checked="checked"' : 'disabled="disabled"');?>/></span>
 					Single 单身 <span id="option"><input type="checkbox" <?php echo ($family == 5 ? 'checked="checked"' : 'disabled="disabled"');?>/></span>
 					Widowed 丧偶 <span id="option"><input type="checkbox" <?php echo ($family == 6 ? 'checked="checked"' : 'disabled="disabled"');?>/></span>

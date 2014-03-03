@@ -420,8 +420,11 @@ function trash_application(uuid, this_a) {
 	});
 }*/
 
-function download_excel() {
-	location.href = '/admin/download_excel?start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val();
+function download_excel($user_type) {
+	switch ($user_type) {
+		case 'admin': location.href = '/admin/download_excel?start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val(); break;
+		case 'user': location.href = '/apply/download_excel?start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val(); break;
+	}
 }
 
 function refresh_captcha() {

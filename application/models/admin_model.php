@@ -85,7 +85,10 @@
 		
 		public function retrieve_records($data, $page) {
 			$this->admin_db->select('userid, uuid, status, first_name, last_name, birth_day, birth_month, birth_year, gender, nationality, passport_number, submit_time, audit_time, pay_time, fee, approve_time, visa_no');
-			$this->admin_db->where('status >= ', APPLY_WAITING);
+			if ($data['userids']) {
+				$this->admin_db->where_in('userid', $data['userids']);
+			}
+			$this->admin_db->where('status >= ', APPLY_ACCEPTED);
 			$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
 			$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
 			$this->admin_db->order_by('submit_time', 'desc');
@@ -158,7 +161,7 @@
 			return $this->admin_db->affected_rows();
 		}
 		
-		public function get_admin_userids($uuid, $start, $end) {
+		public function get_admin_userid($uuid, $start, $end) {
 			$sql = 'SELECT admin_userid FROM visa_auditing WHERE uuid = ? AND status >= ? AND status <= ? LIMIT 1';
 			$query = $this->admin_db->query($sql, array($uuid, $start, $end));
 			

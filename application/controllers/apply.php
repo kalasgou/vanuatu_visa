@@ -209,6 +209,7 @@ class Apply extends UserController {
 		$data['userid'] = $this->userid;
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['city_id'] = $this->user_info['city_id'];
+		$data['agency_id'] = $this->user_info['agency_id'];
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
 		$data['first_name'] = trim($this->input->post('first_name', TRUE));
 		$data['last_name'] = trim($this->input->post('last_name', TRUE));

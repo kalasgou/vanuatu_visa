@@ -24,7 +24,7 @@
 			$this->apply_db->where('agency_id', $data['agency_id']);
 			$this->apply_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
 			$this->apply_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
-			$this->apply_db->order_by('submit_time', 'desc');
+			$this->apply_db->order_by('submit_time', 'asc');
 			$this->apply_db->limit(1000, 1000 * $page);
 			$query = $this->apply_db->get('visa_applying');
 			
@@ -51,8 +51,8 @@
 		}*/
 		
 		public function update_basic_info($data) {
-			$sql = 	'INSERT INTO visa_applying (userid, uuid, province_id, city_id, first_name, last_name, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, modify_time) '.
-					'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE '.
+			$sql = 	'INSERT INTO visa_applying (userid, uuid, agency_id, province_id, city_id, first_name, last_name, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, modify_time) '.
+					'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE '.
 					'first_name = VALUES(first_name), '.
 					'last_name = VALUES(last_name), '.
 					'gender = VALUES(gender), '.
@@ -68,6 +68,7 @@
 			$args = array(
 						'userid' => $data['userid'],
 						'uuid' => $data['uuid'],
+						'agency_id' => $data['agency_id'],
 						'province_id' => $data['province_id'],
 						'city_id' => $data['city_id'],
 						'first_name' => $data['first_name'],
@@ -257,7 +258,7 @@
 								break;
 				default : FALSE;
 			}
-			$this->apply_db->order_by('submit_time', 'desc');
+			$this->apply_db->order_by('submit_time', 'asc');
 			$this->apply_db->limit(20, 20 * $data['page']);
 			$query = $this->apply_db->get('visa_applying');
 			

@@ -32,6 +32,7 @@ class Admin extends UserController {
 					'userid' => PRESENT_USERID,
 					'province_id' => $this->user_info['province_id'],
 					'city_id' => $this->user_info['city_id'],
+					'agency_id' => $this->user_info['agency_id'],
 					'first_name' => '',
 					'last_name' => '',
 					'gender' => '',
@@ -136,6 +137,7 @@ class Admin extends UserController {
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['city_id'] = $this->user_info['city_id'];
+		$data['agency_id'] = $this->user_info['agency_id'];
 		$data['status'] = APPLY_WAITING;
 		
 		$this->load->helper('util');
@@ -746,7 +748,7 @@ class Admin extends UserController {
 		
 		if ($data['status'] === APPLY_ACCEPTED) {
 			$data['start_time'] = strtotime('today');
-			$data['end_time'] = $data['start_time'] + 86400 * VISA_VALID_DAYS;
+			$data['end_time'] = $data['start_time'] + 86400 * VISA_VALID_DAYS - 1;
 			
 			$attributes = '*';
 			$info = $this->adm->retrieve_some_info($uuid, $attributes);

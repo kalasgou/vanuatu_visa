@@ -19,5 +19,30 @@
 			
 			return $query->row_array();
 		}
+		
+		public function find_expiring_visa() {
+			$uuids = array();
+			
+			$this->info_db->select('uuid');
+			$this->info_db->where('expired', 0);
+			$this->info_db->where('end_time <= ', time());
+			$query = $this->info_db->get('visa_approved');
+			
+			foreach ($query->result_array() as $one) {
+				$uuids[] = $one['uuid'];
+			}
+			
+			return $uuids;
+		}
+		
+		public function set_visa_expired($uuids) {
+			$this->info_db->set('expired', 1);
+			$this->info_db->where_in('uuid', $uuids);
+			$this->info_db->update('visa_approved');
+			
+			$this->info_db->set('status', VISA_EXPIRED);
+			$this->info_db->where_in('uuid', $uuids);
+			$this->info_db->update('visa_applying');
+		}
 	}
 ?>

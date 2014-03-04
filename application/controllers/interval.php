@@ -121,7 +121,12 @@
 		}
 		
 		public function best_noti() {
+			$this->load->model('interval_model', 'ivm');
+			$uuids = $this->ivm->find_expiring_visa();
 			
+			if (count($uuids) > 0) {
+				$this->ivm->set_visa_expired($uuids);
+			}
 		}
 	}
 ?>

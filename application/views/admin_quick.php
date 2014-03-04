@@ -103,14 +103,14 @@
 			<table class="table table-hover">
 				<colgroup>
 					<col style="width:11%;"/>
-					<col style="width:18%"/>
+					<col style="width:16%"/>
 					<col style="width:9%;"/>
 					<col style="width:8%"/>
 					<col style="width:9%;"/>
 					<col style="width:9%"/>
 					<col style="width:9%;"/>
 					<col style="width:9%;"/>
-					<col style="width:18%;"/>
+					<col style="width:17%;"/>
 				</colgroup>
 				<thead>
 					<tr>
@@ -143,7 +143,7 @@
 							<?php if ($one['status'] >= APPLY_WAITING && $one['status'] < APPLY_ACCEPTED) { ?> / 
 								<a href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'drop', this);">删除</a>
 							<?php } ?>
-							<?php if ($one['status'] != APPLY_ACCEPTED) { ?> / 
+							<?php if ($one['status'] >= APPLY_WAITING && $one['status'] < APPLY_ACCEPTED) { ?> / 
 								<a href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'visa', this);">通过签证</a>
 							<?php } ?>
 							<?php if ($one['status'] == APPLY_ACCEPTED) { ?> / 

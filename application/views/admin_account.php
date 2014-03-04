@@ -100,14 +100,14 @@
 				<colgroup>
 					<col style="width:10%;"/>
 					<col style="width:10%;"/>
-					<col style="width:13%;"/>
+					<col style="width:12%;"/>
 					<col style="width:10%"/>
 					<col style="width:10%;"/>
-					<col style="width:12%"/>
+					<col style="width:13%"/>
 					<col style="width:5%;"/>
+					<col style="width:11%"/>
 					<col style="width:10%"/>
-					<col style="width:10%"/>
-					<col style="width:10%;"/>
+					<col style="width:6%;"/>
 				</colgroup>
 				<thead>
 					<tr>

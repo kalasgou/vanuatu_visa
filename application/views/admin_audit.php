@@ -103,14 +103,14 @@
 			<table class="table table-hover">
 				<colgroup>
 					<col style="width:11%;"/>
-					<col style="width:18%"/>
+					<col style="width:16%"/>
 					<col style="width:9%;"/>
 					<col style="width:8%"/>
 					<col style="width:9%;"/>
 					<col style="width:9%"/>
 					<col style="width:9%;"/>
 					<col style="width:9%;"/>
-					<col style="width:18%;"/>
+					<col style="width:17%;"/>
 				</colgroup>
 				<thead>
 					<tr>

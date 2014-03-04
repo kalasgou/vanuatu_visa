@@ -265,6 +265,7 @@ function change_account_status(userid, opt, this_a) {
 				case 'forbidden': alert('无此操作权限'); break;
 				case 'fail': alert('出错了'); break;
 			}
+			return;
 		},
 		error: function() {
 			alert('Network Error');
@@ -286,6 +287,7 @@ function update_account_superior(userid, original_superior_id, this_a) {
 				case 'forbidden': alert('无此操作权限'); break;
 				case 'fail': alert('出错了'); break;
 			}
+			return;
 		},
 		error: function() {
 			alert('Network Error');
@@ -310,6 +312,7 @@ function pass_or_not(uuid, opt) {
 				case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！'); break;
 				case 'fail': alert('出错了'); break;
 			}
+			return;
 		},
 		error: function() {
 			alert('Network Error');
@@ -329,6 +332,7 @@ function visa_or_not(uuid, opt) {
 				case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！'); break;
 				case 'fail': alert('出错了'); break;
 			}
+			return;
 		},
 		error: function() {
 			alert('Network Error');
@@ -351,6 +355,7 @@ function pass_for_fee(uuid, opt, this_a) {
 				case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！'); break;
 				case 'fail': alert('出错了'); break;
 			}
+			return;
 		},
 		error: function() {
 			alert('Network Error');
@@ -370,6 +375,7 @@ function visa_it(uuid, opt, this_a) {
 				case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！'); break;
 				case 'fail': alert('出错了'); break;
 			}
+			return;
 		},
 		error: function() {
 			alert('Network Error');
@@ -389,6 +395,7 @@ function trash_application(uuid, this_a) {
 				case 'forbidden': alert('无此操作权限'); break;
 				case 'fail': alert('出错了'); break;
 			}
+			return;
 		},
 		error: function() {
 			alert('Network Error');
@@ -439,6 +446,7 @@ function refresh_captcha() {
 			} else if (json.msg === 'fail') {
 				alert('请不要频繁刷新验证码！');
 			}
+			return;
 		},
 		error: function() {
 			alert('Network Error');

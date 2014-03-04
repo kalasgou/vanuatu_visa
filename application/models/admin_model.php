@@ -67,7 +67,7 @@
 				case APPLY_PRESENT: break;
 				default : return array();
 			}
-			$this->admin_db->order_by('submit_time', 'desc');
+			$this->admin_db->order_by('submit_time', 'asc');
 			$this->admin_db->limit(20, 20 * $data['page']);
 			$query = $this->admin_db->get('visa_applying');
 			
@@ -91,7 +91,7 @@
 			$this->admin_db->where('status >= ', APPLY_ACCEPTED);
 			$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
 			$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
-			$this->admin_db->order_by('submit_time', 'desc');
+			$this->admin_db->order_by('submit_time', 'asc');
 			$this->admin_db->limit(1000, 1000 * $page);
 			$query = $this->admin_db->get('visa_applying');
 			
@@ -223,8 +223,8 @@
 			$behaviour_info['refused'] = $data['refused'];
 			$behaviour_info['refuse_date'] = $data['refuse_date'];
 			
-			$sql = 	'INSERT INTO visa_applying (userid, uuid, province_id, city_id, status, first_name, last_name, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, passport_number, passport_place, passport_date, passport_expiry, purpose, other_purpose, destination, relative_info, detail_info, children_info, behaviour_info, modify_time, submit_time, fee) '.
-					'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE '.
+			$sql = 	'INSERT INTO visa_applying (userid, uuid, agency_id, province_id, city_id, status, first_name, last_name, gender, family, nationality, birth_day, birth_month, birth_year, birth_place, occupation_info, home_info, passport_number, passport_place, passport_date, passport_expiry, purpose, other_purpose, destination, relative_info, detail_info, children_info, behaviour_info, modify_time, submit_time, fee) '.
+					'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE '.
 					'status = VALUES(status), '.
 					'first_name = VALUES(first_name), '.
 					'last_name = VALUES(last_name), '.
@@ -254,6 +254,7 @@
 			$args = array(
 						'userid' => $data['userid'],
 						'uuid' => $data['uuid'],
+						'agency_id' => $data['agency_id'],
 						'province_id' => $data['province_id'],
 						'city_id' => $data['city_id'],
 						'status' => $data['status'],

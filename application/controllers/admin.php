@@ -1313,6 +1313,48 @@ class Admin extends UserController {
 		$this->load->model('admin_model', 'adm');
 		$this->adm->fix_relation();
 	}*/
+	
+	public function update_agency() {
+		if ($this->permission != SYSTEM_ADMIN) {
+			$ret['msg'] = 'forbidden';
+			echo json_encode($ret);
+			exit('Account Not Allowed to Perform This Task');
+		}
+		
+		$data['agency_id'] = intval($this->input->post('agency_id', TRUE));
+		$data['agency_name'] = trim($this->input->post('agency_name', TRUE));
+		$data['agency_addr'] = trim($this->input->post('agency_addr', TRUE));
+		$data['agency_cont'] = trim($this->input->post('agency_cont', TRUE));
+		
+		$this->load->helper('util');
+		if (!check_parameters($data)) exit('Parameters Not Enough');
+		
+		$ret['msg'] = 'fail';
+		
+		$this->load->model('admin_model', 'adm');
+		if ($this->adm->update_agency_detail($data) > 0) {
+			$ret['msg'] = 'success';
+		}
+		
+		echo json_encode($ret);
+	}
+	
+	public function delete_agency() {
+		if ($this->permission != SYSTEM_ADMIN) {
+			$ret['msg'] = 'forbidden';
+			echo json_encode($ret);
+			exit('Account Not Allowed to Perform This Task');
+		}
+		
+		$agency_id = intval($this->input->post('agency_id', TRUE));
+		
+		$this->load->model('admin_model', 'adm');	
+		if ($this->adm->delete_agency_and_their_users($agency_id) > 0) {
+			$ret['msg'] = 'success';
+		}
+		
+		echo json_encode($ret);
+	}
 }
 
 /* End of file */

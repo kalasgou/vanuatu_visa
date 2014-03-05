@@ -43,6 +43,51 @@
 					default : return;
 				}
 			}*/
+			
+			function update_agency(agency_id, this_a) {
+				var agency_name = $('#name_' + agency_id).val();
+				var agency_addr = $('#addr_' + agency_id).val();
+				var agency_cont = $('#cont_' + agency_id).val();
+				
+				$.ajax({
+					url: '/admin/update_agency',
+					data: {agency_id: agency_id, agency_name: agency_name, agency_addr: agency_addr, agency_cont: agency_cont},
+					type: 'POST',
+					dataType: 'json',
+					success: function(json) {
+						switch (json.msg) {
+							case 'success': this_a.innerHTML = '已更新'; this_a.style.color = '#DDDDDD'; break;
+							case 'forbidden': alert('无此操作权限'); break;
+							case 'fail': alert('出错了'); break;
+						}
+						return;
+					},
+					error: function() {
+						alert('Network Error');
+					}
+				});
+			}
+			
+			function delete_agency(agency_id, this_a) {
+				if (confirm('确定要删除“' + $('#name_' + agency_id).val() + '”这一机构吗？删除后该机构下所有帐号均不能登录！')) {
+					$.ajax({
+						url: '/admin/delete_agency',
+						data: {agency_id: agency_id},
+						type: 'POST',
+						dataType: 'json',
+						success: function(json) {
+							switch (json.msg) {
+								case 'success': this_a.parentNode.parentNode.style.display = 'none'; break;
+								case 'forbidden': alert('无此操作权限'); break;
+								case 'fail': alert('出错了'); break;
+							}
+						},
+						error: function() {
+							alert('Network Error');
+						}
+					});
+				}
+			}
 		</script>
 		<style type="text/css">
 			.name, .addr, .cont {border:1px dotted #000;border-top-width:0px; border-right-width:0px; border-left-width:0px;}
@@ -107,8 +152,8 @@
 						<td><?php echo $one['status_str'];?></td>
 						<td><?php echo date('Y-m-d H:i:s', $one['date']);?></td>
 						<td>
-							<a href="javascript:void(0);" onclick="update_agency(<?php echo $one['id'];?>);">修改</a> / 
-							<a href="javascript:void(0);" onclick="delete_agency(<?php echo $one['id'];?>);">删除</a>
+							<a href="javascript:void(0);" onclick="update_agency(<?php echo $one['id'];?>, this);">修改</a> / 
+							<a href="javascript:void(0);" onclick="delete_agency(<?php echo $one['id'];?>, this);">删除</a>
 						</td>
 					</tr>
 					<?php

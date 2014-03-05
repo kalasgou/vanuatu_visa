@@ -219,6 +219,7 @@ function check_province_city_agency() {
 	$('#agency_text').val($('#agencies').find('option:selected').text());
 	return true;
 }
+
 function check_phone() {
 	var phone = $('#inputPhone3').val();
 	var pattern = /(^(([0\+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$)|(^0{0,1}1[3|4|5|6|7|8|9][0-9]{9}$)/;
@@ -254,23 +255,25 @@ function check_login_email() {
 }
 
 function change_account_status(userid, opt, this_a) {
-	$.ajax({
-		url: '/admin/activate_account',
-		data: {userid: userid, activate: opt},
-		type: 'POST',
-		dataType: 'json',
-		success: function(json) {
-			switch (json.msg) {
-				case 'success': alert('对ID: ' + userid + ' 用户帐户操作成功！');  this_a.innerHTML = '已更新'; this_a.style.color = '#DDDDDD'; break;
-				case 'forbidden': alert('无此操作权限'); break;
-				case 'fail': alert('出错了'); break;
+	if (confirm('确定更新该帐户的可用状态吗？')) {
+		$.ajax({
+			url: '/admin/activate_account',
+			data: {userid: userid, activate: opt},
+			type: 'POST',
+			dataType: 'json',
+			success: function(json) {
+				switch (json.msg) {
+					case 'success': alert('对ID: ' + userid + ' 用户帐户操作成功！');  this_a.innerHTML = '已更新'; this_a.style.color = '#DDDDDD'; break;
+					case 'forbidden': alert('无此操作权限'); break;
+					case 'fail': alert('出错了'); break;
+				}
+				return;
+			},
+			error: function() {
+				alert('Network Error');
 			}
-			return;
-		},
-		error: function() {
-			alert('Network Error');
-		}
-	});
+		});
+	}
 }
 
 function update_account_superior(userid, original_superior_id, this_a) {
@@ -384,23 +387,25 @@ function visa_it(uuid, opt, this_a) {
 }
 
 function trash_application(uuid, this_a) {
-	$.ajax({
-		url: '/apply/trash/' + uuid,
-		data: {},
-		type: 'POST',
-		dataType: 'json',
-		success: function(json) {
-			switch (json.msg) {
-				case 'success': this_a.parentNode.parentNode.style.display = 'none'; break;
-				case 'forbidden': alert('无此操作权限'); break;
-				case 'fail': alert('出错了'); break;
+	if (confirm('确定删除流水号为“' + uuid + '”的申请记录吗？')) {
+		$.ajax({
+			url: '/apply/trash/' + uuid,
+			data: {},
+			type: 'POST',
+			dataType: 'json',
+			success: function(json) {
+				switch (json.msg) {
+					case 'success': this_a.parentNode.parentNode.style.display = 'none'; break;
+					case 'forbidden': alert('无此操作权限'); break;
+					case 'fail': alert('出错了'); break;
+				}
+				return;
+			},
+			error: function() {
+				alert('Network Error');
 			}
-			return;
-		},
-		error: function() {
-			alert('Network Error');
-		}
-	});
+		});
+	}
 }
 
 /*function pay_for_visa(uuid, this_a) {

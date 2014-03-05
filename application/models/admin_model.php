@@ -328,6 +328,7 @@
 		public function get_agencies($data) {
 			$this->admin_db->where('city_id', $data['city_id']);
 			$this->admin_db->where('permission', $data['permission']);
+			$this->admin_db->where('status', 1);
 			$this->admin_db->order_by('date', 'desc');
 			$query = $this->admin_db->get('agency');
 			
@@ -387,10 +388,12 @@
 		}
 		
 		public function sum_agencies() {
+			$this->admin_db->where('status', 1);
 			return $this->admin_db->count_all_results('agency');
 		}
 		
 		public function get_agency_list($page) {
+			$this->admin_db->where('status', 1);
 			$this->admin_db->limit(20, 20 * $page);
 			$this->admin_db->order_by('date', 'desc');
 			$query = $this->admin_db->get('agency');
@@ -434,7 +437,7 @@
 			return $this->admin_db->insert_id();
 		}
 		
-		public function fix_relation() {
+		/*public function fix_relation() {
 			$redis = $this->redisdb->instance(REDIS_DEFAULT);
 			$this->admin_db->select('userid, superior_id');
 			$this->admin_db->where('userid > ', 2);
@@ -446,6 +449,28 @@
 				}
 				$redis->sAdd($one['superior_id'].'_subordinate_ids', $one['userid']);
 			}
+		}*/
+		
+		public function update_agency_detail($data) {
+			$this->admin_db->set('name_cn', $data['agency_name']);
+			$this->admin_db->set('addr_cn', $data['agency_addr']);
+			$this->admin_db->set('contact', $data['agency_cont']);
+			$this->admin_db->where('id', $data['agency_id']);
+			$this->admin_db->update('agency');
+			
+			return $this->admin_db->affected_rows();
+		}
+		
+		public function delete_agency_and_their_users($agency_id) {
+			$this->admin_db->set('status', -1);
+			$this->admin_db->where('id', $data['agency_id']);
+			$this->admin_db->update('agency');
+			
+			$this->admin_db->set('status', -1);
+			$this->admin_db->where('agency_id', $data['agency_id']);
+			$this->admin_db->update('user');
+			
+			return $this->admin_db->affected_rows();
 		}
 	}
 ?>

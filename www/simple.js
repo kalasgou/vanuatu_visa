@@ -300,8 +300,11 @@ function update_account_superior(userid, original_superior_id, this_a) {
 
 function pass_or_not(uuid, opt) {
 	var message = $('#message').val();
-	if (opt === 'pass' && message === '') {
+	if (message === '' && opt === 'pass') {
 		message = '你的申请已通过办事处的初步审核，请等待大使馆的签证审核。';
+	} else if (message === '') {
+		alert('请详细填写申请没能通过审核的原因。');
+		return ;
 	}
 	
 	$.ajax({
@@ -324,23 +327,25 @@ function pass_or_not(uuid, opt) {
 }
 
 function visa_or_not(uuid, opt) {
-	$.ajax({
-		url: '/admin/approving/' + uuid + '/' + opt,
-		data: {},
-		type: 'POST',
-		dataType: 'json',
-		success: function(json) {
-			switch (json.msg) {
-				case 'success': alert('对申请号 ' + uuid + ' 审批操作成功！'); break;
-				case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！'); break;
-				case 'fail': alert('出错了'); break;
+	if (confirm('确定更新该申请的状态吗？')) {
+		$.ajax({
+			url: '/admin/approving/' + uuid + '/' + opt,
+			data: {},
+			type: 'POST',
+			dataType: 'json',
+			success: function(json) {
+				switch (json.msg) {
+					case 'success': alert('对申请号 ' + uuid + ' 审批操作成功！'); break;
+					case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！'); break;
+					case 'fail': alert('出错了'); break;
+				}
+				return;
+			},
+			error: function() {
+				alert('Network Error');
 			}
-			return;
-		},
-		error: function() {
-			alert('Network Error');
-		}
-	});
+		});
+	}
 }
 
 function pass_for_fee(uuid, opt, this_a) {
@@ -367,23 +372,25 @@ function pass_for_fee(uuid, opt, this_a) {
 }
 
 function visa_it(uuid, opt, this_a) {
-	$.ajax({
-		url: '/admin/approving/' + uuid + '/' + opt,
-		data: {},
-		type: 'POST',
-		dataType: 'json',
-		success: function(json) {
-			switch (json.msg) {
-				case 'success': alert('对申请号 ' + uuid + ' 审批操作成功！'); this_a.innerHTML = '已更新'; this_a.style.color = '#DDDDDD'; break;
-				case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！'); break;
-				case 'fail': alert('出错了'); break;
+	if (confirm('确定更新该申请的状态吗？')) {
+		$.ajax({
+			url: '/admin/approving/' + uuid + '/' + opt,
+			data: {},
+			type: 'POST',
+			dataType: 'json',
+			success: function(json) {
+				switch (json.msg) {
+					case 'success': alert('对申请号 ' + uuid + ' 审批操作成功！'); this_a.innerHTML = '已更新'; this_a.style.color = '#DDDDDD'; break;
+					case 'invalid': alert('申请号 ' + uuid + ' 记录不存在，请检查流水号正确与否！'); break;
+					case 'fail': alert('出错了'); break;
+				}
+				return;
+			},
+			error: function() {
+				alert('Network Error');
 			}
-			return;
-		},
-		error: function() {
-			alert('Network Error');
-		}
-	});
+		});
+	}
 }
 
 function trash_application(uuid, this_a) {
@@ -457,4 +464,8 @@ function refresh_captcha() {
 			alert('Network Error');
 		}
 	});
+}
+
+function disable_refresh_tuner() {
+	clearInterval(refresh_tuner);
 }

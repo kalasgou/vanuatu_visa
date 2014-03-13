@@ -110,6 +110,15 @@
 				<span id="answer" style="width:350px;"><?php echo $home_info['home_addr'];?></span><br>&nbsp;&nbsp;
 				Tel No.电话: <span id="answer" style="width:150px;"><?php echo $home_info['home_tel'];?></span><br>
 			</div>
+			<?php if ($status >= APPLY_WAITING) { ?>
+			<div id="scan_file">
+				<!--<div>签证相片:<img src="<?php echo $photo_pic;?>" alt="签证相片"/></div>-->
+				<div>护照:<img src="<?php echo $passport_pic;?>" alt="护照"/></div>
+				<!--<div>身份证:<img src="<?php echo $identity_pic;?>" alt="身份证"/></div>
+				<div>往返机票:<img src="<?php echo $ticket_pic;?>" alt="往返机票"/></div>
+				<div>银行存款证明:<img src="<?php echo $deposition_pic;?>" alt="银行存款证明"/></div>-->
+			</div>
+			<? } ?>
 			<div>
 				10、Passport 护照:<br>
 				(a) Number 护照号 <span id="answer" style="width:160px;"><?php echo $passport_number;?></span>
@@ -208,15 +217,6 @@
 				22、Have you ever been refused entry to Vanuatu?<br>
 				您曾经被瓦努阿图拒签过吗？ Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'on' ? 'checked="checked"' : 'disabled="disabled"');?>/></span> When何时 <span id="answer" style="width:150px;"><?php echo $behaviour_info['refuse_date'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'off' ? 'checked="checked"' : 'disabled="disabled"');?>/></span><br>
 			</div>
-			<?php if ($status >= APPLY_WAITING) { ?>
-			<div id="scan_file">
-				<!--<div>签证相片:<img src="<?php echo $photo_pic;?>" alt="签证相片"/></div>-->
-				<div>护照:<img src="<?php echo $passport_pic;?>" alt="护照"/></div>
-				<!--<div>身份证:<img src="<?php echo $identity_pic;?>" alt="身份证"/></div>
-				<div>往返机票:<img src="<?php echo $ticket_pic;?>" alt="往返机票"/></div>
-				<div>银行存款证明:<img src="<?php echo $deposition_pic;?>" alt="银行存款证明"/></div>-->
-			</div>
-			<? } ?>
 			<br>
 			<div>
 				<b>审核记录：</b><br>

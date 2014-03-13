@@ -213,15 +213,15 @@
 		return FALSE;
 	}
 	
-	function get_reservation_subordinates($userid) {
+	function get_direct_subordinates($userid) {
 		$CI = & get_instance();
 		$CI->load->library('RedisDB');
 		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
 		
-		return $redis->sMembers($userid.'_subordinate_ids');
+		return array_merge($redis->sMembers($userid.'_subordinate_ids'), array($userid));
 	}
 	
-	function get_office_reservation_subordinates($userid) {
+	function get_direct_indirect_subordinates($userid) {
 		$CI = & get_instance();
 		$CI->load->library('RedisDB');
 		$redis = $CI->redisdb->instance(REDIS_DEFAULT);
@@ -232,6 +232,6 @@
 			$userids = array_merge($userids, $redis->sMembers($one.'_subordinate_ids'));
 		}
 		
-		return $userids;
+		return array_merge($userids, $office_admins);
 	}
 ?>

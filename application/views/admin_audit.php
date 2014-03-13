@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>Vanuatu Visa</title>
+		<meta http-equiv="Refresh" content="60">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
@@ -36,7 +37,7 @@
 				$('#orderby').val(selected);
 				$('#od' + selected).css('display', 'inline-block');
 				switch (selected) {
-					case '<?php echo APPLY_STATUS;?>' : $('#cur_status').val(cur_status); break;
+					case '<?php echo APPLY_STATUS;?>' : $('#cur_status').val(cur_status); refresh_tuner = setInterval('location.reload();', 10000); break;
 					case '<?php echo APPLY_UUID;?>' : $('#apply_id').val(apply_id); break;
 					case '<?php echo APPLY_PASSPORT;?>' : $('#passport_no').val(passport_no); break;
 					case '<?php echo APPLY_PERIOD;?>' : $('#start_time').val(start_time); $('#end_time').val(end_time); break;
@@ -66,7 +67,7 @@
 			<div>
 				<div style="display:inline-block;">
 					请选择查询条件:&nbsp;
-					<select id="orderby" onchange="javascript:what_is_selected();">
+					<select id="orderby" onclick="javascript:disable_refresh_tuner();" onchange="javascript:what_is_selected();">
 						<option value="<?php echo APPLY_STATUS;?>">申请状态</option>
 						<option value="<?php echo APPLY_UUID;?>">申请流水号</option>
 						<option value="<?php echo APPLY_PASSPORT;?>">护照号</option>
@@ -141,8 +142,8 @@
 						<td>
 							<a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank">详细</a> / 
 							<?php if ($one['status'] > APPLY_NOTFINISHED && $one['status'] < APPLY_PASSED) { ?>
-								<a href="/admin/present/<?php echo $one['uuid'];?>" target="_blank">修改</a> / 
-								<a href="javascript:void(0);" onclick="pass_for_fee('<?php echo $one['uuid'];?>', 'pass', this);">通过审核</a> 
+								<a style="color:darkgreen;" href="/admin/present/<?php echo $one['uuid'];?>" target="_blank">修改</a> / 
+								<a style="color:green;" href="javascript:void(0);" onclick="pass_for_fee('<?php echo $one['uuid'];?>', 'pass', this);">通过审核</a> 
 							<?php } ?>
 							<!--<?php if ($one['status'] == APPLY_PASSED) { ?>
 								<a href="javascript:void(0);" onclick="pay_for_visa('<?php echo $one['uuid'];?>', this);">缴费</a> 
@@ -151,7 +152,7 @@
 							<a href="/admin/scan_upload/<?php echo $one['uuid'];?>" target="_blank">上传证明</a>
 							<?php } ?>-->
 							<?php if ($one['status'] == APPLY_ACCEPTED) { ?>
-							<a href="/admin/download_visa/<?php echo $one['uuid'];?>" target="_blank">下载签证</a>
+							<a style="color:turquoise;" href="/admin/download_visa/<?php echo $one['uuid'];?>" target="_blank">下载签证</a>
 							<?php } ?>
 						</td>
 					</tr>
@@ -168,7 +169,7 @@
 		</div>
 	</body>
 	<script type="text/javascript">
-		var selected = '<?php echo APPLY_STATUS;?>';
+		var selected = '<?php echo APPLY_STATUS;?>', refresh_tuner = '';
 		var selected_arg = '', cur_status = '', apply_id = '', passport_no = '', start_time = '', end_time = '';
 		
 		var argument_str = location.search;

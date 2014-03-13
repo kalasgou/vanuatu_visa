@@ -118,6 +118,13 @@
 				(c) Date of Issue 发照日期 <span id="answer" style="width:120px;"><?php echo date('Y-m-d', $passport_date);?></span>
 				(d) Expiry Date 有效日期至 <span id="answer" style="width:120px;"><?php echo date('Y-m-d', $passport_expiry);?></span>
 			</div>
+			<div id="scan_file">
+				<!--<div>签证相片:<img src="<?php echo $photo_pic;?>" alt="签证相片"/></div>-->
+				<div>护照:<img src="<?php echo $passport_pic;?>" alt="护照"/></div>
+				<!--<div>身份证:<img src="<?php echo $identity_pic;?>" alt="身份证"/></div>
+				<div>往返机票:<img src="<?php echo $ticket_pic;?>" alt="往返机票"/></div>
+				<div>银行存款证明:<img src="<?php echo $deposition_pic;?>" alt="银行存款证明"/></div>-->
+			</div>
 			<div>
 				11、Purpose of Visit 访瓦目的:<br>&nbsp;&nbsp;
 				Tourism 旅游 <span id="option"><input type="checkbox" <?php echo ($purpose == 8 ? 'checked="checked"' : 'disabled="disabled"');?>/></span>
@@ -209,13 +216,6 @@
 				22、Have you ever been refused entry to Vanuatu?<br>
 				您曾经被瓦努阿图拒签过吗？ Yes是 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'on' ? 'checked="checked"' : 'disabled="disabled"');?>/></span> When何时 <span id="answer" style="width:150px;"><?php echo $behaviour_info['refuse_date'];?></span> No否 <span id="option"><input type="checkbox" <?php echo ($behaviour_info['refused'] === 'off' ? 'checked="checked"' : 'disabled="disabled"');?>/></span><br>
 			</div>
-			<div id="scan_file">
-				<!--<div>签证相片:<img src="<?php echo $photo_pic;?>" alt="签证相片"/></div>-->
-				<div>护照:<img src="<?php echo $passport_pic;?>" alt="护照"/></div>
-				<!--<div>身份证:<img src="<?php echo $identity_pic;?>" alt="身份证"/></div>
-				<div>往返机票:<img src="<?php echo $ticket_pic;?>" alt="往返机票"/></div>
-				<div>银行存款证明:<img src="<?php echo $deposition_pic;?>" alt="银行存款证明"/></div>-->
-			</div>
 			<br>
 			<div>
 				<b>审核记录：</b><br>
@@ -243,7 +243,7 @@
 			<?php if ($status < APPLY_PASSED && $user['permission'] == OFFICE_ADMIN) { ?>
 			<div>
 				<b>请在此处填写审核留言（主要填写申请未能通过审核的原因，若通过可不填写）：</b><br>
-				<textarea id="message"></textarea>
+				<textarea id="message" placeholder="若不通过审核请务必填写详细原因"></textarea>
 			</div>
 			<div id="next_step">
 				<a class="btn btn-success" href="javascript:pass_or_not('<?php echo $uuid;?>', 'pass');">通过</a>

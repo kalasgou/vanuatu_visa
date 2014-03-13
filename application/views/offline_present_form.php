@@ -36,8 +36,6 @@
 		<div id="filling_info" style="top:0px; left:0px;">
 			<form id="basic_form" method="POST" action="/admin/submit_present">
 				<input type="hidden" name="uuid" value="<?php echo $uuid;?>"/>
-				<input type="hidden" name="userid" value="<?php echo $userid;?>"/>
-				<input type="hidden" name="province_id" value="<?php echo $province_id;?>"/>
 				<p>1、Full Name 姓名:
 				First Name 名<input type="text" name="first_name" value="<?php echo $first_name;?>"/>
 				Last Name 姓<input type="text" name="last_name" value="<?php echo $last_name;?>"/></p>

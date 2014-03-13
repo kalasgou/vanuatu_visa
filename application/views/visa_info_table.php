@@ -32,14 +32,14 @@
 			<div class="country_logo"><img src="/vanuatu.png" style="width:50%;"></div>
 			<div class="description">Vanuatu Embassy eVisa<br>瓦努阿图驻华大使馆电子签证</div>
 			<div class="info_table">
-				<table class="table table-hover table-bordered" style="font-weight:bold;">
+				<table class="table table-hover table-bordered" style="font-size:16px;">
 					<colgroup>
-						<col style="width:40%;"/>
-						<col style="width:60%"/>
+						<col style="width:45%;"/>
+						<col style="width:55%"/>
 					</colgroup>
 					<?php if ($valid_visa) { ?>
 					<tr>
-						<td colspan="2" align="center">一次有效签注 / Single Entry Visa</td>
+						<td colspan="2" align="center" style="font-weight:bold;">一次有效签注 / Single Entry Visa</td>
 					</tr>
 					<tr>
 						<td>姓名 / Name</td>
@@ -103,7 +103,10 @@
 					</tr>
 					<?php if ($status == APPLY_ACCEPTED) { ?>
 					<tr>
-						<td colspan="2" align="right"><button class="btn btn-success" type="button" onclick="javascript:location.href='/api/download_visa/<?php echo $apply_id;?>/<?php echo $visa_number;?>'">下载签证</button></td>
+						<td colspan="2" align="right">
+							<button class="btn btn-success" type="button" onclick="javascript:location.href='/api/download_visa_word/<?php echo $apply_id;?>/<?php echo $visa_number;?>'">下载签证(WORD)</button>
+							<button class="btn btn-success" type="button" onclick="javascript:location.href='/api/download_visa_pdf/<?php echo $apply_id;?>/<?php echo $visa_number;?>'">下载签证(PDF)</button>
+						</td>
 					</tr>
 					<? } ?>
 					<?php } else { ?>

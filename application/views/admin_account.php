@@ -144,11 +144,11 @@
 							</select>
 						</td>
 						<td>
-							<a href="javascript:void(0);" onclick="update_account_superior(<?php echo $one['userid'];?>, <?php echo $one['superior_id'];?>, this);">更新</a> / 
+							<a style="color:darkgreen;" href="javascript:void(0);" onclick="update_account_superior(<?php echo $one['userid'];?>, <?php echo $one['superior_id'];?>, this);">更新</a> / 
 							<?php if ($one['status'] == ACCOUNT_CANCELLED) { ?>
-								<a href="javascript:void(0);" onclick="change_account_status('<?php echo $one['userid'];?>', 'yes', this);">激活</a>
+								<a style="color:green;" href="javascript:void(0);" onclick="change_account_status('<?php echo $one['userid'];?>', 'yes', this);">激活</a>
 							<?php } else if ($one['status'] == ACCOUNT_NORMAL) { ?>
-								<a href="javascript:void(0);" onclick="change_account_status('<?php echo $one['userid'];?>', 'no', this);">注销</a>
+								<a style="color:red;" href="javascript:void(0);" onclick="change_account_status('<?php echo $one['userid'];?>', 'no', this);">注销</a>
 							<?php } ?>
 						</td>
 					</tr>

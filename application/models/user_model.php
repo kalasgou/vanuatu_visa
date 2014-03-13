@@ -167,6 +167,7 @@
 				}
 				$this->user_db->where('userid > ', 2);
 			}
+			$this->user_db->order_by('reg_time', 'desc');
 			$this->user_db->limit(20, 20 * $data['page']);
 			$query = $this->user_db->get('user');
 			
@@ -279,7 +280,7 @@
 			if ($agency_id > 0) {
 				$this->user_db->where('agency_id', $agency_id);
 			}
-			$this->user_db->where('permission', RESERVATION_USER);
+			$this->user_db->where_in('permission', array(RESERVATION_USER, OFFICE_ADMIN));
 			$query = $this->user_db->get('user');
 			
 			foreach ($query->result_array() as $one) {

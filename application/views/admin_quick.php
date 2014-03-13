@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>Vanuatu Visa</title>
+		<meta http-equiv="Refresh" content="60">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
@@ -25,7 +26,7 @@
 					case '<?php echo APPLY_UUID;?>' : location.href = '/admin/quick?orderby=' + selected + '&apply_id=' + $('#apply_id').val(); break;
 					case '<?php echo APPLY_PASSPORT;?>' : location.href = '/admin/quick?orderby=' + selected + '&passport_no=' + $('#passport_no').val(); break;
 					case '<?php echo APPLY_PERIOD;?>' : location.href = '/admin/quick?orderby=' + selected + '&start_time=' + $('#start_time').val() + '&end_time=' + $('#end_time').val(); break;
-					case '<?php echo APPLY_PRESENT;?>' : location.href = '/admin/quick?orderby=' + selected; break;
+					//case '<?php echo APPLY_PRESENT;?>' : location.href = '/admin/quick?orderby=' + selected; break;
 					default : return;
 				}
 			}
@@ -36,7 +37,7 @@
 				$('#orderby').val(selected);
 				$('#od' + selected).css('display', 'inline-block');
 				switch (selected) {
-					case '<?php echo APPLY_STATUS;?>' : $('#cur_status').val(cur_status); break;
+					case '<?php echo APPLY_STATUS;?>' : $('#cur_status').val(cur_status); refresh_tuner = setInterval('location.reload();', 10000); break;
 					case '<?php echo APPLY_UUID;?>' : $('#apply_id').val(apply_id); break;
 					case '<?php echo APPLY_PASSPORT;?>' : $('#passport_no').val(passport_no); break;
 					case '<?php echo APPLY_PERIOD;?>' : $('#start_time').val(start_time); $('#end_time').val(end_time); break;
@@ -66,12 +67,12 @@
 			<div>
 				<div style="display:inline-block;">
 					请选择查询条件:&nbsp;
-					<select id="orderby" onchange="javascript:what_is_selected();">
+					<select id="orderby" onclick="javascript:disable_refresh_tuner();" onchange="javascript:what_is_selected();">
 						<option value="<?php echo APPLY_STATUS;?>">申请状态</option>
 						<option value="<?php echo APPLY_UUID;?>">申请流水号</option>
 						<option value="<?php echo APPLY_PASSPORT;?>">护照号</option>
 						<option value="<?php echo APPLY_PERIOD;?>">日期范围</option>
-						<option value="<?php echo APPLY_PRESENT;?>">线下申请</option>
+						<!--<option value="<?php echo APPLY_PRESENT;?>">线下申请</option>-->
 					</select>
 				</div>
 				<div id="od1" style="display:inline-block;">
@@ -141,13 +142,13 @@
 						<td>
 							<a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank">详细</a>
 							<?php if ($one['status'] >= APPLY_WAITING && $one['status'] < APPLY_ACCEPTED) { ?> / 
-								<a href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'drop', this);">删除</a>
+								<a style="color:red;" href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'drop', this);">删除</a>
 							<?php } ?>
 							<?php if ($one['status'] >= APPLY_WAITING && $one['status'] < APPLY_ACCEPTED) { ?> / 
-								<a href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'visa', this);">通过签证</a>
+								<a style="color:green;" href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'visa', this);">通过签证</a>
 							<?php } ?>
 							<?php if ($one['status'] == APPLY_ACCEPTED) { ?> / 
-								<a href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'best', this);">注销签证</a>
+								<a style="color:orangered;" href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'best', this);">注销签证</a>
 							<?php } ?>
 						</td>
 					</tr>
@@ -164,7 +165,7 @@
 		</div>
 	</body>
 	<script type="text/javascript">
-		var selected = '<?php echo APPLY_STATUS;?>';
+		var selected = '<?php echo APPLY_STATUS;?>', refresh_tuner = '';
 		var selected_arg = '', cur_status = '', apply_id = '', passport_no = '', start_time = '', end_time = '';
 		
 		var argument_str = location.search;

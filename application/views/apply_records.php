@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>Vanuatu Visa</title>
+		<meta http-equiv="Refresh" content="60">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta content="" name="">
 		<link rel="apple-touch-icon-precomposed" href=""/>
@@ -35,7 +36,7 @@
 				$('#orderby').val(selected);
 				$('#od' + selected).css('display', 'inline-block');
 				switch (selected) {
-					case '<?php echo APPLY_STATUS;?>' : $('#cur_status').val(cur_status); break;
+					case '<?php echo APPLY_STATUS;?>' : $('#cur_status').val(cur_status); refresh_tuner = setInterval('location.reload();', 10000); break;
 					case '<?php echo APPLY_UUID;?>' : $('#apply_id').val(apply_id); break;
 					case '<?php echo APPLY_PASSPORT;?>' : $('#passport_no').val(passport_no); break;
 					case '<?php echo APPLY_PERIOD;?>' : $('#start_time').val(start_time); $('#end_time').val(end_time); break;
@@ -61,7 +62,7 @@
 			<div>
 				<div style="display:inline-block;">
 					请选择查询条件:&nbsp;
-					<select id="orderby" onchange="javascript:what_is_selected();">
+					<select id="orderby" onclick="javascript:disable_refresh_tuner();" onchange="javascript:what_is_selected();">
 						<option value="<?php echo APPLY_STATUS;?>">申请状态</option>
 						<option value="<?php echo APPLY_UUID;?>">申请流水号</option>
 						<option value="<?php echo APPLY_PASSPORT;?>">护照号</option>
@@ -136,10 +137,10 @@
 						<td><span title="具体时间 <?php echo $one['approve_time'];?>"><?php echo substr($one['approve_time'], 0, 10);?></span></td>
 						<td>
 							<a href="/apply/view/<?php echo $one['uuid'];?>" target="_blank">查看</a>
-							<?php if ($one['status'] >= APPLY_NOTFINISHED && $one['status'] <= APPLY_NOTPASSED) { ?><a href="/apply/basic_info/<?php echo $one['uuid'];?>">修改</a><?php } ?>
-							<?php if ($one['status'] >= APPLY_NOTFINISHED && $one['status'] < APPLY_PASSED) { ?><a href="javascript:void(0);" onclick="trash_application('<?php echo $one['uuid'];?>', this)">删除</a><?php } ?>
-							<a href="/apply/download_form/<?php echo $one['uuid'];?>" target="_blank">下载表格</a>
-							<?php if ($one['status'] == APPLY_ACCEPTED) { ?><a href="/apply/download_visa/<?php echo $one['uuid'];?>" target="_blank">下载签证</a><?php } ?>
+							<?php if ($one['status'] >= APPLY_NOTFINISHED && $one['status'] <= APPLY_NOTPASSED) { ?><a style="color:darkgreen;" href="/apply/basic_info/<?php echo $one['uuid'];?>">修改</a><?php } ?>
+							<?php if ($one['status'] >= APPLY_NOTFINISHED && $one['status'] < APPLY_PASSED) { ?><a style="color:red;" href="javascript:void(0);" onclick="trash_application('<?php echo $one['uuid'];?>', this)">删除</a><?php } ?>
+							<a style="color:orange;" href="/apply/download_form/<?php echo $one['uuid'];?>" target="_blank">下载表格</a>
+							<?php if ($one['status'] == APPLY_ACCEPTED) { ?><a style="color:turquoise;" href="/apply/download_visa/<?php echo $one['uuid'];?>" target="_blank">下载签证</a><?php } ?>
 						</td>
 					</tr>
 					<?php
@@ -155,7 +156,7 @@
 		</div>
 	</body>
 	<script type="text/javascript">
-		var selected = '<?php echo APPLY_STATUS;?>';
+		var selected = '<?php echo APPLY_STATUS;?>', refresh_tuner = '';
 		var selected_arg = '', cur_status = '', apply_id = '', passport_no = '', start_time = '', end_time = '';
 		
 		var argument_str = location.search;

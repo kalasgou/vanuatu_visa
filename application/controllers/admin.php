@@ -29,7 +29,7 @@ class Admin extends UserController {
 		
 		$data = array(
 					'uuid' => '',
-					'userid' => PRESENT_USERID,
+					'userid' => $this->userid,
 					'province_id' => $this->user_info['province_id'],
 					'city_id' => $this->user_info['city_id'],
 					'agency_id' => $this->user_info['agency_id'],
@@ -111,6 +111,8 @@ class Admin extends UserController {
 		
 		if ($info) {
 			$data = $info;
+			$data['passport_date'] = $info['passport_date'] == 0 ? '' : date('Y-m-d', $info['passport_date']);
+			$data['passport_expiry'] = $info['passport_expiry'] == 0 ? '' : date('Y-m-d', $info['passport_expiry']);
 			$data['occupation_info'] = json_decode($info['occupation_info'], TRUE);
 			$data['home_info'] = json_decode($info['home_info'], TRUE);
 			$data['relative_info'] = json_decode($info['relative_info'], TRUE);
@@ -133,7 +135,7 @@ class Admin extends UserController {
 			show_error($msg);
 		}
 		
-		$data['userid'] = PRESENT_USERID;
+		$data['userid'] = $this->userid;
 		$data['uuid'] = trim($this->input->post('uuid', TRUE));
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['city_id'] = $this->user_info['city_id'];
@@ -310,7 +312,7 @@ class Admin extends UserController {
 			}
 		}
 		
-		header('Location: '.base_url('/admin/audit?orderby=5'));
+		header('Location: '.base_url('/admin/audit?orderby=2&apply_id='.$data['uuid']));
 	}
 	
 	public function audit($page = 1) {
@@ -325,6 +327,7 @@ class Admin extends UserController {
 		$this->load->helper('util');
 		
 		$data['userids'] = array();
+		$data['permission'] = $this->permission;
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['city_id'] = $this->user_info['city_id'];
 		$data['page'] = $page - 1;
@@ -339,9 +342,9 @@ class Admin extends UserController {
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
 		
 		if ($data['orderby'] === APPLY_PRESENT) {
-			$data['userids'] = array(PRESENT_USERID);
+			$data['userids'] = array($this->userid);
 		} else {
-			$data['userids'] = get_reservation_subordinates($this->user_info['userid']);
+			$data['userids'] = get_direct_subordinates($this->userid);
 		}
 		
 		$this->load->model('admin_model', 'adm');
@@ -390,6 +393,7 @@ class Admin extends UserController {
 		$this->load->helper('util');
 		
 		$data['userids'] = array();
+		$data['permission'] = $this->permission;
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['city_id'] = $this->user_info['city_id'];
 		$data['page'] = $page - 1;
@@ -404,9 +408,9 @@ class Admin extends UserController {
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
 		
 		if ($data['orderby'] === APPLY_PRESENT) {
-			$data['userids'] = array(PRESENT_USERID);
+			$data['userids'] = get_direct_subordinates($this->userid);
 		} else {
-			$data['userids'] = get_office_reservation_subordinates($this->user_info['userid']);
+			$data['userids'] = get_direct_indirect_subordinates($this->userid);
 		}
 		
 		$this->load->model('admin_model', 'adm');
@@ -454,7 +458,8 @@ class Admin extends UserController {
 		
 		$this->load->helper('util');
 		
-		$data['userids'] = array();
+		//$data['userids'] = array();
+		$data['permission'] = $this->permission;
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['city_id'] = $this->user_info['city_id'];
 		$data['page'] = $page - 1;
@@ -468,9 +473,9 @@ class Admin extends UserController {
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
 		
-		if ($data['orderby'] === APPLY_PRESENT) {
+		/*if ($data['orderby'] === APPLY_PRESENT) {
 			$data['userids'] = array(PRESENT_USERID);
-		}
+		}*/
 		
 		$this->load->model('admin_model', 'adm');
 		
@@ -890,6 +895,7 @@ class Admin extends UserController {
 		}
 		
 		$data['userids'] = array();
+		$data['permission'] = $this->permission;
 		$data['start_time'] = trim($this->input->get('start_time', TRUE));
 		$data['end_time'] = trim($this->input->get('end_time', TRUE));
 		
@@ -936,12 +942,12 @@ class Admin extends UserController {
 			case OFFICE_ADMIN: 
 					$office_admins = $this->user->get_office_admins(0, $this->user_info['agency_id']);
 					foreach ($office_admins as $key => $value) {
-						$data['userids'] = array_merge($data['userids'], get_reservation_subordinates($key)); 
+						$data['userids'] = array_merge($data['userids'], get_direct_subordinates($key));
 					}
 					break;
 			case EMBASSY_ADMIN: 
 					$office_admins = $this->user->get_office_admins(0, 0);
-					$data['userids'] = get_office_reservation_subordinates($this->userid);
+					$data['userids'] = get_direct_indirect_subordinates($this->userid);
 					break;
 			default : $office_admins = $this->user->get_office_admins(0, 0);
 		}
@@ -1156,6 +1162,35 @@ class Admin extends UserController {
 		header('Content-Transfer-Encoding: binary');
 		header('Content-Length: '.filesize($filename));
 		readfile($filename);
+	}
+	
+	public function download_form($uuid = '') {
+		if ($this->permission != SYSTEM_ADMIN) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		if ($uuid === '') {
+			show_error('申请流水号出错');
+		}
+		
+		$attributes = '*';
+		
+		$this->load->model('admin_model', 'adm');
+		$info = $this->adm->retrieve_some_info($uuid, $attributes);
+		
+		if ($info) {
+			$this->load->view('form_for_download', $info);
+		} else {
+			$msg['tips'] = '你所请求的申请记录不存在！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
 	}
 	
 	public function agency($page = 1) {

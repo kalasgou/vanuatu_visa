@@ -199,7 +199,9 @@
 	//Convert HTML 2 PDF by using MPDF PHP library
 	require '../application/third_party/mPDF/mpdf.php';
 	$mpdf = new mPDF('utf-8'); 
-	$mpdf->useAdobeCJK = TRUE; 
+	$mpdf->useAdobeCJK = TRUE;
+	$mpdf->SetTitle('Serial NO.'.$uuid);
+	$mpdf->SetAuthor('Vanuatu Visa');
 	$mpdf->SetAutoFont(AUTOFONT_ALL);
 	$mpdf->WriteHTML($HTMLoutput);
 	$mpdf->Output('application_form.pdf', 'D');

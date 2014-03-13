@@ -152,8 +152,8 @@
 						<td><?php echo $one['status_str'];?></td>
 						<td><?php echo date('Y-m-d H:i:s', $one['date']);?></td>
 						<td>
-							<a href="javascript:void(0);" onclick="update_agency(<?php echo $one['id'];?>, this);">修改</a> / 
-							<a href="javascript:void(0);" onclick="delete_agency(<?php echo $one['id'];?>, this);">删除</a>
+							<a style="color:darkgreen;" href="javascript:void(0);" onclick="update_agency(<?php echo $one['id'];?>, this);">修改</a> / 
+							<a style="color:red;" href="javascript:void(0);" onclick="delete_agency(<?php echo $one['id'];?>, this);">删除</a>
 						</td>
 					</tr>
 					<?php

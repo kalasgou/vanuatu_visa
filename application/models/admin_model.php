@@ -13,8 +13,12 @@
 				$this->admin_db->where('province_id', $data['province_id']);
 				$this->admin_db->where('city_id', $data['city_id']);
 			}*/
-			if ($data['userids']) {
-				$this->admin_db->where_in('userid', $data['userids']);
+			if ($data['permission'] == OFFICE_ADMIN || $data['permission'] == EMBASSY_ADMIN) {
+				if ($data['userids']) {
+					$this->admin_db->where_in('userid', $data['userids']);
+				} else {
+					return 0;
+				}
 			}
 			
 			switch ($data['orderby']) {
@@ -45,8 +49,12 @@
 				$this->admin_db->where('province_id', $data['province_id']);
 				$this->admin_db->where('city_id', $data['city_id']);	
 			}*/
-			if ($data['userids']) {
-				$this->admin_db->where_in('userid', $data['userids']);
+			if ($data['permission'] == OFFICE_ADMIN || $data['permission'] == EMBASSY_ADMIN) {
+				if ($data['userids']) {
+					$this->admin_db->where_in('userid', $data['userids']); 
+				} else {
+					return array();
+				}
 			}
 			
 			switch ($data['orderby']) {
@@ -85,8 +93,12 @@
 		
 		public function retrieve_records($data, $page) {
 			$this->admin_db->select('userid, uuid, status, first_name, last_name, birth_day, birth_month, birth_year, gender, nationality, passport_number, submit_time, audit_time, pay_time, fee, approve_time, visa_no');
-			if ($data['userids']) {
-				$this->admin_db->where_in('userid', $data['userids']);
+			if ($data['permission'] == OFFICE_ADMIN || $data['permission'] == EMBASSY_ADMIN) {
+				if ($data['userids']) {
+					$this->admin_db->where_in('userid', $data['userids']);
+				} else {
+					return array();
+				}
 			}
 			$this->admin_db->where('status >= ', APPLY_ACCEPTED);
 			$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00');

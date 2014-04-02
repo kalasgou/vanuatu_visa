@@ -119,3 +119,15 @@ body {
 #not_necessary {
 	font-size: 18px;
 }
+
+#lang_switch {
+	position: relative;
+	float: right;
+	right: 140px;
+	bottom: 28px;
+}
+
+#auto_visa {
+	position: relative;
+	float: right;
+}

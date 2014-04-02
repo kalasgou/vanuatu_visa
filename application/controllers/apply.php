@@ -942,7 +942,7 @@ class Apply extends UserController {
 		}
 	}
 	
-	public function download_visa($uuid = '') {
+	/*public function download_visa($uuid = '') {
 		if ($this->permission != RESERVATION_USER) {
 			$msg['tips'] = '你的帐户无此操作权限！';
 			$link = 'javascript:history.go(-1);';
@@ -979,6 +979,24 @@ class Apply extends UserController {
 		header('Content-Transfer-Encoding: binary');
 		header('Content-Length: '.filesize($filename));
 		readfile($filename);
+	}*/
+	
+	public function download_visa($uuid = '') {
+		if ($uuid === '') {
+			show_error('申请流水号出错');
+		}
+		
+		$this->load->model('apply_model', 'alm');
+		$info = $this->alm->get_visa_info($uuid);
+		
+		if ($info) {
+			$this->load->helper('util');
+			visa_pdf($info);
+		} else {
+			$ret['msg'] = 'Visa Not Found';
+			
+			echo json_encode($ret);
+		}
 	}
 	
 	public function audit_trace_by_uuid($uuid = '') {
@@ -1063,7 +1081,7 @@ class Apply extends UserController {
 				$one['office'] = $office_admins[$userid]['agency'];
 				$one['office_admin'] = $office_admins[$userid]['nickname'];
 				
-				$userid = $this->alm->get_admin_userid($one['uuid'], APPLY_REJECTED, VISA_EXPIRED);
+				$userid = $this->alm->get_admin_userid($one['uuid'], VISA_REFUSED, VISA_EXPIRED);
 				$one['embassy'] = $embassy_admins[$userid]['agency'];
 				$one['embassy_admin'] = $embassy_admins[$userid]['nickname'];
 				

@@ -397,6 +397,8 @@ class Admin extends UserController {
 		$data['province_id'] = $this->user_info['province_id'];
 		$data['city_id'] = $this->user_info['city_id'];
 		$data['page'] = $page - 1;
+		$lang = trim($this->input->get('lang', TRUE));
+		$lang = $lang === 'en' ? 'en' : '';
 		
 		$data['orderby'] = intval($this->input->get('orderby', TRUE));
 		$status_str = trim($this->input->get('cur_status', TRUE));
@@ -428,10 +430,17 @@ class Admin extends UserController {
 			$config['first_url'] = $config['base_url'].'1?'.http_build_query($_GET, '', "&");
 		}
 		
-		$config['prev_link'] = '上一页';
-		$config['next_link'] = '下一页';
-		$config['first_link'] = '首 页';
-		$config['last_link'] = '尾 页';
+		if ($lang === 'en') {
+			$config['prev_link'] = 'Prev';
+			$config['next_link'] = 'Next';
+			$config['first_link'] = 'First';
+			$config['last_link'] = 'Last';
+		} else {
+			$config['prev_link'] = '上一页';
+			$config['next_link'] = '下一页';
+			$config['first_link'] = '首 页';
+			$config['last_link'] = '尾 页';
+		}
 		
 		$this->pagination->initialize($config);
 		
@@ -441,10 +450,14 @@ class Admin extends UserController {
 		$data['num_records'] = $config['total_rows'];
 		
 		foreach ($data['records'] as &$one) {
-			$one['status_str'] = $this->config->config['apply_status_str'][$one['status']];
+			$one['status_str'] = $this->config->config['apply_status_str'.$lang][$one['status']];
 		}
 		
-		$this->load->view('admin_approve', $data);
+		$this->load->library('RedisDB');
+		$redis = $this->redisdb->instance(REDIS_DEFAULT);
+		$data['auto_visa_switch'] = $redis->sIsMember('auto_visa', $this->userid);
+		
+		$this->load->view('admin_approve'.$lang, $data);
 	}
 	
 	public function quick($page = 1) {
@@ -728,6 +741,12 @@ class Admin extends UserController {
 		}
 		
 		echo json_encode($ret);
+		
+		$this->load->library('RedisDB');
+		$redis = $this->redisdb->instance(REDIS_DEFAULT);
+		if ($data['status'] === APPLY_PASSED && $redis->sIsMember('auto_visa', $this->user_info['superior_id'])) {
+			$redis->lPush('auto_visa_queue', json_encode(array('userid' => $this->user_info['superior_id'], 'uuid' => $data['uuid'])));
+		}
 	}
 	
 	public function approving($uuid = '', $opt = '') {
@@ -751,7 +770,7 @@ class Admin extends UserController {
 		
 		$this->load->model('admin_model', 'adm');
 		
-		if ($data['status'] === APPLY_ACCEPTED) {
+		if ($data['status'] === VISA_ISSUED) {
 			$data['start_time'] = strtotime('today');
 			$data['end_time'] = $data['start_time'] + 86400 * VISA_VALID_DAYS - 1;
 			
@@ -769,7 +788,7 @@ class Admin extends UserController {
 				$this->adm->update_visa_number($id, $data['visa_no']);
 				$data['message'] = '该申请通过最终审核并成功获取签证（编号 '.$data['visa_no'].'）。';
 				
-				require '../application/third_party/PHPWord/PHPWord.php';
+				/*require '../application/third_party/PHPWord/PHPWord.php';
 				$PHPWord = new PHPWord();
 
 				$document = $PHPWord->loadTemplate(VISA_TEMPLATE);
@@ -793,7 +812,7 @@ class Admin extends UserController {
 					mkdir($path, 0777);
 				}
 
-				$document->save($path.$data['visa_no'].'.docx');
+				$document->save($path.$data['visa_no'].'.docx');*/
 				
 				update_status($data['uuid'], $data['status']);
 				//push_email_queue($opt.'_notification', $data['uuid']);
@@ -801,7 +820,7 @@ class Admin extends UserController {
 				$data['visa_no'] = '';
 				$data['message'] = '该申请已作最终审核，无须重复操作！';
 			}
-		} else if ($data['status'] === APPLY_REJECTED) {
+		} else if ($data['status'] === VISA_REFUSED) {
 			$data['visa_no'] = 'Refused';
 			$data['message'] = '该申请未能正常获得签证，如还需签证请另作申请！';
 			
@@ -967,7 +986,7 @@ class Admin extends UserController {
 				$one['office'] = $office_admins[$userid]['agency'];
 				$one['office_admin'] = $office_admins[$userid]['nickname'];
 				
-				$userid = $this->adm->get_admin_userid($one['uuid'], APPLY_REJECTED, VISA_EXPIRED);
+				$userid = $this->adm->get_admin_userid($one['uuid'], VISA_REFUSED, VISA_EXPIRED);
 				$one['embassy'] = $embassy_admins[$userid]['agency'];
 				$one['embassy_admin'] = $embassy_admins[$userid]['nickname'];
 				
@@ -1083,6 +1102,9 @@ class Admin extends UserController {
 			show_error($msg);
 		}
 		
+		$lang = trim($this->input->get('lang', TRUE));
+		$lang = $lang === 'en' ? 'en' : '';
+		
 		$this->load->helper('util');
 		
 		$this->load->model('admin_model', 'adm');
@@ -1096,10 +1118,17 @@ class Admin extends UserController {
 		$config['per_page'] = 20;
 		$config['use_page_numbers'] = TRUE;
 		
-		$config['prev_link'] = '上一页';
-		$config['next_link'] = '下一页';
-		$config['first_link'] = '首 页';
-		$config['last_link'] = '尾 页';
+		if ($lang === 'en') {
+			$config['prev_link'] = 'Prev';
+			$config['next_link'] = 'Next';
+			$config['first_link'] = 'First';
+			$config['last_link'] = 'Last';
+		} else {
+			$config['prev_link'] = '上一页';
+			$config['next_link'] = '下一页';
+			$config['first_link'] = '首 页';
+			$config['last_link'] = '尾 页';
+		}
 		
 		$this->pagination->initialize($config);
 		
@@ -1109,11 +1138,11 @@ class Admin extends UserController {
 		$data['num_records'] = $config['total_rows'];
 		
 		foreach ($data['records'] as &$one) {
-			$one['status_str'] = $this->config->item($one['status'], 'apply_status_str');
+			$one['status_str'] = $this->config->item($one['status'], 'apply_status_str'.$lang);
 		}
 		
 		if ($this->permission == EMBASSY_ADMIN) {
-			$this->load->view('admin_approve_records', $data);
+			$this->load->view('admin_approve_records'.$lang, $data);
 		} else {
 			$this->load->view('admin_audit_records', $data);
 		}
@@ -1133,35 +1162,22 @@ class Admin extends UserController {
 		echo json_encode($ret);
 	}
 	
-	public function download_visa($uuid = '') {
+	public function download_visa($uuid = '') {		
 		if ($uuid === '') {
 			show_error('申请流水号出错');
 		}
 		
-		$attributes = 'visa_no';
+		$this->load->model('apply_model', 'alm');
+		$info = $this->alm->get_visa_info($uuid);
 		
-		$this->load->model('admin_model', 'adm');
-		$info = $this->adm->retrieve_some_info($uuid, $attributes);
-		
-		if (!$info || $info['visa_no'] === '') {
-			show_error('申请记录或签证文件不存在！');
+		if ($info) {
+			$this->load->helper('util');
+			visa_pdf($info);
+		} else {
+			$ret['msg'] = 'Visa Not Found';
+			
+			echo json_encode($ret);
 		}
-		
-		$filename = VISA_PATH .$uuid.'/'.$info['visa_no'].'.docx';
-		if (!file_exists($filename)) {
-			$msg['tips'] = '你所请求的签证文件不存在或已过期！';
-			$link = 'javascript:history.go(-1);';
-			$location = '返回上一步';
-			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
-			show_error($msg);
-		}
-		
-		header('Content-Description: File Transfer');
-		header('Content-Type: application/force-download');
-		header('Content-Disposition: attachment; filename='.basename($filename));
-		header('Content-Transfer-Encoding: binary');
-		header('Content-Length: '.filesize($filename));
-		readfile($filename);
 	}
 	
 	public function download_form($uuid = '') {
@@ -1385,6 +1401,31 @@ class Admin extends UserController {
 		
 		$this->load->model('admin_model', 'adm');	
 		if ($this->adm->delete_agency_and_their_users($agency_id) > 0) {
+			$ret['msg'] = 'success';
+		}
+		
+		echo json_encode($ret);
+	}
+	
+	public function auto_visa($option) {
+		if ($this->permission != EMBASSY_ADMIN) {
+			$ret['msg'] = 'forbidden';
+			echo json_encode($ret);
+			exit('Account Not Allowed to Perform This Task');
+		}
+		
+		$result = 0;
+		$ret['msg'] = 'fail';
+		
+		$this->load->library('RedisDB');
+		$redis = $this->redisdb->instance(REDIS_DEFAULT);
+		switch ($option) {
+			case 'on': 	$result = $redis->sAdd('auto_visa', $this->userid); break;
+			case 'off': $result = $redis->sRem('auto_visa', $this->userid); break;
+			default : $result = -1;
+		}
+		
+		if ($result > 0) {
 			$ret['msg'] = 'success';
 		}
 		

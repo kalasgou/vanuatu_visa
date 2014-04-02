@@ -100,7 +100,7 @@
 					return array();
 				}
 			}
-			$this->admin_db->where('status >= ', APPLY_ACCEPTED);
+			$this->admin_db->where('status >= ', VISA_ISSUED);
 			$this->admin_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
 			$this->admin_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
 			$this->admin_db->order_by('submit_time', 'asc');
@@ -111,7 +111,7 @@
 		}
 		
 		public function auditing_application($data) {
-			$update_time = date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);
+			$update_time = date('Y-m-d H:i:s', time());
 			
 			$this->admin_db->set('uuid', $data['uuid']);
 			$this->admin_db->set('status', $data['status']);
@@ -124,7 +124,7 @@
 				if ($data['status'] === APPLY_NOTPASSED || $data['status'] === APPLY_PASSED) {
 					$this->admin_db->set('audit_time', $update_time);
 					$this->admin_db->set('pay_time', $update_time);
-				} else if ($data['status'] === APPLY_REJECTED || $data['status'] === APPLY_ACCEPTED) {
+				} else if ($data['status'] === VISA_REFUSED || $data['status'] === VISA_ISSUED) {
 					$this->admin_db->set('approve_time', $update_time);
 					if ($data['visa_no'] !== '') {
 						$this->admin_db->set('visa_no', $data['visa_no']);

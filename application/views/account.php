@@ -25,60 +25,60 @@
 			<form class="form-horizontal" role="form">
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<h3>帐号资料信息</h3>
+						<h3>帐号资料信息 / Account Info</h3>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputEmail3" class="col-sm-2 control-label">注册邮箱:</label>
+					<label for="inputEmail3" class="col-sm-2 control-label">注册邮箱 / Email:</label>
 					<div class="col-sm-10">
 						<p class="form-control-static"><?php echo $email;?></p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputNickname3" class="col-sm-2 control-label">帐户姓名:</label>
+					<label for="inputNickname3" class="col-sm-2 control-label">帐户姓名 / Username:</label>
 					<div class="col-sm-10">
 						<!--<input type="text" class="form-control" name="nickname" id="inputNickname3" value="" placeholder="Nickname">-->
 						<p class="form-control-static"><?php echo $nickname;?></p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputProvince3" class="col-sm-2 control-label">所属省份:</label>
+					<label for="inputProvince3" class="col-sm-2 control-label">所属省份 / Province:</label>
 					<div class="col-sm-10">
 						<p class="form-control-static"><?php echo $province_str;?></p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputCity3" class="col-sm-2 control-label">所属城市:</label>
+					<label for="inputCity3" class="col-sm-2 control-label">所属城市 / City:</label>
 					<div class="col-sm-10">
 						<p class="form-control-static"><?php echo $city_str;?></p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputAgency3" class="col-sm-2 control-label">所属机构:</label>
+					<label for="inputAgency3" class="col-sm-2 control-label">所属机构 / Agency:</label>
 					<div class="col-sm-10">
 						<p class="form-control-static"><?php echo $agency;?></p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputPhone3" class="col-sm-2 control-label">联系电话:</label>
+					<label for="inputPhone3" class="col-sm-2 control-label">联系电话 / Telephone:</label>
 					<div class="col-sm-10">
 						<p class="form-control-static"><?php echo $telephone;?></p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputPermission3" class="col-sm-2 control-label">帐户类型:</label>
+					<label for="inputPermission3" class="col-sm-2 control-label">帐户类型 / Account Type:</label>
 					<div class="col-sm-10">
 						<p class="form-control-static"><?php echo $permission_str;?></p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputRegtime3" class="col-sm-2 control-label">注册时间:</label>
+					<label for="inputRegtime3" class="col-sm-2 control-label">注册时间 / Register Date:</label>
 					<div class="col-sm-10">
 						<p class="form-control-static"><?php echo $reg_time;?></p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputStatus3" class="col-sm-2 control-label">帐户状态:</label>
+					<label for="inputStatus3" class="col-sm-2 control-label">帐户状态 / Account Status:</label>
 					<div class="col-sm-10">
 						<p class="form-control-static"><?php echo $status_str;?></p>
 					</div>
@@ -101,8 +101,8 @@
 				</div>-->
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<!--<button type="button" class="btn btn-default" onclick="javascript:update_info();">更新资料</button>&nbsp;&nbsp;&nbsp;-->
-						<button type="button" class="btn btn-info" onclick="javascript:history.go(-1);">返回上一页</button>
+						<!--<button type="button" class="btn btn-default" onclick="javascript:update_info();">更新 / Update</button>&nbsp;&nbsp;&nbsp;-->
+						<button type="button" class="btn btn-info" onclick="javascript:history.go(-1);">返回 / Back</button>
 					</div>
 				</div>
 			</form>

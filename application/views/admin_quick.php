@@ -141,13 +141,13 @@
 						<td><span title="具体时间 <?php echo $one['approve_time'];?>"><?php echo substr($one['approve_time'], 0, 10);?></span></td>
 						<td>
 							<a href="/admin/total_preview/<?php echo $one['uuid'];?>" target="_blank">详细</a>
-							<?php if ($one['status'] >= APPLY_WAITING && $one['status'] < APPLY_ACCEPTED) { ?> / 
+							<?php if ($one['status'] >= APPLY_WAITING && $one['status'] < VISA_ISSUED) { ?> / 
 								<a style="color:red;" href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'drop', this);">删除</a>
 							<?php } ?>
-							<?php if ($one['status'] >= APPLY_WAITING && $one['status'] < APPLY_ACCEPTED) { ?> / 
+							<?php if ($one['status'] >= APPLY_WAITING && $one['status'] < VISA_ISSUED) { ?> / 
 								<a style="color:green;" href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'visa', this);">通过签证</a>
 							<?php } ?>
-							<?php if ($one['status'] == APPLY_ACCEPTED) { ?> / 
+							<?php if ($one['status'] == VISA_ISSUED) { ?> / 
 								<a style="color:orangered;" href="javascript:void(0);" onclick="visa_it('<?php echo $one['uuid'];?>', 'best', this);">注销签证</a>
 							<?php } ?>
 						</td>

@@ -13,7 +13,6 @@
 									RESERVATION_USER => '网上预约用户'
 								);
 	
-	
 	$config['apply_status_str'] = array(
 									NEGATIVE_OVERFLOW => '负溢出异常',
 									APPLY_TRASHED => '已删除',
@@ -22,11 +21,24 @@
 									APPLY_NOTPASSED => '未通过',
 									APPLY_PASSED => '通过审核',
 									APPLY_PAID => '已缴款',
-									APPLY_REJECTED => '被拒签',
-									APPLY_ACCEPTED => '已发签证',
-									APPLY_EXPIRED => '申请过期',
+									VISA_REFUSED => '被拒签',
+									VISA_ISSUED => '已发签证',
 									VISA_EXPIRED => '签证过期',
 									POSITIVE_OVERFLOW => '正溢出异常'
+									);
+	
+	$config['apply_status_stren'] = array(
+									NEGATIVE_OVERFLOW => 'Overflow',
+									APPLY_TRASHED => 'Deleted',
+									APPLY_NOTFINISHED => 'Unfinished',
+									APPLY_WAITING => 'Waiting',
+									APPLY_NOTPASSED => 'Failed',
+									APPLY_PASSED => 'Passed',
+									APPLY_PAID => 'Paid',
+									VISA_REFUSED => 'Refused',
+									VISA_ISSUED => 'Issued',
+									VISA_EXPIRED => 'Expired',
+									POSITIVE_OVERFLOW => 'Overflow'
 									);
 	
 	$config['apply_status_code'] = array(
@@ -36,9 +48,8 @@
 									'fail' => APPLY_NOTPASSED,
 									'pass' => APPLY_PASSED,
 									'paid' => APPLY_PAID,
-									'oops' => APPLY_REJECTED,
-									'visa' => APPLY_ACCEPTED,
-									'lost' => APPLY_EXPIRED,
+									'oops' => VISA_REFUSED,
+									'visa' => VISA_ISSUED,
 									'best' => VISA_EXPIRED
 									);
 	
@@ -50,7 +61,7 @@
 									RESERVATION_USER => '旅行社'
 								);
 	
-	$config['apply_status_str_en'] = array(
+	$config['apply_status_overview'] = array(
 									NEGATIVE_OVERFLOW => 'Overflow',
 									APPLY_TRASHED => 'Deleted',
 									APPLY_NOTFINISHED => 'Not Finished',
@@ -58,10 +69,9 @@
 									APPLY_NOTPASSED => 'Audition Failed',
 									APPLY_PASSED => 'Audition Passed',
 									APPLY_PAID => 'Fee Paid',
-									APPLY_REJECTED => 'Visa Rejected',
-									APPLY_ACCEPTED => 'Visa Issued',
-									APPLY_EXPIRED => 'Application Expired',
-									VISA_EXPIRED => 'Expired',
+									VISA_REFUSED => 'Visa Refused',
+									VISA_ISSUED => 'Visa Issued',
+									VISA_EXPIRED => 'Visa Expired',
 									POSITIVE_OVERFLOW => 'Overflow'
 									);
 ?>

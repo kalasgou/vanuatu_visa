@@ -234,4 +234,45 @@
 		
 		return array_merge($userids, $office_admins);
 	}
+	
+	function visa_pdf($info) {
+		require '../application/third_party/tcpdf/tcpdf.php';
+		// create new PDF document
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		// remove default header/footer  
+		$pdf->SetPrintHeader(false);  
+		$pdf->SetPrintFooter(false);
+		// set image scale factor  
+		$pdf->SetImageScale(PDF_IMAGE_SCALE_RATIO); 
+		$pdf->AddPage();
+		$pdf->SetJPEGQuality(100);
+		$pdf->Image('/var/vanuatuvisa.cn/www/www/background.jpeg');
+		$pdf->SetFont('arialuni', 'B', 14);
+		$pdf->Text(84, 62, 'Single Entry Visa');
+		$pdf->SetFont('arialuni', '', 12);
+		$pdf->Text(38, 77, 'Name :'.$info['first_name'].' '.$info['last_name']);
+		$pdf->Text(110, 77, 'Sex :'.($info['gender'] > 1 ? 'Female' : 'Male'));
+		$pdf->Text(38, 84.5, 'Place of Birth :'.$info['birth_place']);
+		$pdf->Text(110, 84.5, 'Date of Birth :'.date('j M, Y', strtotime($info['birth_year'].'-'.$info['birth_month'].'-'.$info['birth_day'])));
+		$pdf->Text(38, 92, 'Passport No. :'.$info['passport_number']);
+		$pdf->Text(110, 92, 'Visa No. :'.$info['visa_no']);
+		$pdf->Text(38, 99.5, 'Type :P');
+		$pdf->Text(110, 99.5, 'Max Days of Stay :90 Days');
+		$pdf->Text(38, 107, 'Place of Issue :'.$info['passport_place']);
+		$pdf->Text(38, 114.5, 'Passport Date of Issue :'.date('j M, Y', $info['passport_date']));
+		$pdf->Text(38, 122, 'Passport Date of Expiry :'.date('j M, Y', $info['passport_expiry']));
+		$pdf->Text(38, 129.5, 'Visa Date of Issue :'.date('j M, Y', $info['start_time']));
+		$pdf->Text(38, 137, 'Visa Date of Expiry :'.date('j M, Y', $info['end_time']));
+		$pdf->SetMargins(39, 0);
+		$pdf->WriteHTML('<br><br><br><br><br>Reminder :
+						<br>1. Please check all the information on your e-Visa certificate to make sure they are correct. Please direct to contact your travel agency or organization if there is any error.
+						<br>2. Your e-Visa fee payment has been paid.
+						<br>3. Your e-Visa is only valid for one (1) entry. Please print out 2 copies of this e-Visa certificate .E-Visa printout in black and white is acceptable. Pass one (1) copy to immigration as your Travel Visa at entry and one (1) copy upon departure.
+						<br>4. All your information will be checked on arrival at the Immigration Online System. You are required to fill out departure and arrival cards at the entry and exit points. As in other countries have problems, please contact our country consulate or visit the website: www.vanuatuembassy.cn.
+						<br>5. Length of stay not more than the visa expiry date, employment prohibited.
+						');
+		$pdf->Output($info['visa_no'].'.pdf', 'D');
+		
+		unset($pdf);
+	}
 ?>

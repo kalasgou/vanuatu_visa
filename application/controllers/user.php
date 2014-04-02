@@ -302,9 +302,9 @@ class User extends LoginController {
 		$this->load->model('user_model', 'user');
 		$this->user->pop_cookie($local_key);
 		
-		$msg['tips'] = '帐户已安全登出！';
+		$msg['tips'] = '帐户已安全登出！/ Logout Successfully!';
 		$link = '/login';
-		$location = '返回系统登录页';
+		$location = '返回系统登录页 / Back to Login Page';
 		$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
 		show_error($msg);
 	}

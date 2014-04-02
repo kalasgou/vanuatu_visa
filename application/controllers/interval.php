@@ -10,7 +10,7 @@
 			$this->load->helper('util');
 		}
 		
-		public function regt_noti() {
+		/*public function regt_noti() {
 			$subject = 'VanuatuVisa帐户邮箱验证邮件';
 			
 			$prefix = '<p>新注册帐号激活（验证）链接</p>';
@@ -38,12 +38,12 @@
 					sleep(6);
 				}
 			}
-		}
+		}*/
 		
-		public function pswd_noti() {
-		}
+		/*public function pswd_noti() {
+		}*/
 		
-		public function pass_noti() {
+		/*public function pass_noti() {
 			$this->load->model('interval_model', 'ivm');
 			
 			$subject = 	'VanuatuVisa签证申请进度';
@@ -76,15 +76,15 @@
 					sleep(20);
 				}
 			}
-		}
+		}*/
 		
-		public function fail_noti() {
+		/*public function fail_noti() {
 		}
 		
 		public function paid_noti() {
-		}
+		}*/
 		
-		public function visa_noti() {
+		/*public function visa_noti() {
 			$this->load->model('interval_model', 'ivm');
 			
 			$subject = 	'VanuatuVisa签证申请进度';
@@ -112,20 +112,45 @@
 					sleep(60);
 				}
 			}
-		}
+		}*/
 		
-		public function oops_noti() {
+		/*public function oops_noti() {
 		}
 		
 		public function lost_noti() {
 		}
 		
 		public function best_noti() {
-			$this->load->model('interval_model', 'ivm');
-			$uuids = $this->ivm->find_expiring_visa();
+		}*/
+		
+		public function auto_visa() {
+			$this->load->helper('util');
 			
-			if (count($uuids) > 0) {
-				$this->ivm->set_visa_expired($uuids);
+			$this->load->library('RedisDB');
+			$redis = $this->redisdb->instance(REDIS_DEFAULT);
+			
+			$this->load->model('admin_model', 'adm');
+			
+			while (TRUE) {
+				$tmp = $redis->rPop('auto_visa_queue');
+				if ($tmp) {
+					$data = json_decode($tmp, TRUE);
+					$data['status'] = VISA_ISSUED;
+					$data['start_time'] = strtotime('today');
+					$data['end_time'] = $data['start_time'] + 86400 * VISA_VALID_DAYS - 1;
+					if ($id = $this->adm->final_audit($data)) {
+						$data['visa_no'] = gen_visa_number($id);
+						$this->adm->update_visa_number($id, $data['visa_no']);
+						$data['message'] = '该申请通过最终审核并成功获取签证（编号 '.$data['visa_no'].'）【自动签证】。';
+						update_status($data['uuid'], $data['status']);
+						$this->adm->auditing_application($data);
+					} else {
+						$redis->lPush('auto_visa_queue', $tmp);
+					}
+				} else {
+					sleep(10);
+				}
+				unset($data);
 			}
 		}
 	}

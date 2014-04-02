@@ -20,7 +20,7 @@
 		
 		public function retrieve_records($data, $page) {
 			$this->apply_db->select('userid, uuid, status, first_name, last_name, birth_day, birth_month, birth_year, gender, nationality, passport_number, submit_time, audit_time, pay_time, fee, approve_time, visa_no');
-			$this->apply_db->where('status >= ', APPLY_ACCEPTED);
+			$this->apply_db->where('status >= ', VISA_ISSUED);
 			$this->apply_db->where('agency_id', $data['agency_id']);
 			$this->apply_db->where('submit_time >= ', $data['start_time'].' 00:00:00');
 			$this->apply_db->where('submit_time <= ', $data['end_time'].' 23:59:59');
@@ -275,8 +275,8 @@
 			if (isset($row['passport_number']) && strcmp($passport_number, $row['passport_number']) === 0) {
 				return TRUE;
 			} else {
-				$sql_a = 'SELECT uuid FROM visa_applying WHERE passport_number = "'.$passport_number.'" AND status >= 11 AND status <= 31';
-				$sql_b = 'SELECT uuid FROM visa_applying WHERE passport_number = "'.$passport_number.'" AND status = 101 AND approve_time >= "'.date('Y-m-d H:i:s', strtotime('-30 days')).'"';
+				$sql_a = 'SELECT uuid FROM visa_applying WHERE passport_number = "'.$passport_number.'" AND status >= '. APPLY_WAITING .' AND status <= '. APPLY_PASSED;
+				$sql_b = 'SELECT uuid FROM visa_applying WHERE passport_number = "'.$passport_number.'" AND status = '. VISA_ISSUED .' AND approve_time >= "'.date('Y-m-d H:i:s', strtotime('-'. VISA_VALID_DAYS .' days')).'"';
 				$sql = $sql_a.' UNION ALL '.$sql_b;
 				$query = $this->apply_db->query($sql);
 				
@@ -326,6 +326,18 @@
 			$this->apply_db->update('visa_applying');
 			
 			return $this->apply_db->affected_rows();
+		}
+		
+		public function get_visa_info($uuid) {
+			$this->apply_db->select('visa_applying.uuid as uuid, status, first_name, last_name, gender, birth_day, birth_month, birth_year, birth_place, birth_place, passport_number, passport_place, passport_date, passport_expiry, fee, visa_approved.visa_no as visa_no, start_time, end_time');
+			$this->apply_db->from('visa_applying');
+			$this->apply_db->join('visa_approved', 'visa_approved.uuid = visa_applying.uuid', 'left');
+			$this->apply_db->where('visa_applying.uuid', $uuid);
+			$this->apply_db->where('visa_applying.status', VISA_ISSUED);
+			
+			$query = $this->apply_db->get();
+			
+			return $query->row_array();
 		}
 	}
 ?>

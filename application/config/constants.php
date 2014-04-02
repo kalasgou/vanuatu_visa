@@ -92,9 +92,8 @@ define('APPLY_WAITING',			11);
 define('APPLY_NOTPASSED',		21);
 define('APPLY_PASSED',			31);
 define('APPLY_PAID',			41);
-define('APPLY_REJECTED',		91);
-define('APPLY_ACCEPTED',		101);
-define('APPLY_EXPIRED',		125);
+define('VISA_REFUSED',			91);
+define('VISA_ISSUED',			101);
 define('VISA_EXPIRED',			126);
 define('POSITIVE_OVERFLOW',		127);
 

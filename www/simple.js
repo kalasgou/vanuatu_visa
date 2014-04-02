@@ -453,10 +453,9 @@ function refresh_captcha() {
 		type: 'GET',
 		dataType: 'json',
 		success: function(json) {
-			if (json.msg === 'success') {
-				$('#captcha').html(json.captcha);
-			} else if (json.msg === 'fail') {
-				alert('请不要频繁刷新验证码！');
+			switch (json.msg) {
+				case 'success': $('#captcha').html(json.captcha); break;
+				case 'fail': alert('请不要频繁刷新验证码！'); break;
 			}
 			return;
 		},
@@ -468,4 +467,19 @@ function refresh_captcha() {
 
 function disable_refresh_tuner() {
 	clearInterval(refresh_tuner);
+}
+
+function auto_visa_switch(option) {
+	$.ajax({
+		url: '/admin/auto_visa/' + option,
+		data: {},
+		type: 'GET',
+		dataType: 'json',
+		success: function(json) {
+			location.reload();
+		},
+		error: function() {
+			alert('Network Error');
+		}
+	});
 }

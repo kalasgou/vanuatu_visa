@@ -30,28 +30,28 @@
 			<form id="login_form" class="form-horizontal" role="form" method="post" action="/user/login" onsubmit="return submit_form();">
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<h3>Vanuatu签证系统帐号登录</h3>
+						<h3>Vanuatu签证系统 / Vanuatu eVisa</h3>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputEmail3" class="col-sm-2 control-label">邮箱:</label>
+					<label for="inputEmail3" class="col-sm-2 control-label">邮箱 / Email:</label>
 					<div class="col-sm-10">
 						<input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email"/>
 						<span id="email_error" class="error_tips">电子邮箱格式不正确</span>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputPassword3" class="col-sm-2 control-label">密码:</label>
+					<label for="inputPassword3" class="col-sm-2 control-label">密码 / Password:</label>
 					<div class="col-sm-10">
 						<input type="password" class="form-control" name="password" id="inputPassword3" placeholder="Password"/>
 						<span id="pswd_short" class="error_tips">密码应不少于六位字符</span>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputCaptcha3" class="col-sm-2 control-label">验证码:</label>
+					<label for="inputCaptcha3" class="col-sm-2 control-label">验证码 / Captcha:</label>
 					<div class="col-sm-10">
 						<input type="captcha" class="form-control" name="captcha" id="inputCaptcha3" placeholder="Captcha"/><br>
-						<span id="captcha"><?php echo $captcha;?></span> <a href="javascript:void(0);" onclick="refresh_captcha();">换过另一张</a>
+						<span id="captcha"><?php echo $captcha;?></span> <a href="javascript:void(0);" onclick="refresh_captcha();">刷新 / Refresh</a>
 					</div>
 				</div>
 				<!--<div>
@@ -59,7 +59,7 @@
 				</div>-->
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-success">登录</button>
+						<button type="submit" class="btn btn-success">登录 / Login</button>
 						<!--<a class="register" href="/register" style="margin-left:12px;">点此注册新用户</a>-->
 					</div>
 				</div>

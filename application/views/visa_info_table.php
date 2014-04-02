@@ -101,11 +101,11 @@
 						<td>签证状态 / Visa Status</td>
 						<td><?php echo $visa_status;?></td>
 					</tr>
-					<?php if ($status == APPLY_ACCEPTED) { ?>
+					<?php if ($status == VISA_ISSUED) { ?>
 					<tr>
 						<td colspan="2" align="right">
-							<button class="btn btn-success" type="button" onclick="javascript:location.href='/api/download_visa_word/<?php echo $apply_id;?>/<?php echo $visa_number;?>'">下载签证(WORD)</button>
-							<button class="btn btn-success" type="button" onclick="javascript:location.href='/api/download_visa_pdf/<?php echo $apply_id;?>/<?php echo $visa_number;?>'">下载签证(PDF)</button>
+							<!--<button class="btn btn-success" type="button" onclick="javascript:location.href='/api/download_visa_word/<?php echo $apply_id;?>/<?php echo $visa_number;?>'">下载签证(WORD)</button>-->
+							<button class="btn btn-success" type="button" onclick="javascript:location.href='/api/download_visa_pdf/<?php echo $apply_id;?>/<?php echo $visa_number;?>'">下载签证 / Visa PDF</button>
 						</td>
 					</tr>
 					<? } ?>

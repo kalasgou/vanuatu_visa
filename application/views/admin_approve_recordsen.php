@@ -47,18 +47,18 @@
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div id="hello">
-				<h5>您好，大使馆管理员 <?php echo $user['nickname'];?>！</h5>
+				<h5>Hello. Embassy Admin <?php echo $user['nickname'];?>!</h5>
 			</div>
 			<div id="lang_switch">
-				<a style="color:#CACACA;">中文</a> / 
-				<a href="/admin/audit_trace?lang=en">English</a>
+				<a href="/admin/audit_trace?lang=sc">中文</a> / 
+				<a style="color:#CACACA;">English</a>
 			</div>
 			<div id="menu">
-				<a href="/admin/approve">审批签证</a> / 
-				<a style="color:#1100FF;">审批记录</a> / 
-				<a href="/account">帐户信息</a> / 
-				<a href="/password">密码修改</a> / 
-				<a href="/logout">安全登出</a>
+				<a href="/admin/approve?lang=en">Application</a> / 
+				<a style="color:#1100FF;">History</a> / 
+				<a href="/account">Account</a> / 
+				<a href="/password">Password</a> / 
+				<a href="/logout">Logout</a>
 			</div>
 		</nav>
 		<div id="list_box">
@@ -101,10 +101,10 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<th>申请流水号</th>
-						<th>审核时间</th>
-						<th>审核状态</th>
-						<th>审核留言</th>
+						<th>Serial No.</th>
+						<th>Audit Date</th>
+						<th>Status</th>
+						<th>Message</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -124,7 +124,7 @@
 				</tbody>
 			</table>
 			<div id="pagination">
-				<p>当前共有<label style="color:green;"><?php echo $num_records;?></label>条记录</p>
+				<p><label style="color:green;"><?php echo $num_records;?></label> Record<?php echo $num_records > 1 ? 's' : '';?> Found</p>
 				<?php echo $pagination;?>
 			</div>
 		</div>

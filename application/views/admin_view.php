@@ -218,24 +218,24 @@
 			</div>
 			<br>
 			<div>
-				<b>审核记录：</b><br>
+				<b>审核记录 / Audition Notes：</b><br>
 				<table style="width:100%;">
 					<colgroup>
-						<col style="width:15%;"/>
+						<col style="width:20%;"/>
 						<col style="width:25%;"/>
-						<col style="width:60%;"/>
+						<col style="width:55%;"/>
 					</colgroup>
 					<thead>
 						<tr>
-							<th>审核状态</th>
-							<th>审核时间</th>
-							<th>审核留言</th>
+							<th>审核状态 / Status</th>
+							<th>审核时间 / Date</th>
+							<th>审核留言 / Message</th>
 						</tr>
 					</thead>
 					<tbody id="trace_body">
 					</tbody>
 					<tr>
-						<td colspan="3"><a href="javascript:void(0);" onclick="get_trace_admin('<?php echo $uuid;?>')">刷新一下</a></td>
+						<td colspan="3"><a href="javascript:void(0);" onclick="get_trace_admin('<?php echo $uuid;?>')">刷新 / Refresh</a></td>
 					</tr>
 				</table>
 			</div>
@@ -246,14 +246,14 @@
 				<textarea id="message" placeholder="若不通过审核请务必填写详细原因"></textarea>
 			</div>
 			<div id="next_step">
-				<a class="btn btn-success" href="javascript:pass_or_not('<?php echo $uuid;?>', 'pass');">通过</a>
-				<a class="btn btn-warning" href="javascript:pass_or_not('<?php echo $uuid;?>', 'fail');">驳回</a>
+				<a class="btn btn-success" href="javascript:pass_or_not('<?php echo $uuid;?>', 'pass');">通过 / Pass</a>
+				<a class="btn btn-warning" href="javascript:pass_or_not('<?php echo $uuid;?>', 'fail');">驳回 / Reject</a>
 			</div>
 			<?php } ?>
-			<?php if (($status == APPLY_PASSED && $user['permission'] == EMBASSY_ADMIN) || ($status < APPLY_ACCEPTED && $user['permission'] == SYSTEM_ADMIN)) { ?>
+			<?php if (($status == APPLY_PASSED && $user['permission'] == EMBASSY_ADMIN) || ($status < VISA_ISSUED && $user['permission'] == SYSTEM_ADMIN)) { ?>
 			<div id="next_step">
-				<a class="btn btn-success" href="javascript:visa_or_not('<?php echo $uuid;?>', 'visa');">同意</a>
-				<a class="btn btn-warning" href="javascript:visa_or_not('<?php echo $uuid;?>', 'oops');">拒签</a>
+				<a class="btn btn-success" href="javascript:visa_or_not('<?php echo $uuid;?>', 'visa');">同意 / Issue</a>
+				<a class="btn btn-warning" href="javascript:visa_or_not('<?php echo $uuid;?>', 'oops');">拒签 / Refuse</a>
 			</div>
 			<?php } ?>
 		</div>

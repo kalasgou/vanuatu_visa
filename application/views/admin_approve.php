@@ -32,6 +32,9 @@
 			}
 			
 			function set_default_filter() {
+				if (selected_arg === '') {
+					return ;
+				}
 				$('#od' + selected).css('display', 'none');
 				selected = selected_arg;
 				$('#orderby').val(selected);
@@ -51,12 +54,21 @@
 			<div id="hello">
 				<h5>您好，大使馆管理员 <?php echo $user['nickname'];?>！</h5>
 			</div>
+			<div id="lang_switch">
+				<a style="color:#CACACA;">中文</a> / 
+				<a href="/admin/approve?lang=en">English</a>
+			</div>
 			<div id="menu">
 				<a style="color:#1100FF;">审批签证</a> / 
 				<a href="/admin/audit_trace">审批记录</a> / 
 				<a href="/account">帐户信息</a> / 
 				<a href="/password">密码修改</a> / 
 				<a href="/logout">安全登出</a>
+				<label id="auto_visa">
+					自动发签
+					<a <?php echo $auto_visa_switch === FALSE ? 'href="javascript:void(0);" onclick="javascript:auto_visa_switch(\'on\');"' : 'style="color:#CACACA;"'?>>打开</a> / 
+					<a <?php echo $auto_visa_switch === TRUE ? 'href="javascript:void(0);" onclick="javascript:auto_visa_switch(\'off\');"' : 'style="color:#CACACA;"'?>>关闭</a>
+				</label>
 			</div>
 		</nav>
 		<div id="list_box">

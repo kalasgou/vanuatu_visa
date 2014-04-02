@@ -151,7 +151,7 @@
 							<?php if ($one['status'] == APPLY_PAID) { ?>
 							<a href="/admin/scan_upload/<?php echo $one['uuid'];?>" target="_blank">上传证明</a>
 							<?php } ?>-->
-							<?php if ($one['status'] == APPLY_ACCEPTED) { ?>
+							<?php if ($one['status'] == VISA_ISSUED) { ?>
 							<a style="color:turquoise;" href="/admin/download_visa/<?php echo $one['uuid'];?>" target="_blank">下载签证</a>
 							<?php } ?>
 						</td>

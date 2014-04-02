@@ -57,24 +57,24 @@
 			<form class="form-horizontal" role="form">
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<h3>帐号密码修改</h3>
+						<h3>帐号密码修改 / Change Password</h3>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputPassword3" class="col-sm-2 control-label">原密码:</label>
+					<label for="inputPassword3" class="col-sm-2 control-label">原密码 / Original:</label>
 					<div class="col-sm-10">
 						<input type="password" class="form-control" name="old_password" id="inputOriginalPassword3" placeholder="Original Password"/>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputPassword3" class="col-sm-2 control-label">重设密码:</label>
+					<label for="inputPassword3" class="col-sm-2 control-label">重设密码 / New:</label>
 					<div class="col-sm-10">
 						<input type="password" class="form-control" name="password" id="inputPassword3" placeholder="New Password"/>
 						<span id="pswd_short" class="error_tips">密码不得少于六位字符</span>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputPassword3" class="col-sm-2 control-label">确定密码:</label>
+					<label for="inputPassword3" class="col-sm-2 control-label">确定密码 / Confirm:</label>
 					<div class="col-sm-10">
 						<input type="password" class="form-control" name="password_confirm" id="inputPasswordConfirm3" placeholder="Confirm Password"/>
 						<span id="pswd_firm_short" class="error_tips">密码不得少于六位字符</span>
@@ -82,10 +82,10 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputCaptcha3" class="col-sm-2 control-label">验证码:</label>
+					<label for="inputCaptcha3" class="col-sm-2 control-label">验证码 / Captcha:</label>
 					<div class="col-sm-10">
 						<input type="captcha" class="form-control" name="captcha" id="inputCaptcha3" placeholder="Captcha"/><br>
-						<span id="captcha"><?php echo $captcha;?></span> <a href="javascript:void(0);" onclick="refresh_captcha();">换过另一张</a>
+						<span id="captcha"><?php echo $captcha;?></span> <a href="javascript:void(0);" onclick="refresh_captcha();">刷新 / Refresh</a>
 					</div>
 				</div>
 				<!--<?php if ($permission == 10000) { ?>
@@ -99,8 +99,8 @@
 				<?php } ?>-->
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="button" class="btn btn-success" onclick="javascript:change_password();">确定修改</button>&nbsp;&nbsp;&nbsp;
-						<button type="button" class="btn btn-info" onclick="javascript:history.go(-1);">返回上一页</button>
+						<button type="button" class="btn btn-success" onclick="javascript:change_password();">确定 / Submit</button>&nbsp;&nbsp;&nbsp;
+						<button type="button" class="btn btn-info" onclick="javascript:history.go(-1);">返回 / Back</button>
 					</div>
 				</div>
 			</form>

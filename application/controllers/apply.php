@@ -1057,6 +1057,7 @@ class Apply extends UserController {
 				->setCellValue('T1', '大使馆经手人');
 		
 		$page = 0;
+		$i = 1;
 		
 		$this->load->model('user_model', 'user');
 		
@@ -1072,7 +1073,6 @@ class Apply extends UserController {
 		$this->load->model('apply_model', 'alm');
 		while ($records = $this->alm->retrieve_records($data, $page)) {
 			// Set Cell Content
-			$i = 1;
 			foreach ($records as $one) {
 				$one['agency'] = $reservation_users[$one['userid']]['agency'];
 				$one['agency_admin'] = $reservation_users[$one['userid']]['nickname'];
@@ -1110,6 +1110,7 @@ class Apply extends UserController {
 				
 				$i ++;
 			}
+			unset($records);
 			$page ++;
 		}
 		

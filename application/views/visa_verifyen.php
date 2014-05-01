@@ -23,7 +23,7 @@
 					valid_num ++;
 				}
 				if (valid_num < 2) {
-					alert('请选择任意两个条件作为查询条件！');
+					alert('Please specify at least two options below!');
 					return false;
 				} else {
 					return true;
@@ -39,7 +39,7 @@
 			.title {display:inline-block; position:relative; font-size:32px; font-weight:bold; font-family:arial; top:6px; color:#fefefe;}
 			.content {width:757px; height:auto; margin:0 auto; background:#ffffff;}
 			.description {display:inline-block; position:relative; font-size:24px; font-weight:bold; font-family:arial; top:36px; left:106px; color:#434ad6; text-align:center;}
-			.search_form {width:360px; margin:0 auto; font-size:20px;}
+			.search_form {width:400px; margin:0 auto; font-size:20px;}
 			input {border:none; border-bottom:1px solid #000000;}
 			.lang_switch {position:relative; float:right; right:128px; top:78px;}
 			.copyright {position:fixed; text-align:center; width:100%; bottom:4px;}
@@ -51,8 +51,8 @@
 				<div class="country_flag"><img src="/vanuatu_flag.png" style="width:121px;"/></div>
 				<div class="title">Vanuatu Embassy Travel Certification</div>
 				<div class="lang_switch">
-					<a style="color:#CACACA;">中文</a> / 
-					<a href="/en">English</a>
+					<a href="/cn">中文</a> / 
+					<a style="color:#CACACA;">English</a>
 				</div>
 			</div>
 		</div>
@@ -63,28 +63,28 @@
 				<form action="/api/visa_verify_table" method="get" style="padding:24px;" onsubmit="return submit_form();">
 					<table>
 						<tr>
-							<td colspan="2" style="font-size:16px; font-weight:bold;" align="center">请输入旅行证件的相关信息<br>&nbsp;</td>
+							<td colspan="2" style="font-size:16px; font-weight:bold;" align="center">Enter Travel Certification info here<br>&nbsp;</td>
 						</tr>
 						<tr>
-							<td colspan="2" style="font-size:16px; font-weight:bold;" align="center">所持证件截止90天<br>&nbsp;</td>
+							<td colspan="2" style="font-size:16px; font-weight:bold;" align="center">The one who carries a document should travel to Vanuatu within 90 days.<br>&nbsp;</td>
 						</tr>
 						<tr>
-							<td>申请号：</td>
+							<td style="vertical-align:bottom;">Serial No. </td>
 							<td><input class="text" id="SN" type="text" name="apply_id"/></td>
 						</tr>
 						<tr>
-							<td>护照号：</td>
+							<td style="vertical-align:bottom;">Passport No. </td>
 							<td><input class="text" id="PN" type="text" name="passport"/></td>
 						</tr>
 						<tr>
-							<td>证件号：</td>
+							<td style="vertical-align:bottom;">Ref No. </td>
 							<td><input type="text" id="VN" name="visa"/></td>
 						</tr>
 						<tr>
-							<td colspan="2" align="right"><button class="btn btn-success" type="submit">查 询</button></td>
+							<td colspan="2" align="right"><button class="btn btn-success" type="submit">Submit</button></td>
 						</tr>
 						<tr>
-							<td colspan="2" style="font-size:12px; color:#ACACAC;" align="center"><br>注：以上条件任选其二作为查询条件，也可全选。</td>
+							<td colspan="2" style="font-size:12px; color:#ACACAC;" align="center"><br>Notice:Choose at least two options as your search condition.</td>
 						</tr>
 					</table>
 				</form>

@@ -2,7 +2,7 @@
 
 class Api extends CI_Controller {
 	
-	public function visa_verify_pic() {
+	/*public function visa_verify_pic() {
 		$data['passport'] = trim($this->input->get('passport', TRUE));
 		$data['visa'] = trim($this->input->get('visa', TRUE));
 		$data['uuid'] = trim($this->input->get('apply_id', TRUE));
@@ -52,7 +52,7 @@ class Api extends CI_Controller {
 			
 			echo json_encode($ret);
 		}
-	}
+	}*/
 	
 	public function visa_verify_table() {
 		$data['passport'] = trim($this->input->get('passport', TRUE));
@@ -95,10 +95,10 @@ class Api extends CI_Controller {
 			$output['visa_status'] = 'Not Available';
 			
 			if ($info['status'] == VISA_ISSUED) {
-				$output['application_status'] = 'Visa Issued';
+				$output['application_status'] = 'Travel Certification Issued';
 				$output['visa_status'] = 'Valid';
 			} else if ($info['status'] == VISA_EXPIRED) {
-				$output['application_status'] = 'Visa Issued';
+				$output['application_status'] = 'Travel Certification Issued';
 				$output['visa_status'] = 'Expired';
 			}
 		}

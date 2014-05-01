@@ -29,8 +29,9 @@
 		<div>
 			<form id="login_form" class="form-horizontal" role="form" method="post" action="/user/login" onsubmit="return submit_form();">
 				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
-						<h3>Vanuatu签证系统 / Vanuatu eVisa</h3>
+					<div class="col-sm-offset-1 col-sm-8">
+						<h3>瓦努阿图驻华大使馆旅行证件申请系统</h3>
+						<h3>Vanuatu Embassy Travel Certification Application Online</h3>
 					</div>
 				</div>
 				<div class="form-group">

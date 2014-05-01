@@ -44,10 +44,11 @@ define('COOKIE_TTL_HOUR',		24);
 
 // Visa
 define('VISA_VALID_DAYS',		90);
-define('MAX_STAY_DAYS',			90);
+define('MAX_STAY_DAYS',			30);
 
 // Location
-define('VISA_TEMPLATE',			'/data/file/visa_file/template/visa_template.docx');
+//define('VISA_TEMPLATE',			'/data/file/visa_file/template/visa_template.docx');
+define('TEMPLATE_PATH',			'/var/vanuatuvisa.cn/www/www/');
 
 define('VISA_PATH',				'/data/file/visa_file/');
 define('SCAN_PATH',				'/data/file/scan_file/');

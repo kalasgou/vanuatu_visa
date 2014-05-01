@@ -39,6 +39,8 @@
 */
 
 $route['default_controller'] = 'welcome';
+$route['cn'] = 'welcome/index/cn';
+$route['en'] = 'welcome/index/en';
 $route['login'] = 'welcome/login';
 $route['register'] = 'welcome/register';
 $route['partner'] = 'welcome/partner';
@@ -49,7 +51,7 @@ $route['logout'] = 'user/logout';
 $route['account'] = 'welcome/account';
 $route['password'] = 'welcome/password';
 $route['refresh_captcha'] = 'welcome/refresh_captcha';
-$route['visa_verify'] = 'welcome/visa_verify';
+$route['visa_verify/(:any)'] = 'welcome/visa_verify/$1';
 //$route['space/(:num)/(:any)'] = 'space/$2/$1';
 $route['404_override'] = '';
 

@@ -4,8 +4,9 @@ require APPPATH .'core/LoginController.php';
 
 class Welcome extends LoginController {
 	
-	public function index() {
-		$this->load->view('visa_verify');
+	public function index($lang = '') {
+		$lang = $lang === 'en' ? 'en' : '';
+		$this->load->view('visa_verify'.$lang);
 	}
 	
 	public function login() {
@@ -166,8 +167,9 @@ class Welcome extends LoginController {
 		echo json_encode($ret);
 	}
 	
-	public function visa_verify() {
-		$this->load->view('visa_verify');
+	public function visa_verify($lang = '') {
+		$lang = $lang === 'en' ? 'en' : '';
+		$this->load->view('visa_verify'.$lang);
 	}
 }
 

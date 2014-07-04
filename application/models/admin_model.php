@@ -92,6 +92,8 @@
 		}
 		
 		public function retrieve_records($data, $page) {
+			$result = array();
+			
 			$this->admin_db->select('userid, uuid, status, first_name, last_name, birth_day, birth_month, birth_year, gender, nationality, passport_number, submit_time, audit_time, pay_time, fee, approve_time, visa_no');
 			if ($data['permission'] == OFFICE_ADMIN || $data['permission'] == EMBASSY_ADMIN) {
 				if ($data['userids']) {
@@ -107,7 +109,10 @@
 			$this->admin_db->limit(1000, 1000 * $page);
 			$query = $this->admin_db->get('visa_applying');
 			
-			return $query->result_array();
+			$result = $query->result_array();
+			$query->free_result();
+			
+			return $result;
 		}
 		
 		public function auditing_application($data) {

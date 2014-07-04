@@ -852,6 +852,8 @@ class Apply extends UserController {
 	}
 	
 	public function trash($uuid = '') {
+		$this->load->helper('util');
+		
 		if ($this->permission != RESERVATION_USER) {
 			$ret['msg'] = 'forbidden';
 			echo json_encode($ret);
@@ -860,6 +862,14 @@ class Apply extends UserController {
 		
 		if ($uuid === '') {
 			show_error('申请流水号出错');
+		}
+		
+		if (!is_editable($uuid)) {
+			$msg['tips'] = '该申请不可再修改！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
 		}
 		
 		$this->load->helper('util');
@@ -1029,6 +1039,117 @@ class Apply extends UserController {
 		$this->load->helper('util');
 		if (!check_parameters($data)) exit('Parameters Not Enough');
 		
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$data['start_time'].'至'.$data['end_time'].'.csv"');
+		header('Cache-Control: max-age=0');
+		
+		$fp = fopen('php://output', 'a');
+		
+		// Set Head Titles
+		$excelHeadTitle = array('', 
+								'申请流水号',
+								'申请人姓名',
+								'出生日期',
+								'性别',
+								'国籍',
+								'护照号',
+								'申请时间',
+								'申请状态',
+								'审核时间',
+								'缴费时间',
+								'签证费用',
+								'签证时间',
+								'签证编号',
+								'旅行社',
+								'旅行社经手人',
+								'办事处',
+								'办事处经手人',
+								'大使馆',
+								'大使馆经手人');
+		
+		foreach ($excelHeadTitle as &$title) {
+			$title = iconv('utf-8', 'gbk', $title);
+		}
+		
+		fputcsv($fp, $excelHeadTitle);
+		
+		$page = 0;
+		$i = 1;
+		
+		$this->load->model('user_model', 'user');
+		
+		$reservation_users = array();
+		$reservation_users = $this->user->get_reservation_users($this->user_info['agency_id']);
+		
+		$office_admins = array();
+		$office_admins = $this->user->get_office_admins($this->user_info['province_id'], 0);
+		
+		$embassy_admins = array();
+		$embassy_admins = $this->user->get_embassy_admins();
+		
+		$this->load->model('apply_model', 'alm');
+		while ($records = $this->adm->retrieve_records($data, $page)) {
+			// Set Cell Content
+			foreach ($records as $one) {
+				$excelCell = array();
+				
+				$excelCell['counter'] = $i;
+				$excelCell['uuid'] = $one['uuid'];
+				$excelCell['full_name'] = $one['first_name'].' '.$one['last_name'];
+				$excelCell['birthday'] = date('Y-m-d', strtotime($one['birth_year'].'-'.$one['birth_month'].'-'.$one['birth_day']));
+				$excelCell['gender'] = $one['gender'] == 1 ? '男' : '女';
+				$excelCell['nationality'] = $one['nationality'];
+				$excelCell['passport_number'] = $one['passport_number'];
+				$excelCell['submit_time'] = $one['submit_time'];
+				$excelCell['status'] = $this->config->item($one['status'], 'apply_status_str');
+				$excelCell['audit_time'] = $one['audit_time'];
+				$excelCell['pay_time'] = $one['pay_time'];
+				$excelCell['fee'] = $one['fee'];
+				$excelCell['approve_time'] = $one['approve_time'];
+				$excelCell['visa_no'] = $one['visa_no'];
+				
+				$excelCell['agency'] = $reservation_users[$one['userid']]['agency'];
+				$excelCell['agency_admin'] = $reservation_users[$one['userid']]['nickname'];
+				
+				$userid = $this->alm->get_admin_userid($one['uuid'], APPLY_NOTPASSED, APPLY_PASSED);
+				$excelCell['office'] = $office_admins[$userid]['agency'];
+				$excelCell['office_admin'] = $office_admins[$userid]['nickname'];
+				
+				$userid = $this->alm->get_admin_userid($one['uuid'], VISA_REFUSED, VISA_EXPIRED);
+				$excelCell['embassy'] = $embassy_admins[$userid]['agency'];
+				$excelCell['embassy_admin'] = $embassy_admins[$userid]['nickname'];
+				
+				foreach ($excelCell as &$cell) {
+					$cell = iconv('utf-8', 'gbk', $cell);
+				}
+				
+				fputcsv($fp, $excelCell);
+				
+				$i ++;
+			}
+			unset($records);
+			$page ++;
+		}
+		
+		fclose($fp);
+	}
+	
+	/*public function download_excel_test() {
+		if ($this->permission != RESERVATION_USER) {
+			$msg['tips'] = '你的帐户无此操作权限！';
+			$link = 'javascript:history.go(-1);';
+			$location = '返回上一页';
+			$msg['target'] = '<a href="'.$link.'">'.$location.'</a>';
+			show_error($msg);
+		}
+		
+		$data['agency_id'] = $this->user_info['agency_id'];
+		$data['start_time'] = trim($this->input->get('start_time', TRUE));
+		$data['end_time'] = trim($this->input->get('end_time', TRUE));
+		
+		$this->load->helper('util');
+		if (!check_parameters($data)) exit('Parameters Not Enough');
+		
 		require '../application/third_party/PHPExcel/PHPExcel.php';
 		
 		$excel = new PHPExcel();
@@ -1058,6 +1179,7 @@ class Apply extends UserController {
 		
 		$page = 0;
 		$i = 1;
+		ini_set('memory_limit', '512M');
 		
 		$this->load->model('user_model', 'user');
 		
@@ -1143,7 +1265,7 @@ class Apply extends UserController {
 		$objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
 		$objWriter->save('php://output');
 		exit(0);
-	}
+	}*/
 }
 
 /* End of file */

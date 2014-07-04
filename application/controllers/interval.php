@@ -130,16 +130,20 @@
 		}
 		
 		public function auto_visa() {
-			$this->load->helper('util');
+			//$this->load->helper('util');
 			
 			$this->load->library('RedisDB');
-			$redis = $this->redisdb->instance(REDIS_DEFAULT);
+			//$redis = $this->redisdb->instance(REDIS_DEFAULT);
 			
-			$this->load->model('admin_model', 'adm');
+			$this->load->model('interval_model', 'adm');
 			
 			while (TRUE) {
+                        	//$this->load->library('RedisDB');
+                        	$redis = $this->redisdb->instance(REDIS_DEFAULT);
 				$tmp = $redis->rPop('auto_visa_queue');
 				if ($tmp) {
+					//$this->load->helper('util');
+					//$this->load->model('admin_model', 'adm');
 					$data = json_decode($tmp, TRUE);
 					$data['status'] = VISA_ISSUED;
 					$data['start_time'] = strtotime('today');
@@ -151,12 +155,14 @@
 						update_status($data['uuid'], $data['status']);
 						$this->adm->auditing_application($data);
 					} else {
-						$redis->lPush('auto_visa_queue', $tmp);
+						//$redis->lPush('auto_visa_queue', $tmp);
+						error_log($data['uuid'].' failed at '.date('Y-m-d H:i:s', time())."\r\n", 3, '/data/file/log/auto_visa_script_log');
 					}
 				} else {
 					sleep(10);
 				}
 				unset($data);
+				unset($tmp);
 			}
 		}
 	}

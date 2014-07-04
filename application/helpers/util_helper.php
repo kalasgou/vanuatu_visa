@@ -272,7 +272,7 @@
 		$pdf->WriteHTML('<br><br><br><br><br>Reminder :
 						<br><br>The above individual is confirmed to travel to Vanuatu and the authorities concerned are therefore informed. 
 						');
-		$pdf->Output($info['visa_no'].'.pdf', 'D');
+		$pdf->Output($info['visa_no'].' - '.$info['passport_number'].'.pdf', 'D');
 		
 		unset($pdf);
 	}

@@ -616,7 +616,7 @@ class Apply extends UserController {
 		
 		$data = array(
 					'uuid' => $uuid,
-					'passport_pic' => SCAN_DOMAIN .$uuid .'/passport',
+					'passport_pic' => SCAN_DOMAIN .substr($uuid, 0, 2) ."/$uuid/passport",
 				);
 		$data['user'] = $this->user_info;
 		
@@ -629,9 +629,9 @@ class Apply extends UserController {
 			if ($_FILES[$filename]['error'] > 0) {
 				return FALSE;
 			} else {
-				$path = SCAN_PATH .$uuid .'/';
+				$path = SCAN_PATH .substr($uuid, 0, 2) ."/$uuid/";
 				if (file_exists($path) === FALSE) {
-					mkdir($path, 0777);
+					mkdir($path, 0777, TRUE);
 				}
 				$destination = $path.$filename;
 				if (move_uploaded_file($_FILES[$filename]['tmp_name'], $destination)) {
@@ -788,7 +788,7 @@ class Apply extends UserController {
 		
 		$this->load->model('apply_model', 'alm');
 		$info = $this->alm->retrieve_some_info($userid, $uuid, $attributes);
-		$info['passport_pic'] = SCAN_DOMAIN .$uuid .'/passport';
+		$info['passport_pic'] = SCAN_DOMAIN .substr($uuid, 0, 2) ."/$uuid/passport";
 		
 		$info['user'] = $this->user_info;
 		if ($info) {
@@ -907,7 +907,7 @@ class Apply extends UserController {
 		if ($info) {
 			if ($info['status'] >= APPLY_WAITING) {
 				//$info['photo_pic'] = SCAN_DOMAIN .$uuid .'/photo';
-				$info['passport_pic'] = SCAN_DOMAIN .$uuid .'/passport';
+				$info['passport_pic'] = SCAN_DOMAIN .substr($uuid, 0, 2).$uuid .'/passport';
 				//$info['identity_pic'] = SCAN_DOMAIN .$uuid .'/identity';
 				//$info['ticket_pic'] = SCAN_DOMAIN .$uuid .'/ticket';
 				//$info['deposition_pic'] = SCAN_DOMAIN .$uuid .'/deposition';

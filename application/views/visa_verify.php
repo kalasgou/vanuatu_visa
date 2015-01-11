@@ -39,7 +39,7 @@
 			.title {display:inline-block; position:relative; font-size:32px; font-weight:bold; font-family:arial; top:6px; color:#fefefe;}
 			.content {width:757px; height:auto; margin:0 auto; background:#ffffff;}
 			.description {display:inline-block; position:relative; font-size:24px; font-weight:bold; font-family:arial; top:36px; left:106px; color:#434ad6; text-align:center;}
-			.search_form {width:360px; margin:0 auto; font-size:20px;}
+			.search_form {width:376px; margin:0 auto; font-size:20px;}
 			input {border:none; border-bottom:1px solid #000000;}
 			.lang_switch {position:relative; float:right; right:128px; top:78px;}
 			.copyright {position:fixed; text-align:center; width:100%; bottom:4px;}

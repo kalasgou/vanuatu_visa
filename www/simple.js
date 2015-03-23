@@ -201,20 +201,23 @@ function check_nickname() {
 }
 
 function check_province_city_agency() {
-	var agency = $('#agencies').val();
-	if (agency == 0) {
-		tips_appear('#agency_empty');
-		return false;
-	}
-	var province = $('#provinces').val();
-	if (province == 0) {
-		tips_appear('#province_empty');
-		return false;
-	}
-	var city = $('#cities').val();
-	if (city == 0) {
-		tips_appear('#city_empty');
-		return false;
+	var permission = $('#permissions').val();
+	if (permission !== '2048') {
+		var agency = $('#agencies').val();
+		if (agency === '0') {
+			tips_appear('#agency_empty');
+			return false;
+		}
+		var province = $('#provinces').val();
+		if (province === '0') {
+			tips_appear('#province_empty');
+			return false;
+		}
+		var city = $('#cities').val();
+		if (city === '0') {
+			tips_appear('#city_empty');
+			return false;
+		}
 	}
 	$('#agency_text').val($('#agencies').find('option:selected').text());
 	return true;

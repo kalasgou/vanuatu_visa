@@ -4,6 +4,10 @@ require APPPATH .'core/UserController.php';
 
 class Admin extends UserController {
 	
+	public function __construct() {
+		parent::__construct();
+	}
+	
 	public function index() {
 		switch (intval($this->permission)) {
 			case OFFICE_ADMIN: header('Location: '. base_url('/admin/audit')); break;

@@ -72,6 +72,7 @@ define('SYSTEM_ADMIN',			1);
 define('EMBASSY_ADMIN',			128);
 define('OFFICE_ADMIN',			256);
 define('RESERVATION_USER',		1024);
+define('CUSTOMER_SERVICE',		2048);
 
 // Account Status
 define('ACCOUNT_CANCELLED',		-1);

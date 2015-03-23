@@ -4,6 +4,10 @@ require APPPATH .'core/LoginController.php';
 
 class Welcome extends LoginController {
 	
+	public function __construct() {
+		parent::__construct();
+	}
+	
 	public function index($lang = '') {
 		$lang = $lang === 'en' ? 'en' : '';
 		$this->load->view('visa_verify'.$lang);

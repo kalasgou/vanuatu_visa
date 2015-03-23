@@ -71,6 +71,7 @@
 							<option value="<?php echo RESERVATION_USER;?>">预约用户</option>
 							<option value="<?php echo OFFICE_ADMIN;?>">办事处</option>
 							<option value="<?php echo EMBASSY_ADMIN;?>">领事馆</option>
+							<option value="<?php echo CUSTOMER_SERVICE;?>">客服员</option>
 						</select>
 					</div>
 				</div>
@@ -134,6 +135,7 @@
 					</div>
 				</div>
 			</form>
+			<div>注：除客服员外，其余帐户类型务必要选择省份、城市和相应机构，否则无法正常工作。</div>
 		</div>
 	</body>
 </html>

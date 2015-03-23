@@ -4,6 +4,10 @@ require APPPATH .'core/LoginController.php';
 
 class User extends LoginController {
 	
+	public function __construct() {
+		parent::__construct();
+	}
+	
 	/*protected $goto_page = array(
 							'applicant' => array('apply', 'login', 'register'),
 							'administrator' => array('admin', 'admin_login', 'admin_register'),
@@ -18,6 +22,9 @@ class User extends LoginController {
 			case EMBASSY_ADMIN : 
 			case OFFICE_ADMIN : 
 								header('Location: '. base_url('/admin/index'));
+								break;
+			case CUSTOMER_SERVICE : 
+								header('Location: '. base_url('/service/searchVisas'));
 								break;
 			default : header('Location: '. base_url('/login')); break;
 		}

@@ -75,6 +75,7 @@
 						<option value="<?php echo RESERVATION_USER;?>">网上预约用户</option>
 						<option value="<?php echo OFFICE_ADMIN;?>">办事处管理员</option>
 						<option value="<?php echo EMBASSY_ADMIN;?>">大使馆管理员</option>
+						<option value="<?php echo CUSTOMER_SERVICE;?>">客户服务人员</option>
 					</select>
 					&nbsp;省份:&nbsp;
 					<select id="provinces" onchange="city_list('all');">

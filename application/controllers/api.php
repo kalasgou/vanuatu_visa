@@ -2,6 +2,10 @@
 
 class Api extends CI_Controller {
 	
+	public function __construct() {
+		parent::__construct();
+	}
+	
 	/*public function visa_verify_pic() {
 		$data['passport'] = trim($this->input->get('passport', TRUE));
 		$data['visa'] = trim($this->input->get('visa', TRUE));

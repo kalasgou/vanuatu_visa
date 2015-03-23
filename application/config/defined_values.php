@@ -10,7 +10,8 @@
 									SYSTEM_ADMIN => '系统管理员', 
 									EMBASSY_ADMIN => '大使馆管理员', 
 									OFFICE_ADMIN => '办事处管理员', 
-									RESERVATION_USER => '网上预约用户'
+									RESERVATION_USER => '网上预约用户',
+									CUSTOMER_SERVICE => '客户服务人员'
 								);
 	
 	$config['apply_status_str'] = array(

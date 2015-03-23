@@ -3,7 +3,11 @@
 require APPPATH .'core/UserController.php';
 
 class Apply extends UserController {
-
+	
+	public function __construct() {
+		parent::__construct();
+	}
+	
 	public function index() {
 		header('Location: '.base_url('/apply/records'));
 	}
